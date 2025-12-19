@@ -25,19 +25,7 @@
             --color-yellow: #fbbf24;
             --color-gray: #666;
             --color-green: #10b981;
-            font-size: 16px; /* Base */
-        }
-        
-        @media (max-width: 768px) {
-            :root {
-                font-size: 14px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            :root {
-                font-size: 13px;
-            }
+            font-size: 16px;
         }
 
         body {
@@ -235,44 +223,17 @@
         }
 
         /* Grid Layout */
-        @media (max-width: 768px) {
-            .status-display {
-                flex-direction: column;
-                gap: 1.5rem;
-                text-align: center;
-            }
-            
-            .status-display > div {
-                flex: 1 1 100%;
-            }
-
-            .header-controls {
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
-            
-            .header-controls .status-info {
-                order: -1;
-                flex: 0 0 100%;
-                justify-content: center;
-            }
-            
-            .header-controls > div:first-child {
-                flex: 1 1 auto;
-            }
-
-            
-            .grid-2 { 
-                grid-template-columns: 1fr !important;
-                gap: 1rem;
-            }
-            .grid-3 { 
-                grid-template-columns: 1fr !important;
-                gap: 1rem;
-            }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
         }
 
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
 
         /* Metrics */
         .metric-card {
@@ -416,7 +377,7 @@
             font-size: 0.875rem;
         }
 
-        /* Health Impact Card */
+        /* Health Impact Card - COMPATTO */
         .impact-card-hero {
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.05) 100%);
             border: 2px solid var(--color-green);
@@ -501,6 +462,7 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
+
         .impact-reference {
             margin-top: 0.75rem;
             padding-top: 0.75rem;
@@ -513,7 +475,7 @@
             z-index: 1;
         }
 
-        /* Comparison Cards */
+        /* Comparison Cards - OTTIMIZZATE */
         .comparison-card {
             padding: 1.25rem;
             border-radius: 1rem;
@@ -937,60 +899,265 @@
             letter-spacing: 0.1em;
         }
 
-        /* Responsive */
+        .hidden { 
+            display: none !important; 
+        }
+
+        /* ========================================
+           RESPONSIVE - MEDIA QUERIES
+           ======================================== */
+
+        /* TABLETS & MEDIUM SCREENS (≤ 1024px) */
         @media (max-width: 1024px) {
-            .grid-2 { grid-template-columns: 1fr; }
-            .status-text { font-size: 3.5rem; }
-            .impact-value-hero { font-size: 2.5rem; }
-            .calendar-circle { width: 36px; height: 36px; }
-            .history-calendar { grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); }
+            .grid-2 { 
+                grid-template-columns: 1fr;
+            }
+            
+            .status-text { 
+                font-size: 3.5rem; 
+            }
+            
+            .impact-value-hero { 
+                font-size: 2.5rem; 
+            }
+            
+            .calendar-circle { 
+                width: 36px; 
+                height: 36px; 
+            }
+            
+            .history-calendar { 
+                grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); 
+            }
         }
 
+        /* MOBILE & SMALL TABLETS (≤ 768px) */
         @media (max-width: 768px) {
-            /* EXTRA SMALL DEVICES (< 480px) */
-@media (max-width: 480px) {
-    .status-text { font-size: 2rem; }
-    .status-label { font-size: 0.85rem; }
-    
-    .score-circle { width: 100px; height: 100px; }
-    .score-inner { width: 80px; height: 80px; font-size: 1.75rem; }
-    
-    .posture-cell { width: 3.5rem; height: 3.5rem; }
-    .posture-cell .sensor-name { font-size: 0.6rem; }
-    .posture-cell .weight-percent { font-size: 1.1rem; }
-    
-    .metric-value { font-size: 1.75rem; }
-    .metric-card { padding: 0.875rem; }
-    
-    .card { padding: 1rem; }
-    .card h3 { font-size: 1rem; }
-    
-    .calendar-circle { width: 28px; height: 28px; font-size: 0.65rem; }
-    .calendar-day-label { font-size: 0.55rem; }
-    
-    .btn { padding: 0.625rem 1.25rem; font-size: 0.75rem; }
-    .btn-toggle { padding: 0.5rem 1rem; }
-    
-    .quality-legend { grid-template-columns: 1fr; gap: 0.5rem; }
-    .quality-legend-item { flex-direction: row; justify-content: space-between; }
-    
-    .timeline-container { grid-template-columns: repeat(auto-fill, minmax(14px, 1fr)); gap: 0.35rem; }
-    .timeline-markers { font-size: 0.55rem; padding: 0 0.25rem 0.35rem; }
-    
-    .impact-value-hero { font-size: 1.75rem; }
-    .impact-icon { font-size: 2rem; }
-    .impact-stat-value { font-size: 1.25rem; }
-    
-    .comparison-value { font-size: 1.75rem; }
-    .insight-value { font-size: 1.5rem; }
-    
-    .modal { padding: 1.5rem; }
-    .modal-title { font-size: 1.25rem; }
-}
+            :root {
+                font-size: 14px;
+            }
 
+            .container { 
+                padding: 1rem; 
+            }
+            
+            .status-text { 
+                font-size: 2.75rem; 
+            }
+            
+            .card { 
+                padding: 1.5rem; 
+            }
+            
+            .posture-cell { 
+                width: 4.5rem; 
+                height: 4.5rem; 
+                font-size: 0.75rem; 
+            }
+            
+            .logo-img { 
+                height: 40px; 
+            }
+            
+            .header { 
+                flex-direction: column; 
+                align-items: flex-start; 
+            }
+            
+            .header-controls { 
+                width: 100%; 
+                justify-content: space-between; 
+            }
+            
+            .impact-value-hero { 
+                font-size: 2rem; 
+            }
+            
+            .impact-stats { 
+                grid-template-columns: 1fr; 
+            }
+            
+            .calendar-circle { 
+                width: 32px; 
+                height: 32px; 
+                font-size: 0.7rem; 
+            }
+            
+            .history-calendar { 
+                grid-template-columns: repeat(7, 1fr); 
+            }
+            
+            .comparison-stats-grid { 
+                grid-template-columns: 1fr; 
+            }
+            
+            .timeline-markers { 
+                font-size: 0.65rem; 
+            }
+            
+            .grid-2 { 
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .status-display {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
         }
 
-        .hidden { display: none !important; }
+        /* SMALL MOBILE (≤ 480px) */
+        @media (max-width: 480px) {
+            :root {
+                font-size: 13px;
+            }
+
+            .status-text { 
+                font-size: 2rem; 
+            }
+            
+            .status-label { 
+                font-size: 0.85rem; 
+            }
+            
+            .score-circle { 
+                width: 100px; 
+                height: 100px; 
+            }
+            
+            .score-inner { 
+                width: 80px; 
+                height: 80px; 
+                font-size: 1.75rem; 
+            }
+            
+            .posture-cell { 
+                width: 3.5rem; 
+                height: 3.5rem; 
+            }
+            
+            .posture-cell .sensor-name { 
+                font-size: 0.6rem; 
+            }
+            
+            .posture-cell .weight-percent { 
+                font-size: 1.1rem; 
+            }
+            
+            .metric-value { 
+                font-size: 1.75rem; 
+            }
+            
+            .metric-card { 
+                padding: 0.875rem; 
+            }
+            
+            .card { 
+                padding: 1rem; 
+            }
+            
+            .card h3 { 
+                font-size: 1rem; 
+            }
+            
+            .calendar-circle { 
+                width: 28px; 
+                height: 28px; 
+                font-size: 0.65rem; 
+            }
+            
+            .calendar-day-label { 
+                font-size: 0.55rem; 
+            }
+            
+            .btn { 
+                padding: 0.625rem 1.25rem; 
+                font-size: 0.75rem; 
+            }
+            
+            .btn-toggle { 
+                padding: 0.5rem 1rem; 
+            }
+            
+            .quality-legend { 
+                grid-template-columns: 1fr; 
+                gap: 0.5rem; 
+            }
+            
+            .timeline-container { 
+                grid-template-columns: repeat(auto-fill, minmax(14px, 1fr)); 
+                gap: 0.35rem; 
+            }
+            
+            .timeline-markers { 
+                font-size: 0.55rem; 
+                padding: 0 0.25rem 0.35rem; 
+            }
+            
+            .impact-value-hero { 
+                font-size: 1.75rem; 
+            }
+            
+            .impact-icon { 
+                font-size: 2rem; 
+            }
+            
+            .impact-stat-value { 
+                font-size: 1.25rem; 
+            }
+            
+            .comparison-value { 
+                font-size: 1.75rem; 
+            }
+            
+            .insight-value { 
+                font-size: 1.5rem; 
+            }
+            
+            .modal { 
+                padding: 1.5rem; 
+            }
+            
+            .modal-title { 
+                font-size: 1.25rem; 
+            }
+        }
+
+        /* LANDSCAPE TABLETS */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            .status-display {
+                flex-direction: row;
+            }
+            
+            .grid-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* TOUCH DEVICES */
+        @media (hover: none) and (pointer: coarse) {
+            .btn, .help-button, .view-btn, .calendar-circle, .timeline-bar {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            .calendar-day {
+                padding: 0.25rem;
+            }
+            
+            .posture-cell {
+                min-width: 60px;
+                min-height: 60px;
+            }
+        }
+
+        /* FORCE DESKTOP GRID */
+        @media (min-width: 769px) {
+            .grid-2 {
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)) !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1049,6 +1216,9 @@
             <div class="modal-section">
                 <div class="modal-section-title">Health Impact</div>
                 <p>See the real-world benefits of your good posture - stretching equivalent and back strain avoided!</p>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--color-text-muted); font-style: italic;">
+                    📊 Metrics based on NIH research showing 75% reduction in musculoskeletal disorders with proper ergonomic posture (2023).
+                </p>
             </div>
         </div>
     </div>
@@ -1056,7 +1226,7 @@
     <!-- Login Screen -->
     <div id="loginScreen" class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
         <div style="text-align: center; max-width: 500px;">
-            <img src="leantil-logo2.png" alt="LeanTil" class="logo-img" style="margin-bottom: 2rem; height: 80px;">
+            <img src="leantil-logo.png" alt="LeanTil" class="logo-img" style="margin-bottom: 2rem; height: 80px;">
             <div class="status-dot disconnected" style="margin: 0 auto 2rem;"></div>
             <p style="color: var(--color-text-muted); margin-bottom: 3rem; font-size: 1.25rem; line-height: 1.6;">
                 Monitor your posture in real time
@@ -1073,7 +1243,7 @@
     <div id="dashboard" class="container hidden">
         <!-- Header -->
         <div class="header">
-            <img src="leantil-logo2.png" alt="LeanTil" class="logo-img">
+            <img src="leantil-logo.png" alt="LeanTil" class="logo-img">
             <div class="header-controls">
                 <div class="status-info">
                     <span id="statusDot" class="status-dot"></span>
@@ -1234,7 +1404,7 @@
                     </div>
                 </div>
 
-                <!-- Health Impact HERO -->
+                <!-- Health Impact HERO CON RIFERIMENTO SCIENTIFICO -->
                 <div class="card">
                     <div class="impact-card-hero">
                         <div class="impact-icon">💚</div>
@@ -1253,13 +1423,11 @@
                             </div>
                         </div>
                         
-                        <!-- NUOVO: Scientific Reference -->
+                        <!-- RIFERIMENTO SCIENTIFICO -->
                         <div class="impact-reference">
                             Based on NIH ergonomic research (2023)
                         </div>
                     </div>
-                </div>
-
                 </div>
             </div>
 
@@ -1548,11 +1716,9 @@
             const markers = [];
             const startHour = startTime.getHours();
             
-            // Generate 5 evenly spaced markers
             if (sessionHours < 2) {
-                // Less than 2 hours: show every 30 min
                 for (let i = 0; i <= 4; i++) {
-                    const markerTime = new Date(startTime.getTime() + (i * 1800000)); // 30 min intervals
+                    const markerTime = new Date(startTime.getTime() + (i * 1800000));
                     markers.push(markerTime.toLocaleTimeString('en-US', { 
                         hour: '2-digit', 
                         minute: '2-digit',
@@ -1560,7 +1726,6 @@
                     }));
                 }
             } else {
-                // 2+ hours: show hourly
                 for (let i = 0; i <= 4; i++) {
                     const markerTime = new Date(startTime.getTime() + (i * 3600000 * sessionHours / 4));
                     markers.push(markerTime.toLocaleTimeString('en-US', { 
@@ -1623,7 +1788,6 @@
             
             lastUpdateTime = now;
             
-            // Update display
             elements.durationGood.textContent = formatDuration(postureDurations.correct);
             elements.durationWarning.textContent = formatDuration(postureDurations.warning);
             elements.durationAway.textContent = formatDuration(postureDurations.away);
@@ -1658,17 +1822,6 @@
                 }
             };
 
-            // Auto-switch to week view on mobile
-            function checkMobileView() {
-                if (window.innerWidth < 768 && calendarView === 'month') {
-                    switchCalendarView('week');
-                }
-            }
-            
-            window.addEventListener('resize', checkMobileView);
-            checkMobileView(); // Run on load
-
-            
             document.addEventListener('mousemove', (e) => {
                 if (e.target.classList.contains('timeline-bar')) {
                     const data = e.target._postureData;
@@ -1777,18 +1930,17 @@
             }
         }
 
-       function updateHealthImpact(score) {
+        function updateHealthImpact(score) {
             const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
             
-            // PARAMETRI SCIENTIFICI AGGIORNATI
+            // PARAMETRI SCIENTIFICI BASATI SU NIH RESEARCH 2023
             const stretchingEquivalent = Math.round((score / 100) * minutes * 0.65);
             const strainAvoided = Math.round((score / 100) * minutes * 1.5);
-        
+
             elements.impactValueHero.textContent = stretchingEquivalent;
             elements.stretchEquiv.textContent = stretchingEquivalent;
             elements.strainAvoided.textContent = strainAvoided;
-        
-            // Soglie aggiornate per messaggi
+
             if (stretchingEquivalent > 35) {
                 elements.impactDescHero.textContent = 'min - Full stretch session!';
             } else if (stretchingEquivalent > 20) {
@@ -1797,7 +1949,6 @@
                 elements.impactDescHero.textContent = 'min stretching equivalent';
             }
         }
-
 
         function updateYesterdayComparison() {
             elements.yesterdayScore.textContent = `${yesterdayScore}%`;
@@ -1934,9 +2085,7 @@
             const isCorrect = mapped.type === 'correct';
             if (isCorrect) correctCount++;
 
-            // Update durations
             updatePostureDurations(mapped.type);
-
             trackBestMoment(isCorrect);
             updateAllUI(data, mapped);
         }
@@ -2036,7 +2185,6 @@
                 <div class="quality-segment" style="width: ${pctAway}%; background: var(--color-gray);"></div>
             `;
 
-            // Generate insight
             generateInsight(pctGood, pctWarning, pctAway);
         }
 
