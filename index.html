@@ -51,10 +51,9 @@
             gap: 1rem;
         }
 
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 300;
-            letter-spacing: 0.05em;
+        .logo-img {
+            height: 50px;
+            width: auto;
         }
 
         .header-controls {
@@ -340,8 +339,13 @@
             50% { transform: translateY(-10px); }
         }
 
-        /* Best Moment Card */
-        .best-moment {
+        /* Best Moment & Community Combined Card */
+        .insights-combined {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .insight-item {
             background: linear-gradient(135deg, rgba(141, 96, 245, 0.15) 0%, rgba(141, 96, 245, 0.05) 100%);
             border: 1px solid var(--color-accent);
             border-radius: 1rem;
@@ -349,37 +353,102 @@
             text-align: center;
         }
 
-        .best-moment-time {
-            font-size: 1.5rem;
-            color: var(--color-accent);
-            font-weight: 600;
+        .insight-label {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
             margin-bottom: 0.5rem;
         }
 
-        .best-moment-desc {
+        .insight-value {
+            font-size: 1.75rem;
+            color: var(--color-accent);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .insight-desc {
             color: var(--color-text-muted);
             font-size: 0.875rem;
         }
 
-        /* Impact Card */
-        .impact-card {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
-            border: 1px solid var(--color-green);
-            border-radius: 1rem;
-            padding: 1.5rem;
+        /* Health Impact Card - HIGHLIGHTED */
+        .impact-card-hero {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border: 2px solid var(--color-green);
+            border-radius: 1.5rem;
+            padding: 2.5rem;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .impact-value {
-            font-size: 2.5rem;
+        .impact-card-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .impact-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .impact-value-hero {
+            font-size: 4rem;
             color: var(--color-green);
             font-weight: 600;
             margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
         }
 
-        .impact-desc {
+        .impact-desc-hero {
             color: var(--color-text-muted);
-            font-size: 0.875rem;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .impact-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(16, 185, 129, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .impact-stat {
+            text-align: center;
+        }
+
+        .impact-stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--color-green);
+            margin-bottom: 0.25rem;
+        }
+
+        .impact-stat-label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         /* Comparison Cards */
@@ -633,6 +702,7 @@
         @media (max-width: 1024px) {
             .grid-2 { grid-template-columns: 1fr; }
             .status-text { font-size: 3.5rem; }
+            .impact-value-hero { font-size: 3rem; }
         }
 
         @media (max-width: 768px) {
@@ -640,9 +710,11 @@
             .status-text { font-size: 2.75rem; }
             .card { padding: 1.75rem; }
             .posture-cell { width: 4.5rem; height: 4.5rem; font-size: 0.75rem; }
-            .logo { font-size: 2rem; }
+            .logo-img { height: 40px; }
             .header { flex-direction: column; align-items: flex-start; }
             .header-controls { width: 100%; justify-content: space-between; }
+            .impact-value-hero { font-size: 2.5rem; }
+            .impact-stats { grid-template-columns: 1fr; }
         }
 
         .hidden { display: none !important; }
@@ -692,13 +764,13 @@
             </div>
 
             <div class="modal-section">
-                <div class="modal-section-title">Timeline (Advanced)</div>
-                <p>Click any square to see the exact time and your posture at that moment.</p>
+                <div class="modal-section-title">Health Impact</div>
+                <p>See the real-world benefits of your good posture - stretching equivalent and back strain avoided!</p>
             </div>
 
             <div class="modal-section">
-                <div class="modal-section-title">Comparisons (Advanced)</div>
-                <p>Track your progress versus yesterday and see how you stack up against the community average.</p>
+                <div class="modal-section-title">Timeline (Advanced)</div>
+                <p>Click any square to see the exact time and your posture at that moment.</p>
             </div>
         </div>
     </div>
@@ -706,7 +778,7 @@
     <!-- Login Screen -->
     <div id="loginScreen" class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
         <div style="text-align: center; max-width: 500px;">
-            <h1 class="logo" style="margin-bottom: 1rem;">LEANTIL</h1>
+            <img src="leantil-logo.png" alt="LeanTil" class="logo-img" style="margin-bottom: 2rem; height: 80px;">
             <div class="status-dot" style="margin: 0 auto 2rem;"></div>
             <p style="color: var(--color-text-muted); margin-bottom: 3rem; font-size: 1.25rem; line-height: 1.6;">
                 Monitor your posture in real time
@@ -723,7 +795,7 @@
     <div id="dashboard" class="container hidden">
         <!-- Header -->
         <div class="header">
-            <h1 class="logo">LEANTIL</h1>
+            <img src="leantil-logo.png" alt="LeanTil" class="logo-img">
             <div class="header-controls">
                 <div class="status-info">
                     <span id="statusDot" class="status-dot"></span>
@@ -807,6 +879,27 @@
         <div id="advancedExtras" class="hidden">
             <div class="mode-divider">📊 Advanced Insights</div>
 
+            <!-- Health Impact - HERO CARD (TOP PLACEMENT) -->
+            <div class="card">
+                <div class="impact-card-hero">
+                    <div class="impact-icon">💚</div>
+                    <h3 style="margin-bottom: 1rem; font-size: 1.75rem; position: relative; z-index: 1;">Posture Health Impact</h3>
+                    <div class="impact-value-hero" id="impactValueHero">0 min</div>
+                    <div class="impact-desc-hero" id="impactDescHero">of stretching equivalent</div>
+                    
+                    <div class="impact-stats">
+                        <div class="impact-stat">
+                            <div class="impact-stat-value" id="stretchEquiv">0</div>
+                            <div class="impact-stat-label">Min Stretching</div>
+                        </div>
+                        <div class="impact-stat">
+                            <div class="impact-stat-value" id="strainAvoided">0</div>
+                            <div class="impact-stat-label">Min Strain Avoided</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Timeline Interactive -->
             <div class="card">
                 <h3>Your Posture Timeline</h3>
@@ -819,7 +912,7 @@
                 </div>
             </div>
 
-            <!-- Comparisons Row -->
+            <!-- Comparisons & Insights Row -->
             <div class="grid-3">
                 <!-- Today vs Yesterday -->
                 <div class="card">
@@ -834,28 +927,6 @@
                     </div>
                 </div>
 
-                <!-- Community Rank -->
-                <div class="card">
-                    <h3>🌟 Community Rank</h3>
-                    <div class="comparison-card">
-                        <div class="comparison-label">You vs Average User</div>
-                        <div class="comparison-value positive" id="vsAverage">+12%</div>
-                        <div class="comparison-subtext" id="vsAverageText">Better than 68% of users</div>
-                    </div>
-                </div>
-
-                <!-- Best Moment -->
-                <div class="card">
-                    <h3>✨ Best Moment</h3>
-                    <div class="best-moment">
-                        <div class="best-moment-time" id="bestMomentTime">--:--</div>
-                        <div class="best-moment-desc" id="bestMomentDesc">Keep sitting well!</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Session Quality + Health Impact -->
-            <div class="grid-2">
                 <!-- Session Quality -->
                 <div class="card">
                     <h3>Session Quality</h3>
@@ -887,19 +958,21 @@
                             </div>
                         </div>
                     </div>
-                    <div class="info-label">Breakdown of your sitting time</div>
                 </div>
 
-                <!-- Health Impact -->
+                <!-- Community Rank + Best Moment Combined -->
                 <div class="card">
-                    <h3>💚 Posture Health Impact</h3>
-                    <div class="impact-card">
-                        <div class="impact-value" id="impactValue">0 min</div>
-                        <div class="impact-desc" id="impactDesc">of stretching equivalent</div>
-                    </div>
-                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
-                        <div style="text-align: center; color: var(--color-text-muted); font-size: 0.875rem;">
-                            You've avoided <span style="color: var(--color-green); font-weight: 600;" id="avoidedStrain">0 min</span> of potential back strain today! 🎉
+                    <h3>✨ Highlights</h3>
+                    <div class="insights-combined">
+                        <div class="insight-item">
+                            <div class="insight-label">🌟 Community Rank</div>
+                            <div class="insight-value" id="vsAverageCombined">+12%</div>
+                            <div class="insight-desc" id="vsAverageTextCombined">Better than 68% of users</div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">🏆 Best Moment</div>
+                            <div class="insight-value" id="bestMomentTimeCombined">--:--</div>
+                            <div class="insight-desc" id="bestMomentDescCombined">Keep it up!</div>
                         </div>
                     </div>
                 </div>
@@ -983,16 +1056,17 @@
             achievementIcon: document.getElementById('achievementIcon'),
             achievementTitle: document.getElementById('achievementTitle'),
             achievementDesc: document.getElementById('achievementDesc'),
-            bestMomentTime: document.getElementById('bestMomentTime'),
-            bestMomentDesc: document.getElementById('bestMomentDesc'),
-            impactValue: document.getElementById('impactValue'),
-            impactDesc: document.getElementById('impactDesc'),
-            avoidedStrain: document.getElementById('avoidedStrain'),
+            impactValueHero: document.getElementById('impactValueHero'),
+            impactDescHero: document.getElementById('impactDescHero'),
+            stretchEquiv: document.getElementById('stretchEquiv'),
+            strainAvoided: document.getElementById('strainAvoided'),
             todayScore: document.getElementById('todayScore'),
             yesterdayScore: document.getElementById('yesterdayScore'),
             scoreDiff: document.getElementById('scoreDiff'),
-            vsAverage: document.getElementById('vsAverage'),
-            vsAverageText: document.getElementById('vsAverageText')
+            vsAverageCombined: document.getElementById('vsAverageCombined'),
+            vsAverageTextCombined: document.getElementById('vsAverageTextCombined'),
+            bestMomentTimeCombined: document.getElementById('bestMomentTimeCombined'),
+            bestMomentDescCombined: document.getElementById('bestMomentDescCombined')
         };
 
         const weightElements = [
@@ -1107,10 +1181,10 @@
                     hour: '2-digit', 
                     minute: '2-digit' 
                 });
-                const duration = minutes > 0 ? `${minutes} min ${seconds} sec` : `${seconds} seconds`;
+                const duration = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
                 
-                elements.bestMomentTime.textContent = time;
-                elements.bestMomentDesc.textContent = `${duration} of perfect posture! 🎉`;
+                elements.bestMomentTimeCombined.textContent = time;
+                elements.bestMomentDescCombined.textContent = `${duration} perfect posture!`;
             }
         }
 
@@ -1120,13 +1194,14 @@
             const stretchingEquivalent = Math.round((score / 100) * minutes * 0.5);
             const strainAvoided = Math.round((score / 100) * minutes * 1.2);
 
-            elements.impactValue.textContent = `${stretchingEquivalent} min`;
-            elements.avoidedStrain.textContent = `${strainAvoided} min`;
+            elements.impactValueHero.textContent = `${stretchingEquivalent}`;
+            elements.stretchEquiv.textContent = stretchingEquivalent;
+            elements.strainAvoided.textContent = strainAvoided;
 
             if (stretchingEquivalent > 30) {
-                elements.impactDesc.textContent = 'Equivalent to a full stretching session!';
+                elements.impactDescHero.textContent = 'minutes - Equivalent to a full stretching session!';
             } else {
-                elements.impactDesc.textContent = 'of stretching equivalent';
+                elements.impactDescHero.textContent = 'minutes of stretching equivalent';
             }
         }
 
@@ -1146,11 +1221,10 @@
             // You vs Average
             const avgDiff = score - averageUserScore;
             const avgDiffText = avgDiff >= 0 ? `+${avgDiff}%` : `${avgDiff}%`;
-            elements.vsAverage.textContent = avgDiffText;
-            elements.vsAverage.className = `comparison-value ${avgDiff >= 0 ? 'positive' : 'negative'}`;
+            elements.vsAverageCombined.textContent = avgDiffText;
             
             const percentile = Math.min(95, Math.max(5, 50 + (avgDiff * 2)));
-            elements.vsAverageText.textContent = `Better than ${Math.round(percentile)}% of users`;
+            elements.vsAverageTextCombined.textContent = `Better than ${Math.round(percentile)}% of users`;
         }
 
         // === CONNECTION ===
@@ -1377,7 +1451,6 @@
             elements.advancedModeBtn.classList.toggle('active', mode === 'advanced');
             elements.advancedExtras.classList.toggle('hidden', mode === 'basic');
             
-            // Update advanced visualizations if switching to advanced
             if (mode === 'advanced' && dataHistory.length > 0) {
                 updateTimeline();
                 updateQualityBreakdown();
