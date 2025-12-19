@@ -1303,5 +1303,103 @@
       }
     }
   </script>
+  <!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<!-- Dashboard logic -->
+<script>
+  window.onload = () => {
+    const ctx = document.getElementById('sensorChart').getContext('2d');
+
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label: 'Front Left',
+            borderColor: '#8d60f5',
+            backgroundColor: 'rgba(141, 96, 245, 0.08)',
+            tension: 0.4,
+            fill: false,
+            pointRadius: 0,
+            borderWidth: 2,
+            data: []
+          },
+          {
+            label: 'Front Right',
+            borderColor: '#a27bf7',
+            backgroundColor: 'rgba(162, 123, 247, 0.08)',
+            tension: 0.4,
+            fill: false,
+            pointRadius: 0,
+            borderWidth: 2,
+            data: []
+          },
+          {
+            label: 'Back Left',
+            borderColor: '#fbbf24',
+            backgroundColor: 'rgba(251, 191, 36, 0.08)',
+            tension: 0.4,
+            fill: false,
+            pointRadius: 0,
+            borderWidth: 2,
+            data: []
+          },
+          {
+            label: 'Back Right',
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245, 158, 11, 0.08)',
+            tension: 0.4,
+            fill: false,
+            pointRadius: 0,
+            borderWidth: 2,
+            data: []
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { display: false },
+          y: {
+            min: 0,
+            max: 100,
+            ticks: {
+              stepSize: 25,
+              color: '#666',
+              callback: v => v + '%'
+            },
+            grid: { color: '#2a2a2a' }
+          }
+        },
+        plugins: {
+          legend: { display: false }
+        },
+        animation: { duration: 0 }
+      }
+    });
+
+    // esempio: aggiorna il grafico ogni 2 secondi in Demo Mode
+    let demoIndex = 0;
+    setInterval(() => {
+      const t = demoIndex++;
+      chart.data.labels.push('');
+      chart.data.datasets[0].data.push(40 + 10 * Math.sin(t / 3));
+      chart.data.datasets[1].data.push(30 + 8 * Math.cos(t / 4));
+      chart.data.datasets[2].data.push(20 + 5 * Math.sin(t / 5));
+      chart.data.datasets[3].data.push(10 + 6 * Math.cos(t / 6));
+      if (chart.data.labels.length > 60) {
+        chart.data.labels.shift();
+        chart.data.datasets.forEach(d => d.data.shift());
+      }
+      chart.update('none');
+    }, 2000);
+
+    // qui puoi integrare i tuoi update reali leggendo da dataHistory
+  };
+</script>
+
 </body>
 </html>
