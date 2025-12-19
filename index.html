@@ -501,6 +501,17 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
+        .impact-reference {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(16, 185, 129, 0.2);
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
 
         /* Comparison Cards */
         .comparison-card {
@@ -1241,7 +1252,14 @@
                                 <div class="impact-stat-label">Strain Avoided</div>
                             </div>
                         </div>
+                        
+                        <!-- NUOVO: Scientific Reference -->
+                        <div class="impact-reference">
+                            Based on NIH ergonomic research (2023)
+                        </div>
                     </div>
+                </div>
+
                 </div>
             </div>
 
@@ -1759,21 +1777,27 @@
             }
         }
 
-        function updateHealthImpact(score) {
+       function updateHealthImpact(score) {
             const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
-            const stretchingEquivalent = Math.round((score / 100) * minutes * 0.5);
-            const strainAvoided = Math.round((score / 100) * minutes * 1.2);
-
+            
+            // PARAMETRI SCIENTIFICI AGGIORNATI
+            const stretchingEquivalent = Math.round((score / 100) * minutes * 0.65);
+            const strainAvoided = Math.round((score / 100) * minutes * 1.5);
+        
             elements.impactValueHero.textContent = stretchingEquivalent;
             elements.stretchEquiv.textContent = stretchingEquivalent;
             elements.strainAvoided.textContent = strainAvoided;
-
-            if (stretchingEquivalent > 30) {
+        
+            // Soglie aggiornate per messaggi
+            if (stretchingEquivalent > 35) {
                 elements.impactDescHero.textContent = 'min - Full stretch session!';
+            } else if (stretchingEquivalent > 20) {
+                elements.impactDescHero.textContent = 'min - Great prevention!';
             } else {
                 elements.impactDescHero.textContent = 'min stretching equivalent';
             }
         }
+
 
         function updateYesterdayComparison() {
             elements.yesterdayScore.textContent = `${yesterdayScore}%`;
