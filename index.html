@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,7 @@
     <meta name="description" content="Real-time posture monitoring dashboard for LeanTil smart chair">
     
     <style>
-        /* Nothing X Theme - COLORE #8d60f5 */
+        /* Nothing X Theme - #8d60f5 */
         * {
             margin: 0;
             padding: 0;
@@ -18,11 +18,12 @@
             --color-bg: #0a0a0a;
             --color-card: #1a1a1a;
             --color-border: #2a2a2a;
-            --color-accent: #8d60f5; /* NUOVO COLORE PRINCIPALE */
+            --color-accent: #8d60f5;
             --color-accent-light: #a27bf7;
             --color-text: #ffffff;
             --color-text-muted: #9ca3af;
             --color-yellow: #fbbf24;
+            --color-gray: #666;
         }
 
         body {
@@ -34,7 +35,7 @@
         }
 
         .container {
-            max-width: 1280px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 1.5rem;
         }
@@ -48,7 +49,7 @@
         }
 
         .logo {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 300;
             letter-spacing: 0.05em;
         }
@@ -58,7 +59,7 @@
             background: var(--color-card);
             border: 1px solid var(--color-border);
             border-radius: 1.5rem;
-            padding: 3rem;
+            padding: 2.5rem;
             margin-bottom: 2rem;
             transition: transform 0.2s;
         }
@@ -75,17 +76,17 @@
         }
 
         .status-text {
-            font-size: 4rem;
+            font-size: 5rem;
             font-weight: 300;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.75rem;
         }
 
         .status-label {
             color: var(--color-text-muted);
-            font-size: 1rem;
+            font-size: 1.125rem;
             text-transform: uppercase;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.2em;
         }
 
         .status-correct { color: var(--color-accent); }
@@ -94,8 +95,8 @@
 
         /* Score Circle */
         .score-circle {
-            width: 120px;
-            height: 120px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             background: conic-gradient(var(--color-accent) var(--score-percent, 0%), var(--color-card) 0%);
             display: flex;
@@ -105,20 +106,20 @@
         }
 
         .score-inner {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             background: var(--color-card);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 2.25rem;
             font-weight: 300;
         }
 
         /* Buttons */
         .btn {
-            padding: 0.75rem 1.5rem;
+            padding: 0.875rem 1.75rem;
             border: 1px solid var(--color-border);
             background: var(--color-card);
             color: var(--color-text);
@@ -142,7 +143,6 @@
 
         .btn-primary:hover {
             background: var(--color-accent-light);
-            transform: scale(1.05);
         }
 
         .btn-toggle {
@@ -156,8 +156,8 @@
             color: #ffffff;
         }
 
-        /* Connection Status */
-        .connection-status {
+        /* Status & Connection */
+        .status-info {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
@@ -165,67 +165,70 @@
             background: var(--color-card);
             border: 1px solid var(--color-border);
             border-radius: 2rem;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
         }
 
         .status-dot {
-            width: 0.5rem;
-            height: 0.5rem;
+            width: 0.625rem;
+            height: 0.625rem;
             border-radius: 50%;
-            background: var(--color-text-muted);
+            background: var(--color-accent);
             animation: pulse 2s infinite;
         }
 
-        .status-dot.connected {
-            background: var(--color-accent);
-        }
-
-        /* Metrics Grid */
-        .metrics-grid {
+        /* Grid Layout */
+        .grid-2 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
         }
 
-        .metric-card {
-            background: rgba(26, 26, 26, 0.5);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            border: 1px solid var(--color-border);
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Metrics */
+        .metric-big {
             text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .metric-value {
-            font-size: 3rem;
+        .metric-value-big {
+            font-size: 8rem;
             font-weight: 200;
             color: var(--color-accent);
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.05em;
         }
 
-        .metric-label {
+        .metric-label-big {
             color: var(--color-text-muted);
-            font-size: 0.875rem;
+            font-size: 1.5rem;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.15em;
         }
 
         /* Posture Map */
         .posture-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
+            gap: 1rem;
             margin: 2rem auto;
             width: fit-content;
         }
 
         .posture-cell {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 0.75rem;
-            border: 2px solid var(--color-border);
+            width: 4rem;
+            height: 4rem;
+            border-radius: 1rem;
+            border: 3px solid var(--color-border);
             background: rgba(107, 114, 128, 0.3);
-            transition: all 0.5s ease;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
@@ -233,115 +236,150 @@
         .posture-cell.active {
             background: var(--color-accent);
             border-color: var(--color-accent);
-            box-shadow: 0 0 20px rgba(141, 96, 245, 0.4);
-            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(141, 96, 245, 0.5);
+            transform: scale(1.1);
         }
 
-        .posture-cell::before {
-            content: '';
+        /* Radar Chart */
+        .radar-container {
+            position: relative;
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .radar-svg {
+            max-width: 300px;
+            max-height: 300px;
+        }
+
+        .radar-labels {
             position: absolute;
-            top: 0;
-            left: -100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
+            pointer-events: none;
         }
 
-        .posture-cell.active::before {
-            left: 100%;
+        .radar-label {
+            position: absolute;
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            font-weight: 500;
         }
 
-        /* Mode Toggle */
-        .mode-toggle {
+        /* Weight Heatmap */
+        .heatmap {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .sensor-cell {
+            aspect-ratio: 1;
+            border-radius: 1rem;
+            border: 2px solid var(--color-border);
             display: flex;
-            gap: 0.5rem;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            transition: all 0.3s;
         }
 
-        /* Loading Animation */
-        .loading-dot {
-            width: 1rem;
-            height: 1rem;
-            border-radius: 50%;
-            background: var(--color-accent);
-            margin: 0 auto 1.5rem;
-            animation: pulse 2s ease-in-out infinite;
+        .sensor-value {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
         }
 
+        .sensor-label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Timeline */
+        .timeline-container {
+            height: 60px;
+            display: flex;
+            align-items: flex-end;
+            gap: 0.25rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+
+        .timeline-bar {
+            flex: 1;
+            min-width: 12px;
+            height: 40px;
+            border-radius: 6px 6px 2px 2px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .timeline-bar.correct { background: var(--color-accent); }
+        .timeline-bar.warning { background: var(--color-yellow); }
+        .timeline-bar.away { background: var(--color-gray); }
+
+        /* Labels & Help */
+        .info-label {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Animations */
         @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(141, 96, 245, 0.7);
-            }
-            50% {
-                opacity: 0.7;
-                transform: scale(1.1);
-                box-shadow: 0 0 0 10px rgba(141, 96, 245, 0);
-            }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
         }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .status-text { font-size: 3.5rem; }
+        }
+
         @media (max-width: 768px) {
-            .status-display {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-            }
-
-            .status-text {
-                font-size: 2.5rem;
-            }
-
-            .card {
-                padding: 1.5rem;
-            }
-
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
+            .container { padding: 1rem; }
+            .status-text { font-size: 2.75rem; }
+            .metric-value-big { font-size: 5rem; }
+            .card { padding: 1.75rem; }
         }
 
-        /* Hide/Show */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Test Mode Indicator */
-        .test-mode {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            background: var(--color-accent);
-            color: #000;
-            padding: 0.5rem 1rem;
-            border-radius: 1rem;
-            font-size: 0.75rem;
-            font-weight: 500;
-            z-index: 1000;
-        }
+        .hidden { display: none !important; }
+        .test-mode { position: fixed; top: 1rem; right: 1rem; background: var(--color-accent); color: #000; padding: 0.5rem 1rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 500; z-index: 1000; }
     </style>
 </head>
 <body>
-    <!-- Test Mode Toggle -->
+    <!-- Test Mode -->
     <div id="testModeToggle" class="test-mode hidden">
-        🧪 TEST MODE
+        🧪 TEST MODE 
         <button id="toggleTestMode" style="margin-left: 0.5rem; background: none; border: none; color: inherit; font-size: inherit; cursor: pointer;">OFF</button>
     </div>
 
     <!-- Login Screen -->
     <div id="loginScreen" class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-        <div style="text-align: center; max-width: 400px;">
-            <h1 style="font-size: 3rem; font-weight: 300; margin-bottom: 2rem; letter-spacing: 0.05em;">LEANTIL</h1>
-            <div class="loading-dot"></div>
-            <p style="color: var(--color-text-muted); margin-bottom: 3rem; font-size: 1.125rem;">
-                Connect your LeanTil HC-05 device to start monitoring
+        <div style="text-align: center; max-width: 500px;">
+            <h1 class="logo">LEANTIL</h1>
+            <div class="status-dot" style="margin: 0 auto 2rem;"></div>
+            <p style="color: var(--color-text-muted); margin-bottom: 3rem; font-size: 1.25rem;">
+                Monitor your posture in real time
             </p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <button id="connectBtn" class="btn btn-primary">🔌 Connect HC-05</button>
-                <button id="testModeBtn" class="btn">🧪 Test Mode</button>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; max-width: 400px; margin: 0 auto;">
+                <button id="connectBtn" class="btn btn-primary">🔗 Connect Device</button>
+                <button id="testModeBtn" class="btn">🧪 Demo Mode</button>
             </div>
-            <p id="errorMessage" style="color: #ef4444; margin-top: 1rem; display: none;"></p>
+            <p id="errorMessage" style="color: #ef4444; margin-top: 1.5rem; display: none; font-size: 1rem;"></p>
         </div>
     </div>
 
@@ -350,12 +388,12 @@
         <!-- Header -->
         <div class="header">
             <h1 class="logo">LEANTIL</h1>
-            <div style="display: flex; align-items: center; gap: 1.5rem;">
-                <div class="connection-status">
+            <div style="display: flex; align-items: center; gap: 2rem;">
+                <div class="status-info">
                     <span id="statusDot" class="status-dot"></span>
                     <span id="dataCount">Data: 0</span>
                 </div>
-                <div class="mode-toggle">
+                <div style="display: flex; gap: 0.5rem;">
                     <button id="basicModeBtn" class="btn btn-toggle active">Basic</button>
                     <button id="advancedModeBtn" class="btn btn-toggle">Advanced</button>
                 </div>
@@ -363,90 +401,147 @@
             </div>
         </div>
 
-        <!-- Status + Score Card -->
+        <!-- Status + Score -->
         <div class="card">
             <div class="status-display">
                 <div style="flex: 1;">
                     <div id="statusText" class="status-text status-correct">CORRECT</div>
                     <div class="status-label">Current Status</div>
                 </div>
-                <div style="text-align: right;">
-                    <div class="score-circle" id="scoreCircle">
+                <div style="text-align: right; min-width: 200px;">
+                    <div class="score-circle" id="scoreCircle" style="--score-percent: 306deg;">
                         <div class="score-inner">
                             <span id="scoreValue">85</span>
                         </div>
                     </div>
-                    <h3 style="font-weight: 300; margin-top: 1rem; font-size: 1.5rem;">Overall Score</h3>
-                    <p class="status-label">Comprehensive wellness</p>
+                    <h3 style="font-weight: 300; margin-top: 1.25rem; font-size: 1.75rem;">Overall Score</h3>
+                    <p class="status-label">Your posture wellness score</p>
                 </div>
             </div>
         </div>
 
-        <!-- Session Summary -->
-        <div class="card">
-            <h3 style="font-size: 1.875rem; font-weight: 300; text-align: center; margin-bottom: 2rem;">Session Summary</h3>
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-value" id="sessionTime">0</div>
-                    <div class="metric-label">Minutes Active</div>
+        <!-- BASIC MODE: Posture Map + Session Summary -->
+        <div id="basicModeContent">
+            <div class="grid-3">
+                <!-- Posture Map -->
+                <div class="card">
+                    <h3 style="font-size: 1.5rem; font-weight: 300; margin-bottom: 1.5rem;">Posture Map</h3>
+                    <div class="posture-grid">
+                        <div class="posture-cell" id="cell-0"></div>
+                        <div class="posture-cell" id="cell-1"></div>
+                        <div class="posture-cell" id="cell-2"></div>
+                        <div class="posture-cell" id="cell-3"></div>
+                    </div>
+                    <p id="postureLabel" style="text-align: center; color: var(--color-text-muted); margin-top: 1.5rem; font-size: 1.125rem;">Balanced weight distribution</p>
+                    <div class="info-label">4 sensors detect your weight distribution across the chair</div>
                 </div>
-                <div class="metric-card">
-                    <div class="metric-value" id="correctPercent">0%</div>
-                    <div class="metric-label">Good Posture</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value" id="stabilityScore">0</div>
-                    <div class="metric-label">Stability</div>
+
+                <!-- Session Summary -->
+                <div class="card">
+                    <h3 style="font-size: 1.5rem; font-weight: 300; margin-bottom: 2rem;">Session Summary</h3>
+                    <div class="grid-3" style="gap: 1rem;">
+                        <div class="metric-card">
+                            <div class="metric-value" id="sessionTime">0</div>
+                            <div class="metric-label">Active</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="correctPercent">0%</div>
+                            <div class="metric-label">Good Posture</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="stabilityScore">0</div>
+                            <div class="metric-label">Stability</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Basic Mode: Posture Map -->
-        <div id="basicModeContent" class="card">
-            <h3 style="font-size: 1.5rem; font-weight: 300; text-align: center; margin-bottom: 1.5rem;">Posture Map</h3>
-            <div class="posture-grid">
-                <div class="posture-cell" id="cell-0"></div>
-                <div class="posture-cell" id="cell-1"></div>
-                <div class="posture-cell" id="cell-2"></div>
-                <div class="posture-cell" id="cell-3"></div>
-            </div>
-            <p style="text-align: center; color: var(--color-text-muted); margin-top: 1.5rem; font-size: 1.125rem;" id="postureLabel">Current Position</p>
-        </div>
-
-        <!-- Advanced Mode Content -->
+        <!-- ADVANCED MODE -->
         <div id="advancedModeContent" class="hidden">
-            <!-- Radar Chart (SVG Animation) -->
-            <div class="card">
-                <h3 style="font-size: 1.5rem; font-weight: 300; text-align: center; margin-bottom: 2rem;">Balance Radar</h3>
-                <svg id="radarChart" width="300" height="300" viewBox="0 0 300 300" style="margin: 0 auto; display: block;">
-                    <!-- Background circles -->
-                    <rcle cx="150" cy="150" r="80" fill="none" stroke="#333" stroke-width="1" opacity="0.3"/>
-                    <rcle cx="150" cy="150" r="120" fill="none" stroke="#333" stroke-width="1" opacity="0.2"/>
-                    
-                    <!-- Radar path (animated) -->
-                    <path id="radarPath" d="" fill="url(#radarGradient)" stroke="var(--color-accent)" stroke-width="2" opacity="0.8"/>
-                    
-                    <!-- Center dot -->
-                    <rcle cx="150" cy="150" r="4" fill="var(--color-accent)" opacity="0.8"/>
-                </svg>
-                <div style="text-align: center; margin-top: 1rem;">
-                    <div id="radarStatus" style="font-size: 1.25rem; font-weight: 300; color: var(--color-accent);">BALANCED</div>
-                    <div style="color: var(--color-text-muted); font-size: 0.875rem;">Load Distribution</div>
+            <!-- Row 1: Posture Map + Radar (comparabili) -->
+            <div class="grid-2">
+                <!-- Posture Map (sempre visibile) -->
+                <div class="card">
+                    <h3 style="font-size: 1.25rem; font-weight: 300; margin-bottom: 1.25rem;">Posture Map</h3>
+                    <div class="posture-grid">
+                        <div class="posture-cell" id="cell-adv-0"></div>
+                        <div class="posture-cell" id="cell-adv-1"></div>
+                        <div class="posture-cell" id="cell-adv-2"></div>
+                        <div class="posture-cell" id="cell-adv-3"></div>
+                    </div>
+                    <div class="info-label">FRONT-LEFT | FRONT-RIGHT | BACK-LEFT | BACK-RIGHT</div>
+                </div>
+
+                <!-- Balance Radar -->
+                <div class="card">
+                    <h3 style="font-size: 1.25rem; font-weight: 300; margin-bottom: 1.25rem;">Balance Radar</h3>
+                    <div class="radar-container">
+                        <svg id="radarChart" class="radar-svg" viewBox="0 0 300 300">
+                            <!-- Grid -->
+                            <rcle cx="150" cy="150" r="40" fill="none" stroke="#333" stroke-width="1" opacity="0.4"/>
+                            <rcle cx="150" cy="150" r="80" fill="none" stroke="#333" stroke-width="1" opacity="0.3"/>
+                            <rcle cx="150" cy="150" r="120" fill="none" stroke="#333" stroke-width="1" opacity="0.2"/>
+                            
+                            <!-- Radar path -->
+                            <path id="radarPath" d="" fill="url(#radarGradient)" stroke="var(--color-accent)" stroke-width="3" opacity="0.7"/>
+                            
+                            <!-- Center -->
+                            <rcle cx="150" cy="150" r="6" fill="var(--color-accent)" opacity="0.9"/>
+                        </svg>
+                        <div class="info-label">FRONT → RIGHT → BACK → LEFT (clockwise)</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Timeline -->
+            <!-- Row 2: Weight Heatmap -->
             <div class="card">
-                <h3 style="font-size: 1.5rem; font-weight: 300; text-align: center; margin-bottom: 2rem;">Timeline</h3>
-                <div id="timeline" style="display: flex; gap: 0.25rem; justify-content: center; height: 40px; align-items: flex-end;">
-                    <!-- Timeline bars will be generated here -->
+                <h3 style="font-size: 1.5rem; font-weight: 300; margin-bottom: 1.5rem;">Weight Sensors</h3>
+                <div class="heatmap">
+                    <div class="sensor-cell" id="sensor-0">
+                        <div class="sensor-value" id="weight-0">0g</div>
+                        <div class="sensor-label">Front Left</div>
+                    </div>
+                    <div class="sensor-cell" id="sensor-1">
+                        <div class="sensor-value" id="weight-1">0g</div>
+                        <div class="sensor-label">Front Right</div>
+                    </div>
+                    <div class="sensor-cell" id="sensor-2">
+                        <div class="sensor-value" id="weight-2">0g</div>
+                        <div class="sensor-label">Back Left</div>
+                    </div>
+                    <div class="sensor-cell" id="sensor-3">
+                        <div class="sensor-value" id="weight-3">0g</div>
+                        <div class="sensor-label">Back Right</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 3: Big Metrics + Timeline -->
+            <div class="grid-2">
+                <!-- Big Metrics -->
+                <div class="card metric-big">
+                    <div class="metric-value-big" id="bigCorrectPercent">0%</div>
+                    <div class="metric-label-big">Good Posture</div>
+                    <div class="info-label">% of time in correct posture</div>
+                </div>
+                
+                <!-- Timeline -->
+                <div class="card">
+                    <h3 style="font-size: 1.25rem; font-weight: 300; margin-bottom: 1.5rem;">Posture Timeline (Last 30)</h3>
+                    <div id="timeline" class="timeline-container"></div>
+                    <div class="info-label">
+                        <span style="color: var(--color-accent);">🟣</span> Correct 
+                        <span style="color: var(--color-yellow);">🟡</span> Leaning 
+                        <span style="color: var(--color-gray);">⚫</span> Away
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // === CONFIG ===
+        // === GLOBAL STATE ===
         const ACCENT_COLOR = '#8d60f5';
         let isTestMode = false;
         let port, reader;
@@ -455,15 +550,27 @@
         let sessionStartTime = Date.now();
         let correctCount = 0;
         let totalCount = 0;
+        let currentMode = 'basic';
 
-        // Test data patterns
+        // Arduino posture mapping
+        const postureMap = {
+            'CORRETTA': { display: 'CORRECT', type: 'correct' },
+            'INCLINATO_AVANTI': { display: 'LEAN FORWARD', type: 'warning' },
+            'INCLINATO_INDIETRO': { display: 'LEAN BACK', type: 'warning' },
+            'INCLINATO_SINISTRA': { display: 'LEAN LEFT', type: 'warning' },
+            'INCLINATO_DESTRA': { display: 'LEAN RIGHT', type: 'warning' },
+            'ASSENTE': { display: 'AWAY', type: 'away' },
+            'CORRECT': { display: 'CORRECT', type: 'correct' }
+        };
+
+        // Test data
         const testPostures = [
-            { name: 'CORRETTA', weight: 4800, cells: [1,1,1,1] },
-            { name: 'INCLINATO_INDIETRO', weight: 5000, cells: [0,0,1,1] },
-            { name: 'INCLINATO_AVANTI', weight: 4500, cells: [1,1,0,0] },
-            { name: 'INCLINATO_DESTRA', weight: 4700, cells: [0,1,0,1] },
-            { name: 'INCLINATO_SINISTRA', weight: 4600, cells: [1,0,1,0] },
-            { name: 'ASSENTE', weight: 0, cells: [0,0,0,0] }
+            { name: 'CORRETTA', weights: [1200, 1250, 1180, 1220] },
+            { name: 'INCLINATO_INDIETRO', weights: [800, 850, 1450, 1480] },
+            { name: 'INCLINATO_AVANTI', weights: [1400, 1420, 950, 980] },
+            { name: 'INCLINATO_DESTRA', weights: [1100, 1350, 1150, 1400] },
+            { name: 'INCLINATO_SINISTRA', weights: [1350, 1100, 1400, 1150] },
+            { name: 'ASSENTE', weights: [0, 0, 0, 0] }
         ];
 
         // DOM Elements
@@ -489,38 +596,34 @@
             advancedModeBtn: document.getElementById('advancedModeBtn'),
             basicModeContent: document.getElementById('basicModeContent'),
             advancedModeContent: document.getElementById('advancedModeContent'),
-            radarChart: document.getElementById('radarChart'),
             radarPath: document.getElementById('radarPath'),
-            radarStatus: document.getElementById('radarStatus'),
-            timeline: document.getElementById('timeline')
+            timeline: document.getElementById('timeline'),
+            bigCorrectPercent: document.getElementById('bigCorrectPercent')
+        };
+
+        // Weights elements
+        const weightElements = {
+            0: { value: document.getElementById('weight-0'), cell: document.getElementById('sensor-0') },
+            1: { value: document.getElementById('weight-1'), cell: document.getElementById('sensor-1') },
+            2: { value: document.getElementById('weight-2'), cell: document.getElementById('sensor-2') },
+            3: { value: document.getElementById('weight-3'), cell: document.getElementById('sensor-3') }
         };
 
         // === INIT ===
-        initEventListeners();
-        checkWebSerialSupport();
-
-        function initEventListeners() {
-            // Connect
-            elements.connectBtn.addEventListener('click', connectDevice);
-            
-            // Test Mode
-            elements.testModeBtn.addEventListener('click', toggleTestMode);
-            elements.toggleTestMode.addEventListener('click', toggleTestMode);
-            
-            // Disconnect
-            elements.disconnectBtn.addEventListener('click', disconnectDevice);
-            
-            // Mode Toggle
-            elements.basicModeBtn.addEventListener('click', () => switchMode('basic'));
-            elements.advancedModeBtn.addEventListener('click', () => switchMode('advanced'));
+        init();
+        
+        function init() {
+            initEventListeners();
+            checkWebSerialSupport();
         }
 
-        function checkWebSerialSupport() {
-            if (!('serial' in navigator)) {
-                elements.errorMessage.textContent = 'Web Serial API requires Chrome/Edge. Use Test Mode.';
-                elements.errorMessage.style.display = 'block';
-                elements.connectBtn.style.display = 'none';
-            }
+        function initEventListeners() {
+            elements.connectBtn.onclick = connectDevice;
+            elements.testModeBtn.onclick = toggleTestMode;
+            elements.toggleTestMode.onclick = toggleTestMode;
+            elements.disconnectBtn.onclick = disconnectDevice;
+            elements.basicModeBtn.onclick = () => switchMode('basic');
+            elements.advancedModeBtn.onclick = () => switchMode('advanced');
         }
 
         // === CONNECTION ===
@@ -528,25 +631,25 @@
             try {
                 port = await navigator.serial.requestPort();
                 await port.open({ baudRate: 9600 });
-                
                 isConnected = true;
                 showDashboard();
                 readSerialData();
             } catch (error) {
-                showError('Connection failed. Try Test Mode.');
+                showError('Connection failed. Use Demo Mode to test.');
             }
         }
 
         async function disconnectDevice() {
+            stopTestMode();
             if (reader) await reader.cancel();
             if (port) await port.close();
-            
             isConnected = false;
             showLogin();
             resetData();
         }
 
         // === TEST MODE ===
+        let testInterval;
         function toggleTestMode() {
             isTestMode = !isTestMode;
             elements.testModeToggle.classList.toggle('hidden', !isTestMode);
@@ -555,40 +658,42 @@
             if (isTestMode && !isConnected) {
                 showDashboard();
                 startTestData();
+            } else if (!isTestMode) {
+                stopTestMode();
             }
         }
 
-        let testInterval;
         function startTestData() {
             testInterval = setInterval(() => {
-                const randomPosture = testPostures[Math.floor(Math.random() * testPostures.length)];
-                simulateData(randomPosture);
-            }, 2000);
+                const posture = testPostures[Math.floor(Math.random() * testPostures.length)];
+                const data = {
+                    postureName: posture.name,
+                    lc0: posture.weights[0],
+                    lc1: posture.weights[1],
+                    lc2: posture.weights[2],
+                    lc3: posture.weights[3],
+                    totalWeight: posture.weights.reduce((a, b) => a + b, 0)
+                };
+                parseAndUpdateData(data);
+            }, 2500);
         }
 
-        function simulateData(posture) {
-            const data = {
-                postureName: posture.name,
-                totalWeight: posture.weight,
-                lc0: Math.random() * 2000,
-                lc1: Math.random() * 2000,
-                lc2: Math.random() * 2000,
-                lc3: Math.random() * 2000
-            };
-            parseAndUpdateData(data);
+        function stopTestMode() {
+            if (testInterval) {
+                clearInterval(testInterval);
+                testInterval = null;
+            }
         }
 
-        // === SERIAL DATA ===
+        // === SERIAL ===
         async function readSerialData() {
             const decoder = new TextDecoderStream();
-            const readableStreamClosed = port.readable.pipeTo(decoder.writable);
+            port.readable.pipeTo(decoder.writable);
             reader = decoder.readable.getReader();
 
             try {
                 while (true) {
-                    const { value, done } = await reader.read();
-                    if (done) break;
-                    
+                    const { value } = await reader.read();
                     const lines = value.split('\n');
                     for (const line of lines) {
                         if (line.startsWith('DATA,')) {
@@ -598,189 +703,165 @@
                     }
                 }
             } catch (error) {
-                console.error('Serial read error:', error);
+                console.error('Serial error:', error);
             }
         }
 
         function parseSerialLine(line) {
             const parts = line.split(',');
             return {
-                timestamp: parseInt(parts[1] || 0),
                 lc0: parseFloat(parts[2] || 0),
                 lc1: parseFloat(parts[3] || 0),
                 lc2: parseFloat(parts[4] || 0),
                 lc3: parseFloat(parts[5] || 0),
                 totalWeight: parseFloat(parts[6] || 0),
-                centerX: parseFloat(parts[7] || 0),
-                centerY: parseFloat(parts[8] || 0),
-                postureCode: parseInt(parts[9] || 0),
                 postureName: parts[10]?.trim() || 'UNKNOWN'
             };
         }
 
         // === DATA PROCESSING ===
         function parseAndUpdateData(data) {
-            dataHistory.push(data);
-            if (dataHistory.length > 100) dataHistory.shift();
+            dataHistory.push({...data, timestamp: Date.now()});
+            if (dataHistory.length > 200) dataHistory.shift();
 
             totalCount++;
-            if (data.postureName === 'CORRETTA') correctCount++;
+            const mappedPosture = postureMap[data.postureName] || { display: 'UNKNOWN', type: 'warning' };
+            if (mappedPosture.type === 'correct') correctCount++;
 
-            updateUI(data);
+            updateAllUI(data, mappedPosture);
         }
 
-        function updateUI(data) {
+        function updateAllUI(data, posture) {
             // Status
-            updateStatus(data.postureName);
-            
+            elements.statusText.textContent = posture.display;
+            elements.statusText.className = `status-text status-${posture.type}`;
+            elements.postureLabel.textContent = posture.display;
+
             // Score
             const score = Math.max(0, Math.min(100, Math.round((correctCount / totalCount) * 100)));
             elements.scoreValue.textContent = score;
             elements.scoreCircle.style.setProperty('--score-percent', `${score * 3.6}deg`);
-            
+            elements.correctPercent.textContent = `${score}%`;
+            elements.bigCorrectPercent.textContent = `${score}%`;
+            elements.stabilityScore.textContent = Math.round(score * 0.9 + 10);
+
             // Data count
             elements.dataCount.textContent = `Data: ${totalCount}`;
-            
+
             // Session time
             const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
             elements.sessionTime.textContent = minutes;
-            
-            // Metrics
-            elements.correctPercent.textContent = `${score}%`;
-            elements.stabilityScore.textContent = Math.round(score * 0.85 + 15);
-            
-            // Posture map
-            updatePostureMap(data.postureName);
-            
-            // Radar (advanced)
-            if (!elements.basicModeContent.classList.contains('hidden')) {
-                updateRadar(data);
-                updateTimeline();
-            }
+
+            // Update all visualizations
+            updatePostureMaps(data);
+            updateWeights(data);
+            updateRadar(data);
+            updateTimeline();
+
+            // Update cells color intensity
+            Object.values(weightElements).forEach(({cell}, i) => {
+                const weight = data[`lc${i}`] || 0;
+                const intensity = Math.min(1, weight / 1500);
+                cell.style.background = `rgba(141, 96, 245, ${intensity * 0.4})`;
+                cell.style.borderColor = `rgba(141, 96, 245, ${intensity * 0.8})`;
+            });
         }
 
-        function updateStatus(postureName) {
-            let displayName = postureName === 'ASSENTE' ? 'AWAY' : 
-                            postureName === 'CORRETTA' ? 'CORRECT' : 
-                            postureName.replace('_', ' ').toUpperCase();
-            
-            let statusClass = postureName === 'CORRETTA' ? 'status-correct' :
-                            postureName === 'ASSENTE' ? 'status-away' : 'status-warning';
-            
-            elements.statusText.textContent = displayName;
-            elements.statusText.className = `status-text ${statusClass}`;
-            elements.postureLabel.textContent = displayName;
+        // Update both posture maps (basic + advanced)
+        function updatePostureMaps(data) {
+            const maps = {
+                basic: ['cell-0', 'cell-1', 'cell-2', 'cell-3'],
+                advanced: ['cell-adv-0', 'cell-adv-1', 'cell-adv-2', 'cell-adv-3']
+            };
+
+            Object.values(maps).forEach(cells => {
+                // Reset
+                cells.forEach(id => document.getElementById(id)?.classList.remove('active'));
+                
+                // Activate based on posture
+                const postureName = data.postureName;
+                if (postureName === 'CORRETTA' || postureName === 'CORRECT') {
+                    cells.forEach(id => document.getElementById(id)?.classList.add('active'));
+                } else if (postureName.includes('AVANTI') || postureName.includes('FORWARD')) {
+                    document.getElementById(cells[0])?.classList.add('active');
+                    document.getElementById(cells[1])?.classList.add('active');
+                } else if (postureName.includes('INDIETRO') || postureName.includes('BACK')) {
+                    document.getElementById(cells[2])?.classList.add('active');
+                    document.getElementById(cells[3])?.classList.add('active');
+                } else if (postureName.includes('SINISTRA') || postureName.includes('LEFT')) {
+                    document.getElementById(cells[0])?.classList.add('active');
+                    document.getElementById(cells[2])?.classList.add('active');
+                } else if (postureName.includes('DESTRA') || postureName.includes('RIGHT')) {
+                    document.getElementById(cells[1])?.classList.add('active');
+                    document.getElementById(cells[3])?.classList.add('active');
+                }
+            });
         }
 
-        function updatePostureMap(postureName) {
-            const cells = ['cell-0', 'cell-1', 'cell-2', 'cell-3'].map(id => document.getElementById(id));
-            
-            // Reset
-            cells.forEach(cell => cell.classList.remove('active'));
-            
-            // Activate
-            switch (postureName) {
-                case 'INCLINATO_AVANTI':
-                case 'LEAN_FORWARD':
-                    cells[0].classList.add('active');
-                    cells[1].classList.add('active');
-                    break;
-                case 'INCLINATO_INDIETRO':
-                case 'LEAN_BACK':
-                    cells[2].classList.add('active');
-                    cells[3].classList.add('active');
-                    break;
-                case 'INCLINATO_SINISTRA':
-                case 'LEAN_LEFT':
-                    cells[0].classList.add('active');
-                    cells[2].classList.add('active');
-                    break;
-                case 'INCLINATO_DESTRA':
-                case 'LEAN_RIGHT':
-                    cells[1].classList.add('active');
-                    cells[3].classList.add('active');
-                    break;
-                case 'CORRETTA':
-                case 'CORRECT':
-                    cells.forEach(cell => cell.classList.add('active'));
-                    break;
-            }
+        function updateWeights(data) {
+            Object.entries(weightElements).forEach(([i, el]) => {
+                const weight = data[`lc${i}`] || 0;
+                el.value.textContent = `${Math.round(weight)}g`;
+            });
         }
 
         function updateRadar(data) {
             const weights = [data.lc0 || 0, data.lc1 || 0, data.lc2 || 0, data.lc3 || 0];
             const maxWeight = Math.max(...weights, 100);
-            const normalized = weights.map(w => (w / maxWeight) * 100);
-            
-            // Simple radar path (FRONT, RIGHT, BACK, LEFT)
-            const angles = [0, 90, 180, 270];
-            let path = '';
+            const normalized = weights.map(w => Math.min(120, (w / maxWeight) * 120));
+
+            // Radar points: FRONT, RIGHT, BACK, LEFT
+            const angles = [90, 0, 270, 180]; // Clockwise from top
+            let pathData = '';
             angles.forEach((angle, i) => {
-                const rad = angle * Math.PI / 180;
-                const radius = (normalized[i] / 100) * 90;
-                const x = 150 + Math.cos(rad) * radius;
-                const y = 150 + Math.sin(rad) * radius;
-                path += (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+                const rad = (angle * Math.PI) / 180;
+                const r = normalized[i];
+                const x = 150 + Math.cos(rad) * r;
+                const y = 150 + Math.sin(rad) * r;
+                pathData += (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
             });
-            path += ' Z';
-            
-            elements.radarPath.setAttribute('d', path);
-            
-            const balanceStatus = data.postureName === 'CORRETTA' ? 'BALANCED' : 
-                                 data.postureName === 'ASSENTE' ? 'AWAY' : 'ADJUSTING';
-            elements.radarStatus.textContent = balanceStatus;
-            elements.radarStatus.style.color = data.postureName === 'CORRETTA' ? 
-                                             'var(--color-accent)' : 'var(--color-yellow)';
+            pathData += ' Z';
+
+            elements.radarPath.setAttribute('d', pathData);
         }
 
         function updateTimeline() {
-            const recentData = dataHistory.slice(-24);
+            const recent = dataHistory.slice(-30);
             elements.timeline.innerHTML = '';
-            
-            recentData.forEach((data, i) => {
+
+            recent.forEach(data => {
                 const bar = document.createElement('div');
-                bar.style.width = '8px';
-                bar.style.height = '30px';
-                bar.style.background = data.postureName === 'CORRETTA' ? 
-                                     'var(--color-accent)' : '#666';
-                bar.style.borderRadius = '4px';
-                bar.style.opacity = '0.8';
-                bar.style.transition = 'all 0.3s';
-                bar.dataset.posture = data.postureName;
+                const posture = postureMap[data.postureName];
+                bar.className = `timeline-bar ${posture?.type || 'warning'}`;
+                bar.title = posture?.display || 'Unknown';
                 elements.timeline.appendChild(bar);
             });
         }
 
-        // === UI MODE ===
         function switchMode(mode) {
-            const isAdvanced = mode === 'advanced';
-            
-            elements.basicModeBtn.classList.toggle('active', !isAdvanced);
-            elements.advancedModeBtn.classList.toggle('active', isAdvanced);
-            
-            elements.basicModeContent.classList.toggle('hidden', isAdvanced);
-            elements.advancedModeContent.classList.toggle('hidden', !isAdvanced);
+            currentMode = mode;
+            elements.basicModeBtn.classList.toggle('active', mode === 'basic');
+            elements.advancedModeBtn.classList.toggle('active', mode === 'advanced');
+            elements.basicModeContent.classList.toggle('hidden', mode === 'advanced');
+            elements.advancedModeContent.classList.toggle('hidden', mode === 'basic');
         }
 
         // === UTILS ===
         function showDashboard() {
             elements.loginScreen.classList.add('hidden');
             elements.dashboard.classList.remove('hidden');
-            elements.statusDot.classList.add('connected');
+            elements.statusDot.style.animationPlayState = 'running';
         }
 
         function showLogin() {
             elements.dashboard.classList.add('hidden');
             elements.loginScreen.classList.remove('hidden');
-            elements.statusDot.classList.remove('connected');
         }
 
-        function showError(message) {
-            elements.errorMessage.textContent = message;
+        function showError(msg) {
+            elements.errorMessage.textContent = msg;
             elements.errorMessage.style.display = 'block';
-            setTimeout(() => {
-                elements.errorMessage.style.display = 'none';
-            }, 5000);
+            setTimeout(() => elements.errorMessage.style.display = 'none', 5000);
         }
 
         function resetData() {
@@ -790,11 +871,10 @@
             totalCount = 0;
         }
 
-        // Stop test mode on disconnect
-        function stopTestMode() {
-            if (testInterval) {
-                clearInterval(testInterval);
-                testInterval = null;
+        function checkWebSerialSupport() {
+            if (!('serial' in navigator)) {
+                elements.connectBtn.style.opacity = '0.5';
+                elements.connectBtn.onclick = () => showError('Web Serial needs Chrome/Edge');
             }
         }
     </script>
