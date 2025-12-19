@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LeanTil Dashboard - Posture Monitoring</title>
     <meta name="description" content="Real-time posture monitoring dashboard for LeanTil smart chair">
     
@@ -222,17 +222,44 @@
         }
 
         /* Grid Layout */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 1.5rem;
+        @media (max-width: 768px) {
+            .status-display {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+            
+            .status-display > div {
+                flex: 1 1 100%;
+            }
+
+            .header-controls {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .header-controls .status-info {
+                order: -1;
+                flex: 0 0 100%;
+                justify-content: center;
+            }
+            
+            .header-controls > div:first-child {
+                flex: 1 1 auto;
+            }
+
+            
+            .grid-2 { 
+                grid-template-columns: 1fr !important;
+                gap: 1rem;
+            }
+            .grid-3 { 
+                grid-template-columns: 1fr !important;
+                gap: 1rem;
+            }
         }
 
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
 
         /* Metrics */
         .metric-card {
@@ -896,19 +923,47 @@
         }
 
         @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            .status-text { font-size: 2.75rem; }
-            .card { padding: 1.5rem; }
-            .posture-cell { width: 4.5rem; height: 4.5rem; font-size: 0.75rem; }
-            .logo-img { height: 40px; }
-            .header { flex-direction: column; align-items: flex-start; }
-            .header-controls { width: 100%; justify-content: space-between; }
-            .impact-value-hero { font-size: 2rem; }
-            .impact-stats { grid-template-columns: 1fr; }
-            .calendar-circle { width: 32px; height: 32px; font-size: 0.7rem; }
-            .history-calendar { grid-template-columns: repeat(7, 1fr); }
-            .comparison-stats-grid { grid-template-columns: 1fr; }
-            .timeline-markers { font-size: 0.65rem; }
+            /* EXTRA SMALL DEVICES (< 480px) */
+@media (max-width: 480px) {
+    .status-text { font-size: 2rem; }
+    .status-label { font-size: 0.85rem; }
+    
+    .score-circle { width: 100px; height: 100px; }
+    .score-inner { width: 80px; height: 80px; font-size: 1.75rem; }
+    
+    .posture-cell { width: 3.5rem; height: 3.5rem; }
+    .posture-cell .sensor-name { font-size: 0.6rem; }
+    .posture-cell .weight-percent { font-size: 1.1rem; }
+    
+    .metric-value { font-size: 1.75rem; }
+    .metric-card { padding: 0.875rem; }
+    
+    .card { padding: 1rem; }
+    .card h3 { font-size: 1rem; }
+    
+    .calendar-circle { width: 28px; height: 28px; font-size: 0.65rem; }
+    .calendar-day-label { font-size: 0.55rem; }
+    
+    .btn { padding: 0.625rem 1.25rem; font-size: 0.75rem; }
+    .btn-toggle { padding: 0.5rem 1rem; }
+    
+    .quality-legend { grid-template-columns: 1fr; gap: 0.5rem; }
+    .quality-legend-item { flex-direction: row; justify-content: space-between; }
+    
+    .timeline-container { grid-template-columns: repeat(auto-fill, minmax(14px, 1fr)); gap: 0.35rem; }
+    .timeline-markers { font-size: 0.55rem; padding: 0 0.25rem 0.35rem; }
+    
+    .impact-value-hero { font-size: 1.75rem; }
+    .impact-icon { font-size: 2rem; }
+    .impact-stat-value { font-size: 1.25rem; }
+    
+    .comparison-value { font-size: 1.75rem; }
+    .insight-value { font-size: 1.5rem; }
+    
+    .modal { padding: 1.5rem; }
+    .modal-title { font-size: 1.25rem; }
+}
+
         }
 
         .hidden { display: none !important; }
@@ -1572,6 +1627,17 @@
                 }
             };
 
+            // Auto-switch to week view on mobile
+            function checkMobileView() {
+                if (window.innerWidth < 768 && calendarView === 'month') {
+                    switchCalendarView('week');
+                }
+            }
+            
+            window.addEventListener('resize', checkMobileView);
+            checkMobileView(); // Run on load
+
+            
             document.addEventListener('mousemove', (e) => {
                 if (e.target.classList.contains('timeline-bar')) {
                     const data = e.target._postureData;
