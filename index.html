@@ -69,7 +69,7 @@
             background: var(--color-card);
             border: 1px solid var(--color-border);
             border-radius: 1.5rem;
-            padding: 2.5rem;
+            padding: 2rem;
             margin-bottom: 2rem;
             transition: transform 0.2s;
         }
@@ -79,9 +79,13 @@
         }
 
         .card h3 {
-            font-size: 1.5rem;
-            font-weight: 300;
-            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 1.25rem;
+        }
+
+        .card.compact {
+            padding: 1.5rem;
         }
 
         /* Status Display */
@@ -220,27 +224,27 @@
         /* Grid Layout */
         .grid-2 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
         }
 
         .grid-3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
         }
 
         /* Metrics */
         .metric-card {
             text-align: center;
-            padding: 1.5rem;
+            padding: 1.25rem;
             background: rgba(26, 26, 26, 0.5);
             border-radius: 1rem;
             border: 1px solid var(--color-border);
         }
 
         .metric-value {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 200;
             color: var(--color-accent);
             margin-bottom: 0.5rem;
@@ -257,15 +261,15 @@
         .posture-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1.25rem;
-            margin: 1.5rem auto;
+            gap: 1rem;
+            margin: 1rem auto;
             width: fit-content;
         }
 
         .posture-cell {
-            width: 5.5rem;
-            height: 5.5rem;
-            border-radius: 1.25rem;
+            width: 5rem;
+            height: 5rem;
+            border-radius: 1rem;
             border: 3px solid var(--color-border);
             background: rgba(107, 114, 128, 0.3);
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -289,55 +293,61 @@
         }
 
         .posture-cell .sensor-name {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             margin-bottom: 0.25rem;
             opacity: 0.9;
         }
 
         .posture-cell .weight-percent {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 500;
         }
 
-        /* Achievement Badge */
-        .achievement-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-light) 100%);
-            border-radius: 2rem;
-            padding: 3rem;
+        /* Achievements Card */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .achievement-item {
             text-align: center;
-            z-index: 2000;
-            box-shadow: 0 20px 60px rgba(141, 96, 245, 0.6);
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            padding: 1rem;
+            background: rgba(26, 26, 26, 0.5);
+            border-radius: 0.75rem;
+            border: 1px solid var(--color-border);
+            transition: all 0.3s;
         }
 
-        .achievement-popup.show {
-            transform: translate(-50%, -50%) scale(1);
+        .achievement-item.unlocked {
+            border-color: var(--color-accent);
+            background: rgba(141, 96, 245, 0.1);
         }
 
-        .achievement-icon {
-            font-size: 5rem;
-            margin-bottom: 1rem;
-            animation: bounce 1s infinite;
+        .achievement-item:hover {
+            transform: translateY(-2px);
         }
 
-        .achievement-title {
+        .achievement-emoji {
             font-size: 2rem;
-            font-weight: 600;
             margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .achievement-item:not(.unlocked) .achievement-emoji {
+            opacity: 0.3;
+            filter: grayscale(1);
+        }
+
+        .achievement-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
         }
 
         .achievement-desc {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            font-size: 0.65rem;
+            color: var(--color-text-muted);
         }
 
         /* Best Moment Card */
@@ -388,6 +398,7 @@
             border-radius: 1rem;
             border: 1px solid var(--color-border);
             background: rgba(26, 26, 26, 0.5);
+            text-align: center;
         }
 
         .comparison-label {
@@ -488,7 +499,7 @@
 
         .quality-legend {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             margin-top: 1.5rem;
         }
@@ -619,14 +630,14 @@
 
         /* Responsive */
         @media (max-width: 1024px) {
-            .grid-2 { grid-template-columns: 1fr; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
             .status-text { font-size: 3.5rem; }
         }
 
         @media (max-width: 768px) {
             .container { padding: 1rem; }
             .status-text { font-size: 2.75rem; }
-            .card { padding: 1.75rem; }
+            .card { padding: 1.5rem; }
             .posture-cell { width: 4.5rem; height: 4.5rem; font-size: 0.75rem; }
             .logo { font-size: 2rem; }
             .header { flex-direction: column; align-items: flex-start; }
@@ -641,13 +652,6 @@
     <div id="testModeToggle" class="test-mode hidden">
         🧪 TEST MODE
         <button id="toggleTestMode" style="background: none; border: none; color: inherit; font-size: inherit; cursor: pointer; font-weight: 600;">OFF</button>
-    </div>
-
-    <!-- Achievement Popup -->
-    <div id="achievementPopup" class="achievement-popup">
-        <div class="achievement-icon" id="achievementIcon">🏆</div>
-        <div class="achievement-title" id="achievementTitle">Achievement Unlocked!</div>
-        <div class="achievement-desc" id="achievementDesc">Great job!</div>
     </div>
 
     <!-- Timeline Tooltip -->
@@ -671,7 +675,7 @@
 
             <div class="modal-section">
                 <div class="modal-section-title">Achievements</div>
-                <p>Unlock badges as you hit milestones: Perfect Hour, Consistency Champion, and more!</p>
+                <p>Unlock badges as you hit milestones: Perfect Hour, Consistency Champion, and more! Locked achievements appear dimmed.</p>
             </div>
 
             <div class="modal-section">
@@ -747,9 +751,9 @@
 
         <!-- SIMPLE MODE -->
         <div id="basicModeContent">
-            <div class="grid-3">
-                <!-- Weight Distribution -->
-                <div class="card">
+            <!-- Row 1: Weight + Session -->
+            <div class="grid-2">
+                <div class="card compact">
                     <h3>Weight Distribution</h3>
                     <div class="posture-grid">
                         <div class="posture-cell" id="cell-basic-0">
@@ -769,20 +773,15 @@
                             <div class="weight-percent" id="basic-weight-3">25%</div>
                         </div>
                     </div>
-                    <div class="info-label">Brighter areas show where you're putting more weight</div>
+                    <div class="info-label">Brighter areas = more weight</div>
                 </div>
 
-                <!-- Session Summary -->
-                <div class="card">
+                <div class="card compact">
                     <h3>Session Summary</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1rem;">
                         <div class="metric-card">
                             <div class="metric-value" id="sessionTime">0</div>
                             <div class="metric-label">Minutes</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" id="correctPercent">0%</div>
-                            <div class="metric-label">Good Posture</div>
                         </div>
                         <div class="metric-card">
                             <div class="metric-value" id="stabilityScore">0</div>
@@ -790,20 +789,19 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Best Moment Today (SIMPLE) -->
-                <div class="card">
+            <!-- Row 2: Best Moment + Progress -->
+            <div class="grid-2">
+                <div class="card compact">
                     <h3>✨ Today's Best</h3>
                     <div class="best-moment">
                         <div class="best-moment-time" id="bestMomentTimeSimple">--:--</div>
                         <div class="best-moment-desc" id="bestMomentDescSimple">Keep going to set your record!</div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Better Than Yesterday (SIMPLE) -->
-            <div class="grid-2">
-                <div class="card">
+                <div class="card compact">
                     <h3>📈 Your Progress</h3>
                     <div class="comparison-card">
                         <div class="comparison-label">vs Yesterday</div>
@@ -811,12 +809,41 @@
                         <div class="comparison-subtext">You're improving!</div>
                     </div>
                 </div>
+            </div>
 
-                <div class="card">
+            <!-- Row 3: Health Impact + Achievements -->
+            <div class="grid-2">
+                <div class="card compact">
                     <h3>💚 Health Impact</h3>
                     <div class="impact-card">
                         <div class="impact-value" id="impactValueSimple">0 min</div>
                         <div class="impact-desc">of stretching equivalent</div>
+                    </div>
+                </div>
+
+                <div class="card compact">
+                    <h3>🏆 Achievements</h3>
+                    <div class="achievements-grid">
+                        <div class="achievement-item" id="ach-firstSession">
+                            <div class="achievement-emoji">🎯</div>
+                            <div class="achievement-name">First Session</div>
+                            <div class="achievement-desc">Get started</div>
+                        </div>
+                        <div class="achievement-item" id="ach-perfectMinute">
+                            <div class="achievement-emoji">⏱️</div>
+                            <div class="achievement-name">Perfect Minute</div>
+                            <div class="achievement-desc">60s great posture</div>
+                        </div>
+                        <div class="achievement-item" id="ach-consistency">
+                            <div class="achievement-emoji">🔥</div>
+                            <div class="achievement-name">Consistency</div>
+                            <div class="achievement-desc">100 good readings</div>
+                        </div>
+                        <div class="achievement-item" id="ach-superStar">
+                            <div class="achievement-emoji">⭐</div>
+                            <div class="achievement-name">SuperStar</div>
+                            <div class="achievement-desc">90% score</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -824,31 +851,59 @@
 
         <!-- ADVANCED MODE -->
         <div id="advancedModeContent" class="hidden">
-            <!-- Weight Distribution -->
-            <div class="card">
-                <h3 style="text-align: center;">Weight Distribution</h3>
-                <div class="posture-grid">
-                    <div class="posture-cell" id="cell-adv-0">
-                        <div class="sensor-name">FRONT</div>
-                        <div class="weight-percent" id="adv-weight-0">25%</div>
+            <!-- Row 1: Weight + Achievements (compact side by side) -->
+            <div class="grid-2">
+                <div class="card compact">
+                    <h3>Weight Distribution</h3>
+                    <div class="posture-grid">
+                        <div class="posture-cell" id="cell-adv-0">
+                            <div class="sensor-name">FRONT</div>
+                            <div class="weight-percent" id="adv-weight-0">25%</div>
+                        </div>
+                        <div class="posture-cell" id="cell-adv-1">
+                            <div class="sensor-name">FRONT</div>
+                            <div class="weight-percent" id="adv-weight-1">25%</div>
+                        </div>
+                        <div class="posture-cell" id="cell-adv-2">
+                            <div class="sensor-name">BACK</div>
+                            <div class="weight-percent" id="adv-weight-2">25%</div>
+                        </div>
+                        <div class="posture-cell" id="cell-adv-3">
+                            <div class="sensor-name">BACK</div>
+                            <div class="weight-percent" id="adv-weight-3">25%</div>
+                        </div>
                     </div>
-                    <div class="posture-cell" id="cell-adv-1">
-                        <div class="sensor-name">FRONT</div>
-                        <div class="weight-percent" id="adv-weight-1">25%</div>
-                    </div>
-                    <div class="posture-cell" id="cell-adv-2">
-                        <div class="sensor-name">BACK</div>
-                        <div class="weight-percent" id="adv-weight-2">25%</div>
-                    </div>
-                    <div class="posture-cell" id="cell-adv-3">
-                        <div class="sensor-name">BACK</div>
-                        <div class="weight-percent" id="adv-weight-3">25%</div>
+                    <div class="info-label">Real-time weight shifts</div>
+                </div>
+
+                <div class="card compact">
+                    <h3>🏆 Achievements</h3>
+                    <div class="achievements-grid">
+                        <div class="achievement-item" id="ach-adv-firstSession">
+                            <div class="achievement-emoji">🎯</div>
+                            <div class="achievement-name">First Session</div>
+                            <div class="achievement-desc">Get started</div>
+                        </div>
+                        <div class="achievement-item" id="ach-adv-perfectMinute">
+                            <div class="achievement-emoji">⏱️</div>
+                            <div class="achievement-name">Perfect Minute</div>
+                            <div class="achievement-desc">60s great posture</div>
+                        </div>
+                        <div class="achievement-item" id="ach-adv-consistency">
+                            <div class="achievement-emoji">🔥</div>
+                            <div class="achievement-name">Consistency</div>
+                            <div class="achievement-desc">100 good readings</div>
+                        </div>
+                        <div class="achievement-item" id="ach-adv-superStar">
+                            <div class="achievement-emoji">⭐</div>
+                            <div class="achievement-name">SuperStar</div>
+                            <div class="achievement-desc">90% score</div>
+                        </div>
                     </div>
                 </div>
-                <div class="info-label">See how your weight shifts throughout the session</div>
             </div>
 
-            <!-- Timeline Interactive -->
+            <!-- Row 2: Timeline (full width) -->
             <div class="card">
                 <h3>Your Posture Timeline</h3>
                 <div id="timeline" class="timeline-container"></div>
@@ -860,10 +915,9 @@
                 </div>
             </div>
 
-            <!-- Comparisons Row -->
+            <!-- Row 3: Comparisons + Best Moment -->
             <div class="grid-3">
-                <!-- Session Score Comparison -->
-                <div class="card">
+                <div class="card compact">
                     <h3>📊 Today vs Yesterday</h3>
                     <div class="comparison-card">
                         <div class="comparison-label">Today</div>
@@ -875,18 +929,16 @@
                     </div>
                 </div>
 
-                <!-- You vs Average -->
-                <div class="card">
+                <div class="card compact">
                     <h3>🌟 Community Rank</h3>
                     <div class="comparison-card">
-                        <div class="comparison-label">You vs Average User</div>
+                        <div class="comparison-label">You vs Average</div>
                         <div class="comparison-value positive" id="vsAverage">+12%</div>
                         <div class="comparison-subtext" id="vsAverageText">Better than 68% of users</div>
                     </div>
                 </div>
 
-                <!-- Best Moment -->
-                <div class="card">
+                <div class="card compact">
                     <h3>✨ Best Moment</h3>
                     <div class="best-moment">
                         <div class="best-moment-time" id="bestMomentTime">--:--</div>
@@ -895,10 +947,9 @@
                 </div>
             </div>
 
-            <!-- Session Quality + Health Impact -->
+            <!-- Row 4: Session Quality + Health Impact -->
             <div class="grid-2">
-                <!-- Session Quality -->
-                <div class="card">
+                <div class="card compact">
                     <h3>Session Quality</h3>
                     <div class="quality-bar" id="qualityBar">
                         <div class="quality-segment" style="width: 70%; background: var(--color-accent);"></div>
@@ -928,11 +979,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="info-label">Breakdown of your sitting time</div>
                 </div>
 
-                <!-- Health Impact -->
-                <div class="card">
+                <div class="card compact">
                     <h3>💚 Posture Health Impact</h3>
                     <div class="impact-card">
                         <div class="impact-value" id="impactValue">0 min</div>
@@ -940,7 +989,7 @@
                     </div>
                     <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
                         <div style="text-align: center; color: var(--color-text-muted); font-size: 0.875rem;">
-                            You've avoided <span style="color: var(--color-green); font-weight: 600;" id="avoidedStrain">0</span> of potential back strain today! 🎉
+                            Avoided <span style="color: var(--color-green); font-weight: 600;" id="avoidedStrain">0 min</span> of back strain! 🎉
                         </div>
                     </div>
                 </div>
@@ -962,7 +1011,6 @@
         let currentStreak = { start: null, duration: 0 };
         let achievementsUnlocked = new Set();
 
-        // Simulated data for comparisons
         const yesterdayScore = 71 + Math.floor(Math.random() * 10);
         const averageUserScore = 65 + Math.floor(Math.random() * 8);
 
@@ -986,10 +1034,10 @@
         ];
 
         const achievements = {
-            firstSession: { icon: '🎯', title: 'First Session', desc: 'Welcome to LeanTil!', trigger: 1 },
-            perfectMinute: { icon: '⏱️', title: 'Perfect Minute', desc: '60 seconds of great posture!', trigger: 30 },
-            consistency: { icon: '🔥', title: 'Consistency Champion', desc: '100 readings of good posture!', trigger: 100 },
-            superStar: { icon: '⭐', title: 'Posture SuperStar', desc: 'Maintained 90% score!', trigger: 90 }
+            firstSession: { id: 'firstSession', icon: '🎯', title: 'First Session', desc: 'Get started', trigger: 1 },
+            perfectMinute: { id: 'perfectMinute', icon: '⏱️', title: 'Perfect Minute', desc: '60s great posture', trigger: 30 },
+            consistency: { id: 'consistency', icon: '🔥', title: 'Consistency', desc: '100 good readings', trigger: 100 },
+            superStar: { id: 'superStar', icon: '⭐', title: 'SuperStar', desc: '90% score', trigger: 90 }
         };
 
         const elements = {
@@ -1006,7 +1054,6 @@
             dataCount: document.getElementById('dataCount'),
             errorMessage: document.getElementById('errorMessage'),
             sessionTime: document.getElementById('sessionTime'),
-            correctPercent: document.getElementById('correctPercent'),
             stabilityScore: document.getElementById('stabilityScore'),
             statusDot: document.getElementById('statusDot'),
             basicModeBtn: document.getElementById('basicModeBtn'),
@@ -1022,10 +1069,6 @@
             qualityGood: document.getElementById('qualityGood'),
             qualityWarning: document.getElementById('qualityWarning'),
             qualityAway: document.getElementById('qualityAway'),
-            achievementPopup: document.getElementById('achievementPopup'),
-            achievementIcon: document.getElementById('achievementIcon'),
-            achievementTitle: document.getElementById('achievementTitle'),
-            achievementDesc: document.getElementById('achievementDesc'),
             bestMomentTime: document.getElementById('bestMomentTime'),
             bestMomentDesc: document.getElementById('bestMomentDesc'),
             bestMomentTimeSimple: document.getElementById('bestMomentTimeSimple'),
@@ -1077,7 +1120,6 @@
             elements.basicModeBtn.onclick = () => switchMode('basic');
             elements.advancedModeBtn.onclick = () => switchMode('advanced');
 
-            // Help modal
             elements.helpBtn.onclick = () => elements.helpBackdrop.classList.add('open');
             elements.closeHelp.onclick = () => elements.helpBackdrop.classList.remove('open');
             elements.helpBackdrop.onclick = (e) => {
@@ -1086,7 +1128,6 @@
                 }
             };
 
-            // Timeline tooltip
             document.addEventListener('mousemove', (e) => {
                 if (e.target.classList.contains('timeline-bar')) {
                     const data = e.target._postureData;
@@ -1112,31 +1153,23 @@
         // === ACHIEVEMENTS ===
         function checkAchievements(score) {
             if (totalCount === 1 && !achievementsUnlocked.has('firstSession')) {
-                showAchievement('firstSession');
+                unlockAchievement('firstSession');
             }
             if (correctCount === 30 && !achievementsUnlocked.has('perfectMinute')) {
-                showAchievement('perfectMinute');
+                unlockAchievement('perfectMinute');
             }
             if (correctCount === 100 && !achievementsUnlocked.has('consistency')) {
-                showAchievement('consistency');
+                unlockAchievement('consistency');
             }
             if (score >= 90 && totalCount > 50 && !achievementsUnlocked.has('superStar')) {
-                showAchievement('superStar');
+                unlockAchievement('superStar');
             }
         }
 
-        function showAchievement(key) {
-            const ach = achievements[key];
+        function unlockAchievement(key) {
             achievementsUnlocked.add(key);
-            
-            elements.achievementIcon.textContent = ach.icon;
-            elements.achievementTitle.textContent = ach.title;
-            elements.achievementDesc.textContent = ach.desc;
-            elements.achievementPopup.classList.add('show');
-
-            setTimeout(() => {
-                elements.achievementPopup.classList.remove('show');
-            }, 3000);
+            document.getElementById(`ach-${key}`)?.classList.add('unlocked');
+            document.getElementById(`ach-adv-${key}`)?.classList.add('unlocked');
         }
 
         // === BEST MOMENT TRACKING ===
@@ -1165,7 +1198,7 @@
                     hour: '2-digit', 
                     minute: '2-digit' 
                 });
-                const duration = minutes > 0 ? `${minutes} min ${seconds} sec` : `${seconds} seconds`;
+                const duration = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
                 
                 elements.bestMomentTime.textContent = time;
                 elements.bestMomentDesc.textContent = `${duration} of perfect posture! 🎉`;
@@ -1182,7 +1215,7 @@
 
             elements.impactValue.textContent = `${stretchingEquivalent} min`;
             elements.impactValueSimple.textContent = `${stretchingEquivalent} min`;
-            elements.avoidedStrain.textContent = `${strainAvoided} minutes`;
+            elements.avoidedStrain.textContent = `${strainAvoided} min`;
 
             if (stretchingEquivalent > 30) {
                 elements.impactDesc.textContent = 'Equivalent to a full stretching session!';
@@ -1197,7 +1230,6 @@
         }
 
         function updateComparisons(score) {
-            // Today vs Yesterday
             const diff = score - yesterdayScore;
             const diffText = diff >= 0 ? `+${diff}%` : `${diff}%`;
             elements.todayScore.textContent = `${score}%`;
@@ -1206,7 +1238,6 @@
             elements.vsYesterdaySimple.textContent = diffText;
             elements.vsYesterdaySimple.className = `comparison-value ${diff >= 0 ? 'positive' : 'negative'}`;
 
-            // You vs Average
             const avgDiff = score - averageUserScore;
             const avgDiffText = avgDiff >= 0 ? `+${avgDiff}%` : `${avgDiff}%`;
             elements.vsAverage.textContent = avgDiffText;
@@ -1337,28 +1368,22 @@
         }
 
         function updateAllUI(data, posture) {
-            // Status
             elements.statusText.textContent = posture.display;
             elements.statusText.className = `status-text status-${posture.type}`;
 
-            // Score
             const score = totalCount > 0 ? Math.max(0, Math.min(100, Math.round((correctCount / totalCount) * 100))) : 85;
             elements.scoreValue.textContent = score;
             elements.scoreCircle.style.setProperty('--score-percent', `${score * 3.6}deg`);
-            elements.correctPercent.textContent = `${score}%`;
             elements.stabilityScore.textContent = Math.round(score * 0.9 + 10);
 
-            // Meta
             elements.dataCount.textContent = `Readings: ${totalCount}`;
             const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
             elements.sessionTime.textContent = minutes;
 
-            // Special updates
             checkAchievements(score);
             updateHealthImpact(score);
             updateComparisons(score);
 
-            // Update visualizations
             updatePostureMaps(data);
             updateTimeline();
             updateQualityBreakdown();
