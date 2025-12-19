@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeanTil Dashboard - Posture Monitoring</title>
+    <meta name="description" content="Real-time posture monitoring dashboard for LeanTil smart chair">
+    
+    <style>
+        /* Nothing X Theme CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-bg: #0a0a0a;
+            --color-card: #1a1a1a;
+            --color-border: #2a2a2a;
+            --color-accent: #64FFDA;
+            --color-text: #ffffff;
+            --color-text-muted: #9ca3af;
+            --color-yellow: #fbbf24;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 1.5rem;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Status Display */
+        .status-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-text {
+            font-size: 4rem;
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-label {
+            color: var(--color-text-muted);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .status-correct { color: var(--color-accent); }
+        .status-away { color: var(--color-text-muted); }
+        .status-warning { color: var(--color-yellow); }
+
+        /* Score Circle */
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--color-accent) var(--score-percent, 0%), var(--color-card) 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .score-inner {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--color-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 300;
+        }
+
+        /* Connection Button */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: 1px solid var(--color-border);
+            background: var(--color-card);
+            color: var(--color-text);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: var(--color-border);
+            transform: scale(1.05);
+        }
+
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-bg);
+            border-color: var(--color-accent);
+        }
+
+        .btn-primary:hover {
+            background: #52e6c4;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .metric-card {
+            background: var(--color-bg);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--color-border);
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 200;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Posture Map */
+        .posture-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin: 2rem auto;
+            width: fit-content;
+        }
+
+        .posture-cell {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            border: 2px solid var(--color-border);
+            background: rgba(107, 114, 128, 0.5);
+            transition: all 0.5s;
+        }
+
+        .posture-cell.active {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+        }
+
+        /* Loading Animation */
+        .loading-dot {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--color-accent);
+            margin: 0 auto 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(100, 255, 218, 0.7);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+                box-shadow: 0 0 0 10px rgba(100, 255, 218, 0);
+            }
+        }
+
+        /* Connection Status */
+        .connection-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 2rem;
+            font-size: 0.75rem;
+        }
+
+        .status-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background: var(--color-text-muted);
+        }
+
+        .status-dot.connected {
+            background: var(--color-accent);
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .status-display {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .status-text {
+                font-size: 2.5rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Hide/Show */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div style="text-align: center;">
+            <h1 class="logo">LEANTIL</h1>
+            <div class="loading-dot"></div>
+            <p style="color: var(--color-text-muted); margin-bottom: 3rem; font-size: 1.125rem;">
+                Connect your LeanTil HC-05 device to start monitoring
+            </p>
+            <button id="connectBtn" class="btn btn-primary">Connect HC-05</button>
+            <p id="errorMessage" style="color: #ef4444; margin-top: 1rem; display: none;"></p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="container hidden">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="logo">LEANTIL</h1>
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <div class="connection-status">
+                    <span class="status-dot connected"></span>
+                    <span id="dataCount">Data: 0</span>
+                </div>
+                <button id="disconnectBtn" class="btn">Disconnect</button>
+            </div>
+        </div>
+
+        <!-- Status + Score Card -->
+        <div class="card">
+            <div class="status-display">
+                <div style="flex: 1;">
+                    <div id="statusText" class="status-text status-correct">CORRECT</div>
+                    <div class="status-label">Current Status</div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="score-circle" id="scoreCircle">
+                        <div class="score-inner">
+                            <span id="scoreValue">85</span>
+                        </div>
+                    </div>
+                    <h3 style="font-weight: 300; margin-top: 1rem; font-size: 1.5rem;">Overall Score</h3>
+                    <p class="status-label">Comprehensive wellness</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Session Summary -->
+        <div class="card">
+            <h3 style="font-size: 1.875rem; font-weight: 300; text-align: center; margin-bottom: 2rem;">Session Summary</h3>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="sessionTime">0</div>
+                    <div class="metric-label">Minutes Active</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="correctPercent">0%</div>
+                    <div class="metric-label">Good Posture</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="stabilityScore">0</div>
+                    <div class="metric-label">Stability</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Posture Map -->
+        <div class="card">
+            <h3 style="font-size: 1.5rem; font-weight: 300; text-align: center; margin-bottom: 1rem;">Posture Map</h3>
+            <div class="posture-grid">
+                <div class="posture-cell" id="cell-0"></div>
+                <div class="posture-cell" id="cell-1"></div>
+                <div class="posture-cell" id="cell-2"></div>
+                <div class="posture-cell" id="cell-3"></div>
+            </div>
+            <p style="text-align: center; color: var(--color-text-muted); margin-top: 1rem;" id="postureLabel">Current Position</p>
+        </div>
+    </div>
+
+    <script>
+        // Web Serial API Integration
+        let port;
+        let reader;
+        let isConnected = false;
+        let dataHistory = [];
+        let sessionStartTime = Date.now();
+        let correctCount = 0;
+        let totalCount = 0;
+
+        // DOM Elements
+        const loginScreen = document.getElementById('loginScreen');
+        const dashboard = document.getElementById('dashboard');
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const statusText = document.getElementById('statusText');
+        const scoreValue = document.getElementById('scoreValue');
+        const scoreCircle = document.getElementById('scoreCircle');
+        const dataCount = document.getElementById('dataCount');
+        const errorMessage = document.getElementById('errorMessage');
+        const sessionTime = document.getElementById('sessionTime');
+        const correctPercent = document.getElementById('correctPercent');
+        const stabilityScore = document.getElementById('stabilityScore');
+        const postureLabel = document.getElementById('postureLabel');
+
+        // Connect Button
+        connectBtn.addEventListener('click', async () => {
+            try {
+                // Request serial port
+                port = await navigator.serial.requestPort();
+                await port.open({ baudRate: 9600 });
+
+                isConnected = true;
+                loginScreen.classList.add('hidden');
+                dashboard.classList.remove('hidden');
+
+                // Start reading
+                readSerialData();
+            } catch (error) {
+                console.error('Connection error:', error);
+                errorMessage.textContent = 'Failed to connect. Please try again.';
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        // Disconnect Button
+        disconnectBtn.addEventListener('click', async () => {
+            if (reader) {
+                await reader.cancel();
+            }
+            if (port) {
+                await port.close();
+            }
+            isConnected = false;
+            dashboard.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+        });
+
+        // Read Serial Data
+        async function readSerialData() {
+            const decoder = new TextDecoderStream();
+            const readableStreamClosed = port.readable.pipeTo(decoder.writable);
+            reader = decoder.readable.getReader();
+
+            let buffer = '';
+
+            try {
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+
+                    buffer += value;
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        if (line.startsWith('DATA,')) {
+                            parseAndUpdateData(line);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Read error:', error);
+            } finally {
+                reader.releaseLock();
+            }
+        }
+
+        // Parse Data from Arduino
+        function parseAndUpdateData(line) {
+            const parts = line.trim().split(',');
+            if (parts.length < 11) return;
+
+            const data = {
+                timestamp: parseInt(parts[1]),
+                lc0: parseFloat(parts[2]),
+                lc1: parseFloat(parts[3]),
+                lc2: parseFloat(parts[4]),
+                lc3: parseFloat(parts[5]),
+                totalWeight: parseFloat(parts[6]),
+                centerX: parseFloat(parts[7]),
+                centerY: parseFloat(parts[8]),
+                postureCode: parseInt(parts[9]),
+                postureName: parts[10].trim()
+            };
+
+            dataHistory.push(data);
+            if (dataHistory.length > 1000) dataHistory.shift();
+
+            totalCount++;
+            if (data.postureName === 'CORRETTA') correctCount++;
+
+            updateDashboard(data);
+        }
+
+        // Update Dashboard
+        function updateDashboard(data) {
+            // Update count
+            dataCount.textContent = `Data: ${totalCount}`;
+
+            // Update status
+            let statusClass = 'status-correct';
+            let displayName = data.postureName.toUpperCase();
+
+            if (data.postureName === 'ASSENTE') {
+                displayName = 'AWAY';
+                statusClass = 'status-away';
+            } else if (data.postureName !== 'CORRETTA') {
+                statusClass = 'status-warning';
+                displayName = displayName.replace('_', ' ');
+            } else {
+                displayName = 'CORRECT';
+            }
+
+            statusText.textContent = displayName;
+            statusText.className = `status-text ${statusClass}`;
+
+            // Update score
+            const score = Math.round((correctCount / totalCount) * 100);
+            scoreValue.textContent = score;
+            scoreCircle.style.setProperty('--score-percent', `${score * 3.6}deg`);
+
+            // Update session time
+            const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
+            sessionTime.textContent = minutes;
+
+            // Update metrics
+            correctPercent.textContent = `${score}%`;
+            stabilityScore.textContent = Math.round(score * 0.8 + 20);
+
+            // Update posture map
+            updatePostureMap(data.postureName);
+
+            // Update label
+            postureLabel.textContent = displayName;
+        }
+
+        // Update Posture Map (2x2 grid)
+        function updatePostureMap(postureName) {
+            const cells = [
+                document.getElementById('cell-0'),
+                document.getElementById('cell-1'),
+                document.getElementById('cell-2'),
+                document.getElementById('cell-3')
+            ];
+
+            // Clear all
+            cells.forEach(cell => cell.classList.remove('active'));
+
+            // Activate based on posture
+            switch (postureName) {
+                case 'LEAN_FORWARD':
+                case 'INCLINATO_AVANTI':
+                    cells[0].classList.add('active');
+                    cells[1].classList.add('active');
+                    break;
+                case 'LEAN_BACK':
+                case 'INCLINATO_INDIETRO':
+                    cells[2].classList.add('active');
+                    cells[3].classList.add('active');
+                    break;
+                case 'LEAN_LEFT':
+                case 'INCLINATO_SINISTRA':
+                    cells[0].classList.add('active');
+                    cells[2].classList.add('active');
+                    break;
+                case 'LEAN_RIGHT':
+                case 'INCLINATO_DESTRA':
+                    cells[1].classList.add('active');
+                    cells[3].classList.add('active');
+                    break;
+                case 'CORRETTA':
+                    cells.forEach(cell => cell.classList.add('active'));
+                    break;
+            }
+        }
+
+        // Check Web Serial API support
+        if (!('serial' in navigator)) {
+            errorMessage.textContent = 'Web Serial API not supported. Use Chrome/Edge browser.';
+            errorMessage.style.display = 'block';
+            connectBtn.disabled = true;
+        }
+    </script>
+</body>
+</html>
