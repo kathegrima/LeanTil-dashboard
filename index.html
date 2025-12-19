@@ -63,7 +63,7 @@
             flex-wrap: wrap;
         }
 
-        /* Cards - PADDING RIDOTTO */
+        /* Cards */
         .card {
             background: var(--color-card);
             border: 1px solid var(--color-border);
@@ -376,16 +376,19 @@
             font-size: 0.875rem;
         }
 
-        /* Health Impact Card - PADDING RIDOTTO */
+        /* Health Impact Card - COMPATTO */
         .impact-card-hero {
             background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.05) 100%);
             border: 2px solid var(--color-green);
             border-radius: 1.5rem;
-            padding: 1.75rem;
+            padding: 1.5rem;
             text-align: center;
             position: relative;
             overflow: hidden;
-            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100%;
         }
 
         .impact-card-hero::before {
@@ -405,24 +408,25 @@
         }
 
         .impact-icon {
-            font-size: 3rem;
-            margin-bottom: 0.75rem;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
             position: relative;
             z-index: 1;
         }
 
         .impact-value-hero {
-            font-size: 3.5rem;
+            font-size: 3rem;
             color: var(--color-green);
             font-weight: 600;
             margin-bottom: 0.25rem;
             position: relative;
             z-index: 1;
+            line-height: 1;
         }
 
         .impact-desc-hero {
             color: var(--color-text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-bottom: 1rem;
             position: relative;
             z-index: 1;
@@ -432,8 +436,8 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 0.75rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
             border-top: 1px solid rgba(16, 185, 129, 0.3);
             position: relative;
             z-index: 1;
@@ -444,25 +448,54 @@
         }
 
         .impact-stat-value {
-            font-size: 1.75rem;
+            font-size: 1.5rem;
             font-weight: 600;
             color: var(--color-green);
             margin-bottom: 0.25rem;
+            line-height: 1;
         }
 
         .impact-stat-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--color-text-muted);
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
-        /* Comparison Cards */
+        /* Comparison Cards - OTTIMIZZATE */
         .comparison-card {
             padding: 1.25rem;
             border-radius: 1rem;
             border: 1px solid var(--color-border);
             background: rgba(26, 26, 26, 0.5);
+        }
+
+        .comparison-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comparison-stat {
+            text-align: center;
+            padding: 0.75rem;
+            background: rgba(141, 96, 245, 0.05);
+            border-radius: 0.75rem;
+            border: 1px solid var(--color-border);
+        }
+
+        .comparison-stat-label {
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .comparison-stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-accent);
         }
 
         .comparison-label {
@@ -563,31 +596,61 @@
 
         .quality-legend {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 0.75rem;
             margin-top: 1rem;
         }
 
         .quality-legend-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.35rem;
             font-size: 0.875rem;
+            text-align: center;
         }
 
         .quality-legend-color {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             border-radius: 3px;
         }
 
-        /* HISTORY CALENDAR - MINIMAL */
-        .history-calendar {
+        /* HISTORY CALENDAR - MONTHLY VIEW */
+        .calendar-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-view-toggle {
+            display: flex;
             gap: 0.5rem;
-            flex-wrap: wrap;
-            justify-content: center;
+        }
+
+        .view-btn {
+            padding: 0.5rem 1rem;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-muted);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: #fff;
+        }
+
+        .history-calendar {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+            gap: 0.5rem;
+            justify-items: center;
         }
 
         .calendar-day {
@@ -604,15 +667,15 @@
         }
 
         .calendar-day-label {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: var(--color-text-muted);
             text-transform: uppercase;
             font-weight: 500;
         }
 
         .calendar-circle {
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             border: 2px solid var(--color-border);
             display: flex;
@@ -623,15 +686,16 @@
             transition: all 0.2s;
         }
 
+        /* COLORI SWITCHATI: VIOLA = ECCELLENZA */
         .calendar-circle.excellent {
-            background: var(--color-green);
-            border-color: var(--color-green);
+            background: var(--color-accent);
+            border-color: var(--color-accent);
             color: #fff;
         }
 
         .calendar-circle.good {
-            background: var(--color-accent);
-            border-color: var(--color-accent);
+            background: var(--color-green);
+            border-color: var(--color-green);
             color: #fff;
         }
 
@@ -649,7 +713,7 @@
 
         .calendar-circle.today {
             box-shadow: 0 0 0 3px rgba(141, 96, 245, 0.3);
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
         /* Labels & Help */
@@ -779,7 +843,9 @@
         @media (max-width: 1024px) {
             .grid-2 { grid-template-columns: 1fr; }
             .status-text { font-size: 3.5rem; }
-            .impact-value-hero { font-size: 3rem; }
+            .impact-value-hero { font-size: 2.5rem; }
+            .calendar-circle { width: 36px; height: 36px; }
+            .history-calendar { grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); }
         }
 
         @media (max-width: 768px) {
@@ -790,9 +856,11 @@
             .logo-img { height: 40px; }
             .header { flex-direction: column; align-items: flex-start; }
             .header-controls { width: 100%; justify-content: space-between; }
-            .impact-value-hero { font-size: 2.5rem; }
+            .impact-value-hero { font-size: 2rem; }
             .impact-stats { grid-template-columns: 1fr; }
             .calendar-circle { width: 32px; height: 32px; font-size: 0.7rem; }
+            .history-calendar { grid-template-columns: repeat(7, 1fr); }
+            .comparison-stats-grid { grid-template-columns: 1fr; }
         }
 
         .hidden { display: none !important; }
@@ -842,8 +910,8 @@
             </div>
 
             <div class="modal-section">
-                <div class="modal-section-title">Weekly History</div>
-                <p>Track your daily progress with color-coded circles. Green = excellent, Purple = good, Yellow = needs improvement.</p>
+                <div class="modal-section-title">Monthly History</div>
+                <p>Track your progress over the last 30 days. Purple = excellent (90+), Green = good (70-89), Yellow = needs improvement, Gray = no data.</p>
             </div>
 
             <div class="modal-section">
@@ -953,15 +1021,21 @@
             </div>
         </div>
 
-        <!-- WEEKLY HISTORY - ALWAYS VISIBLE -->
+        <!-- HISTORY CALENDAR - MONTHLY VIEW -->
         <div class="card">
-            <h3>📅 Weekly History</h3>
+            <div class="calendar-header">
+                <h3>📅 Posture History</h3>
+                <div class="calendar-view-toggle">
+                    <button class="view-btn active" id="viewWeek">Week</button>
+                    <button class="view-btn" id="viewMonth">Month</button>
+                </div>
+            </div>
             <div class="history-calendar" id="historyCalendar">
                 <!-- Generated by JS -->
             </div>
             <div class="info-label">
-                <span style="color: var(--color-green);">●</span> Excellent (90+)
-                <span style="color: var(--color-accent); margin-left: 0.75rem;">●</span> Good (70-89)
+                <span style="color: var(--color-accent);">●</span> Excellent (90+)
+                <span style="color: var(--color-green); margin-left: 0.75rem;">●</span> Good (70-89)
                 <span style="color: var(--color-yellow); margin-left: 0.75rem;">●</span> Medium (50-69)
                 <span style="color: var(--color-gray); margin-left: 0.75rem;">●</span> Low / No data
             </div>
@@ -995,45 +1069,39 @@
                     </div>
                     <div class="quality-legend">
                         <div class="quality-legend-item">
+                            <div style="font-weight: 600; font-size: 1.5rem; color: var(--color-accent);" id="qualityGood">70%</div>
                             <div class="quality-legend-color" style="background: var(--color-accent);"></div>
-                            <div>
-                                <div style="font-weight: 600;" id="qualityGood">70%</div>
-                                <div style="color: var(--color-text-muted); font-size: 0.7rem;">Balanced</div>
-                            </div>
+                            <div style="color: var(--color-text-muted); font-size: 0.7rem;">Balanced</div>
                         </div>
                         <div class="quality-legend-item">
+                            <div style="font-weight: 600; font-size: 1.5rem; color: var(--color-yellow);" id="qualityWarning">20%</div>
                             <div class="quality-legend-color" style="background: var(--color-yellow);"></div>
-                            <div>
-                                <div style="font-weight: 600;" id="qualityWarning">20%</div>
-                                <div style="color: var(--color-text-muted); font-size: 0.7rem;">Leaning</div>
-                            </div>
+                            <div style="color: var(--color-text-muted); font-size: 0.7rem;">Leaning</div>
                         </div>
                         <div class="quality-legend-item">
+                            <div style="font-weight: 600; font-size: 1.5rem; color: var(--color-gray);" id="qualityAway">10%</div>
                             <div class="quality-legend-color" style="background: var(--color-gray);"></div>
-                            <div>
-                                <div style="font-weight: 600;" id="qualityAway">10%</div>
-                                <div style="color: var(--color-text-muted); font-size: 0.7rem;">Away</div>
-                            </div>
+                            <div style="color: var(--color-text-muted); font-size: 0.7rem;">Away</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Health Impact HERO -->
+                <!-- Health Impact HERO - COMPATTO -->
                 <div class="card">
                     <div class="impact-card-hero">
                         <div class="impact-icon">💚</div>
-                        <h3 style="margin-bottom: 0.75rem; font-size: 1.25rem; position: relative; z-index: 1; font-weight: 300;">Posture Health Impact</h3>
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem; position: relative; z-index: 1; font-weight: 300;">Health Impact</h3>
                         <div class="impact-value-hero" id="impactValueHero">0</div>
-                        <div class="impact-desc-hero" id="impactDescHero">minutes of stretching equivalent</div>
+                        <div class="impact-desc-hero" id="impactDescHero">min stretching equivalent</div>
                         
                         <div class="impact-stats">
                             <div class="impact-stat">
                                 <div class="impact-stat-value" id="stretchEquiv">0</div>
-                                <div class="impact-stat-label">Min Stretching</div>
+                                <div class="impact-stat-label">Stretching</div>
                             </div>
                             <div class="impact-stat">
                                 <div class="impact-stat-value" id="strainAvoided">0</div>
-                                <div class="impact-stat-label">Min Strain Avoided</div>
+                                <div class="impact-stat-label">Strain Avoided</div>
                             </div>
                         </div>
                     </div>
@@ -1042,16 +1110,27 @@
 
             <!-- Comparisons & Highlights Row -->
             <div class="grid-2">
-                <!-- Today vs Yesterday -->
+                <!-- Today vs Yesterday + MORE DATA -->
                 <div class="card">
-                    <h3>📊 Today vs Yesterday</h3>
+                    <h3>📊 Your Progress</h3>
                     <div class="comparison-card">
                         <div class="comparison-label">Today</div>
                         <div class="comparison-value" id="todayScore" style="color: var(--color-accent);">85%</div>
                         <div class="comparison-subtext">
                             Yesterday: <span id="yesterdayScore">78%</span>
                         </div>
-                        <div class="comparison-value positive" id="scoreDiff" style="font-size: 1.5rem; margin-top: 1rem;">+7%</div>
+                        <div class="comparison-value positive" id="scoreDiff" style="font-size: 1.5rem; margin-top: 0.5rem;">+7%</div>
+                    </div>
+                    
+                    <div class="comparison-stats-grid">
+                        <div class="comparison-stat">
+                            <div class="comparison-stat-label">Week Avg</div>
+                            <div class="comparison-stat-value" id="weekAvg">82%</div>
+                        </div>
+                        <div class="comparison-stat">
+                            <div class="comparison-stat-label">Best Streak</div>
+                            <div class="comparison-stat-value" id="bestStreak">5d</div>
+                        </div>
                     </div>
                 </div>
 
@@ -1088,9 +1167,10 @@
         let bestStreak = { start: null, duration: 0 };
         let currentStreak = { start: null, duration: 0 };
         let achievementsUnlocked = new Set();
+        let calendarView = 'week'; // 'week' or 'month'
 
-        // Weekly history data (simulated - in real app would be stored in localStorage/DB)
-        let weeklyHistory = generateWeeklyHistory();
+        // Monthly history data (30 days)
+        let monthlyHistory = generateMonthlyHistory();
 
         // Simulated data
         const yesterdayScore = 71 + Math.floor(Math.random() * 10);
@@ -1161,12 +1241,16 @@
             todayScore: document.getElementById('todayScore'),
             yesterdayScore: document.getElementById('yesterdayScore'),
             scoreDiff: document.getElementById('scoreDiff'),
+            weekAvg: document.getElementById('weekAvg'),
+            bestStreak: document.getElementById('bestStreak'),
             vsAverageCombined: document.getElementById('vsAverageCombined'),
             vsAverageTextCombined: document.getElementById('vsAverageTextCombined'),
             bestMomentTimeCombined: document.getElementById('bestMomentTimeCombined'),
             bestMomentDescCombined: document.getElementById('bestMomentDescCombined'),
             statusDot: document.getElementById('statusDot'),
-            historyCalendar: document.getElementById('historyCalendar')
+            historyCalendar: document.getElementById('historyCalendar'),
+            viewWeek: document.getElementById('viewWeek'),
+            viewMonth: document.getElementById('viewMonth')
         };
 
         const weightElements = [
@@ -1178,23 +1262,21 @@
 
         const postureCells = ['cell-0', 'cell-1', 'cell-2', 'cell-3'];
 
-        // === WEEKLY HISTORY GENERATION ===
-        function generateWeeklyHistory() {
+        // === MONTHLY HISTORY GENERATION ===
+        function generateMonthlyHistory() {
             const history = [];
             const today = new Date();
             
-            for (let i = 6; i >= 0; i--) {
+            for (let i = 29; i >= 0; i--) {
                 const date = new Date(today);
                 date.setDate(date.getDate() - i);
                 
-                // Simulate scores (in real app, load from localStorage/DB)
+                // Simulate scores
                 let score = null;
                 if (i > 0) {
-                    // Past days - generate random scores
                     score = Math.floor(Math.random() * 40) + 60; // 60-100
-                    if (Math.random() > 0.8) score = null; // 20% chance of no data
+                    if (Math.random() > 0.75) score = null; // 25% chance of no data
                 }
-                // Today (i === 0) starts with null, will be updated by current session
                 
                 history.push({
                     date: date,
@@ -1206,19 +1288,22 @@
             return history;
         }
 
-        function renderWeeklyHistory() {
+        function renderCalendar() {
             const container = elements.historyCalendar;
             container.innerHTML = '';
             
-            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            const data = calendarView === 'week' ? monthlyHistory.slice(-7) : monthlyHistory;
             
-            weeklyHistory.forEach(day => {
+            data.forEach(day => {
                 const dayEl = document.createElement('div');
                 dayEl.className = 'calendar-day';
                 
                 const label = document.createElement('div');
                 label.className = 'calendar-day-label';
-                label.textContent = dayNames[day.date.getDay()];
+                label.textContent = calendarView === 'week' 
+                    ? dayNames[day.date.getDay()] 
+                    : day.date.getDate();
                 
                 const circle = document.createElement('div');
                 circle.className = 'calendar-circle';
@@ -1227,21 +1312,20 @@
                     circle.classList.add('today');
                 }
                 
+                // Show day of month in circle
+                circle.textContent = day.date.getDate();
+                
+                // Color based on score - VIOLA = ECCELLENZA
                 if (day.score === null) {
                     circle.classList.add('poor');
-                    circle.textContent = '–';
                 } else if (day.score >= 90) {
-                    circle.classList.add('excellent');
-                    circle.textContent = day.score;
+                    circle.classList.add('excellent'); // VIOLA
                 } else if (day.score >= 70) {
-                    circle.classList.add('good');
-                    circle.textContent = day.score;
+                    circle.classList.add('good'); // VERDE
                 } else if (day.score >= 50) {
-                    circle.classList.add('medium');
-                    circle.textContent = day.score;
+                    circle.classList.add('medium'); // GIALLO
                 } else {
-                    circle.classList.add('poor');
-                    circle.textContent = day.score;
+                    circle.classList.add('poor'); // GRIGIO
                 }
                 
                 dayEl.onclick = () => {
@@ -1261,12 +1345,34 @@
         }
 
         function updateTodayScore(score) {
-            // Update today's score in weekly history
-            const todayIndex = weeklyHistory.findIndex(d => d.isToday);
+            const todayIndex = monthlyHistory.findIndex(d => d.isToday);
             if (todayIndex !== -1) {
-                weeklyHistory[todayIndex].score = score;
-                renderWeeklyHistory();
+                monthlyHistory[todayIndex].score = score;
+                renderCalendar();
             }
+        }
+
+        function calculateWeekAverage() {
+            const lastWeek = monthlyHistory.slice(-7);
+            const scores = lastWeek.filter(d => d.score !== null).map(d => d.score);
+            if (scores.length === 0) return 0;
+            return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+        }
+
+        function calculateBestStreak() {
+            let maxStreak = 0;
+            let currentStreak = 0;
+            
+            monthlyHistory.forEach(day => {
+                if (day.score && day.score >= 70) {
+                    currentStreak++;
+                    maxStreak = Math.max(maxStreak, currentStreak);
+                } else {
+                    currentStreak = 0;
+                }
+            });
+            
+            return maxStreak;
         }
 
         // === INIT ===
@@ -1275,7 +1381,8 @@
             checkWebSerialSupport();
             updateYesterdayComparison();
             updateConnectionStatus();
-            renderWeeklyHistory();
+            renderCalendar();
+            updateProgressStats();
         });
 
         function initEventListeners() {
@@ -1285,6 +1392,10 @@
             elements.disconnectBtn.onclick = disconnectDevice;
             elements.basicModeBtn.onclick = () => switchMode('basic');
             elements.advancedModeBtn.onclick = () => switchMode('advanced');
+            
+            // Calendar view toggle
+            elements.viewWeek.onclick = () => switchCalendarView('week');
+            elements.viewMonth.onclick = () => switchCalendarView('month');
 
             // Help modal
             elements.helpBtn.onclick = () => elements.helpBackdrop.classList.add('open');
@@ -1316,6 +1427,21 @@
                     elements.timelineTooltip.classList.remove('show');
                 }
             });
+        }
+
+        function switchCalendarView(view) {
+            calendarView = view;
+            elements.viewWeek.classList.toggle('active', view === 'week');
+            elements.viewMonth.classList.toggle('active', view === 'month');
+            renderCalendar();
+        }
+
+        function updateProgressStats() {
+            const weekAvg = calculateWeekAverage();
+            const bestStreakDays = calculateBestStreak();
+            
+            elements.weekAvg.textContent = `${weekAvg}%`;
+            elements.bestStreak.textContent = `${bestStreakDays}d`;
         }
 
         // === CONNECTION STATUS ===
@@ -1403,9 +1529,9 @@
             elements.strainAvoided.textContent = strainAvoided;
 
             if (stretchingEquivalent > 30) {
-                elements.impactDescHero.textContent = 'minutes - Equivalent to a full stretching session!';
+                elements.impactDescHero.textContent = 'min - Full stretch session!';
             } else {
-                elements.impactDescHero.textContent = 'minutes of stretching equivalent';
+                elements.impactDescHero.textContent = 'min stretching equivalent';
             }
         }
 
@@ -1575,7 +1701,8 @@
             checkAchievements(score);
             updateHealthImpact(score);
             updateComparisons(score);
-            updateTodayScore(score); // Update weekly calendar
+            updateTodayScore(score);
+            updateProgressStats();
 
             // Update visualizations
             updatePostureMap(data);
