@@ -7,7 +7,7 @@
     <meta name="description" content="Real-time posture monitoring dashboard for LeanTil smart chair">
     
     <style>
-        /* Nothing X Theme CSS */
+        /* Nothing X Theme - COLORE #8d60f5 */
         * {
             margin: 0;
             padding: 0;
@@ -18,7 +18,8 @@
             --color-bg: #0a0a0a;
             --color-card: #1a1a1a;
             --color-border: #2a2a2a;
-            --color-accent: #64FFDA;
+            --color-accent: #8d60f5; /* NUOVO COLORE PRINCIPALE */
+            --color-accent-light: #a27bf7;
             --color-text: #ffffff;
             --color-text-muted: #9ca3af;
             --color-yellow: #fbbf24;
@@ -115,105 +116,44 @@
             font-weight: 300;
         }
 
-        /* Connection Button */
+        /* Buttons */
         .btn {
             padding: 0.75rem 1.5rem;
             border: 1px solid var(--color-border);
             background: var(--color-card);
             color: var(--color-text);
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
             cursor: pointer;
             font-size: 0.875rem;
             transition: all 0.2s;
+            font-weight: 500;
         }
 
         .btn:hover {
             background: var(--color-border);
-            transform: scale(1.05);
+            transform: scale(1.02);
         }
 
         .btn-primary {
             background: var(--color-accent);
-            color: var(--color-bg);
+            color: #ffffff;
             border-color: var(--color-accent);
         }
 
         .btn-primary:hover {
-            background: #52e6c4;
+            background: var(--color-accent-light);
+            transform: scale(1.05);
         }
 
-        /* Metrics Grid */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .metric-card {
-            background: var(--color-bg);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            border: 1px solid var(--color-border);
-        }
-
-        .metric-value {
-            font-size: 3rem;
-            font-weight: 200;
-            color: var(--color-accent);
-            margin-bottom: 0.5rem;
-        }
-
-        .metric-label {
-            color: var(--color-text-muted);
-            font-size: 0.875rem;
-        }
-
-        /* Posture Map */
-        .posture-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-            margin: 2rem auto;
-            width: fit-content;
-        }
-
-        .posture-cell {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 0.75rem;
-            border: 2px solid var(--color-border);
-            background: rgba(107, 114, 128, 0.5);
-            transition: all 0.5s;
-        }
-
-        .posture-cell.active {
-            background: var(--color-accent);
+        .btn-toggle {
+            background: transparent;
             border-color: var(--color-accent);
-            box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+            color: var(--color-accent);
         }
 
-        /* Loading Animation */
-        .loading-dot {
-            width: 1rem;
-            height: 1rem;
-            border-radius: 50%;
+        .btn-toggle.active {
             background: var(--color-accent);
-            margin: 0 auto 1.5rem;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(100, 255, 218, 0.7);
-            }
-            50% {
-                opacity: 0.7;
-                transform: scale(1.1);
-                box-shadow: 0 0 0 10px rgba(100, 255, 218, 0);
-            }
+            color: #ffffff;
         }
 
         /* Connection Status */
@@ -233,11 +173,112 @@
             height: 0.5rem;
             border-radius: 50%;
             background: var(--color-text-muted);
+            animation: pulse 2s infinite;
         }
 
         .status-dot.connected {
             background: var(--color-accent);
-            animation: pulse 2s infinite;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(26, 26, 26, 0.5);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 3rem;
+            font-weight: 200;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Posture Map */
+        .posture-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin: 2rem auto;
+            width: fit-content;
+        }
+
+        .posture-cell {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.75rem;
+            border: 2px solid var(--color-border);
+            background: rgba(107, 114, 128, 0.3);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .posture-cell.active {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            box-shadow: 0 0 20px rgba(141, 96, 245, 0.4);
+            transform: scale(1.05);
+        }
+
+        .posture-cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .posture-cell.active::before {
+            left: 100%;
+        }
+
+        /* Mode Toggle */
+        .mode-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Loading Animation */
+        .loading-dot {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: var(--color-accent);
+            margin: 0 auto 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(141, 96, 245, 0.7);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.1);
+                box-shadow: 0 0 0 10px rgba(141, 96, 245, 0);
+            }
         }
 
         /* Responsive */
@@ -245,6 +286,7 @@
             .status-display {
                 flex-direction: column;
                 text-align: center;
+                gap: 1rem;
             }
 
             .status-text {
@@ -264,18 +306,41 @@
         .hidden {
             display: none !important;
         }
+
+        /* Test Mode Indicator */
+        .test-mode {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--color-accent);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
+    <!-- Test Mode Toggle -->
+    <div id="testModeToggle" class="test-mode hidden">
+        🧪 TEST MODE
+        <button id="toggleTestMode" style="margin-left: 0.5rem; background: none; border: none; color: inherit; font-size: inherit; cursor: pointer;">OFF</button>
+    </div>
+
     <!-- Login Screen -->
     <div id="loginScreen" class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-        <div style="text-align: center;">
-            <h1 class="logo">LEANTIL</h1>
+        <div style="text-align: center; max-width: 400px;">
+            <h1 style="font-size: 3rem; font-weight: 300; margin-bottom: 2rem; letter-spacing: 0.05em;">LEANTIL</h1>
             <div class="loading-dot"></div>
             <p style="color: var(--color-text-muted); margin-bottom: 3rem; font-size: 1.125rem;">
                 Connect your LeanTil HC-05 device to start monitoring
             </p>
-            <button id="connectBtn" class="btn btn-primary">Connect HC-05</button>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <button id="connectBtn" class="btn btn-primary">🔌 Connect HC-05</button>
+                <button id="testModeBtn" class="btn">🧪 Test Mode</button>
+            </div>
             <p id="errorMessage" style="color: #ef4444; margin-top: 1rem; display: none;"></p>
         </div>
     </div>
@@ -287,10 +352,14 @@
             <h1 class="logo">LEANTIL</h1>
             <div style="display: flex; align-items: center; gap: 1.5rem;">
                 <div class="connection-status">
-                    <span class="status-dot connected"></span>
+                    <span id="statusDot" class="status-dot"></span>
                     <span id="dataCount">Data: 0</span>
                 </div>
-                <button id="disconnectBtn" class="btn">Disconnect</button>
+                <div class="mode-toggle">
+                    <button id="basicModeBtn" class="btn btn-toggle active">Basic</button>
+                    <button id="advancedModeBtn" class="btn btn-toggle">Advanced</button>
+                </div>
+                <button id="disconnectBtn" class="btn">🔌 Disconnect</button>
             </div>
         </div>
 
@@ -332,221 +401,401 @@
             </div>
         </div>
 
-        <!-- Posture Map -->
-        <div class="card">
-            <h3 style="font-size: 1.5rem; font-weight: 300; text-align: center; margin-bottom: 1rem;">Posture Map</h3>
+        <!-- Basic Mode: Posture Map -->
+        <div id="basicModeContent" class="card">
+            <h3 style="font-size: 1.5rem; font-weight: 300; text-align: center; margin-bottom: 1.5rem;">Posture Map</h3>
             <div class="posture-grid">
                 <div class="posture-cell" id="cell-0"></div>
                 <div class="posture-cell" id="cell-1"></div>
                 <div class="posture-cell" id="cell-2"></div>
                 <div class="posture-cell" id="cell-3"></div>
             </div>
-            <p style="text-align: center; color: var(--color-text-muted); margin-top: 1rem;" id="postureLabel">Current Position</p>
+            <p style="text-align: center; color: var(--color-text-muted); margin-top: 1.5rem; font-size: 1.125rem;" id="postureLabel">Current Position</p>
+        </div>
+
+        <!-- Advanced Mode Content -->
+        <div id="advancedModeContent" class="hidden">
+            <!-- Radar Chart (SVG Animation) -->
+            <div class="card">
+                <h3 style="font-size: 1.5rem; font-weight: 300; text-align: center; margin-bottom: 2rem;">Balance Radar</h3>
+                <svg id="radarChart" width="300" height="300" viewBox="0 0 300 300" style="margin: 0 auto; display: block;">
+                    <!-- Background circles -->
+                    <rcle cx="150" cy="150" r="80" fill="none" stroke="#333" stroke-width="1" opacity="0.3"/>
+                    <rcle cx="150" cy="150" r="120" fill="none" stroke="#333" stroke-width="1" opacity="0.2"/>
+                    
+                    <!-- Radar path (animated) -->
+                    <path id="radarPath" d="" fill="url(#radarGradient)" stroke="var(--color-accent)" stroke-width="2" opacity="0.8"/>
+                    
+                    <!-- Center dot -->
+                    <rcle cx="150" cy="150" r="4" fill="var(--color-accent)" opacity="0.8"/>
+                </svg>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <div id="radarStatus" style="font-size: 1.25rem; font-weight: 300; color: var(--color-accent);">BALANCED</div>
+                    <div style="color: var(--color-text-muted); font-size: 0.875rem;">Load Distribution</div>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="card">
+                <h3 style="font-size: 1.5rem; font-weight: 300; text-align: center; margin-bottom: 2rem;">Timeline</h3>
+                <div id="timeline" style="display: flex; gap: 0.25rem; justify-content: center; height: 40px; align-items: flex-end;">
+                    <!-- Timeline bars will be generated here -->
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Web Serial API Integration
-        let port;
-        let reader;
+        // === CONFIG ===
+        const ACCENT_COLOR = '#8d60f5';
+        let isTestMode = false;
+        let port, reader;
         let isConnected = false;
         let dataHistory = [];
         let sessionStartTime = Date.now();
         let correctCount = 0;
         let totalCount = 0;
 
-        // DOM Elements
-        const loginScreen = document.getElementById('loginScreen');
-        const dashboard = document.getElementById('dashboard');
-        const connectBtn = document.getElementById('connectBtn');
-        const disconnectBtn = document.getElementById('disconnectBtn');
-        const statusText = document.getElementById('statusText');
-        const scoreValue = document.getElementById('scoreValue');
-        const scoreCircle = document.getElementById('scoreCircle');
-        const dataCount = document.getElementById('dataCount');
-        const errorMessage = document.getElementById('errorMessage');
-        const sessionTime = document.getElementById('sessionTime');
-        const correctPercent = document.getElementById('correctPercent');
-        const stabilityScore = document.getElementById('stabilityScore');
-        const postureLabel = document.getElementById('postureLabel');
+        // Test data patterns
+        const testPostures = [
+            { name: 'CORRETTA', weight: 4800, cells: [1,1,1,1] },
+            { name: 'INCLINATO_INDIETRO', weight: 5000, cells: [0,0,1,1] },
+            { name: 'INCLINATO_AVANTI', weight: 4500, cells: [1,1,0,0] },
+            { name: 'INCLINATO_DESTRA', weight: 4700, cells: [0,1,0,1] },
+            { name: 'INCLINATO_SINISTRA', weight: 4600, cells: [1,0,1,0] },
+            { name: 'ASSENTE', weight: 0, cells: [0,0,0,0] }
+        ];
 
-        // Connect Button
-        connectBtn.addEventListener('click', async () => {
+        // DOM Elements
+        const elements = {
+            loginScreen: document.getElementById('loginScreen'),
+            dashboard: document.getElementById('dashboard'),
+            connectBtn: document.getElementById('connectBtn'),
+            testModeBtn: document.getElementById('testModeBtn'),
+            disconnectBtn: document.getElementById('disconnectBtn'),
+            testModeToggle: document.getElementById('testModeToggle'),
+            toggleTestMode: document.getElementById('toggleTestMode'),
+            statusText: document.getElementById('statusText'),
+            scoreValue: document.getElementById('scoreValue'),
+            scoreCircle: document.getElementById('scoreCircle'),
+            dataCount: document.getElementById('dataCount'),
+            errorMessage: document.getElementById('errorMessage'),
+            sessionTime: document.getElementById('sessionTime'),
+            correctPercent: document.getElementById('correctPercent'),
+            stabilityScore: document.getElementById('stabilityScore'),
+            postureLabel: document.getElementById('postureLabel'),
+            statusDot: document.getElementById('statusDot'),
+            basicModeBtn: document.getElementById('basicModeBtn'),
+            advancedModeBtn: document.getElementById('advancedModeBtn'),
+            basicModeContent: document.getElementById('basicModeContent'),
+            advancedModeContent: document.getElementById('advancedModeContent'),
+            radarChart: document.getElementById('radarChart'),
+            radarPath: document.getElementById('radarPath'),
+            radarStatus: document.getElementById('radarStatus'),
+            timeline: document.getElementById('timeline')
+        };
+
+        // === INIT ===
+        initEventListeners();
+        checkWebSerialSupport();
+
+        function initEventListeners() {
+            // Connect
+            elements.connectBtn.addEventListener('click', connectDevice);
+            
+            // Test Mode
+            elements.testModeBtn.addEventListener('click', toggleTestMode);
+            elements.toggleTestMode.addEventListener('click', toggleTestMode);
+            
+            // Disconnect
+            elements.disconnectBtn.addEventListener('click', disconnectDevice);
+            
+            // Mode Toggle
+            elements.basicModeBtn.addEventListener('click', () => switchMode('basic'));
+            elements.advancedModeBtn.addEventListener('click', () => switchMode('advanced'));
+        }
+
+        function checkWebSerialSupport() {
+            if (!('serial' in navigator)) {
+                elements.errorMessage.textContent = 'Web Serial API requires Chrome/Edge. Use Test Mode.';
+                elements.errorMessage.style.display = 'block';
+                elements.connectBtn.style.display = 'none';
+            }
+        }
+
+        // === CONNECTION ===
+        async function connectDevice() {
             try {
-                // Request serial port
                 port = await navigator.serial.requestPort();
                 await port.open({ baudRate: 9600 });
-
+                
                 isConnected = true;
-                loginScreen.classList.add('hidden');
-                dashboard.classList.remove('hidden');
-
-                // Start reading
+                showDashboard();
                 readSerialData();
             } catch (error) {
-                console.error('Connection error:', error);
-                errorMessage.textContent = 'Failed to connect. Please try again.';
-                errorMessage.style.display = 'block';
+                showError('Connection failed. Try Test Mode.');
             }
-        });
+        }
 
-        // Disconnect Button
-        disconnectBtn.addEventListener('click', async () => {
-            if (reader) {
-                await reader.cancel();
-            }
-            if (port) {
-                await port.close();
-            }
+        async function disconnectDevice() {
+            if (reader) await reader.cancel();
+            if (port) await port.close();
+            
             isConnected = false;
-            dashboard.classList.add('hidden');
-            loginScreen.classList.remove('hidden');
-        });
+            showLogin();
+            resetData();
+        }
 
-        // Read Serial Data
+        // === TEST MODE ===
+        function toggleTestMode() {
+            isTestMode = !isTestMode;
+            elements.testModeToggle.classList.toggle('hidden', !isTestMode);
+            elements.toggleTestMode.textContent = isTestMode ? 'ON' : 'OFF';
+            
+            if (isTestMode && !isConnected) {
+                showDashboard();
+                startTestData();
+            }
+        }
+
+        let testInterval;
+        function startTestData() {
+            testInterval = setInterval(() => {
+                const randomPosture = testPostures[Math.floor(Math.random() * testPostures.length)];
+                simulateData(randomPosture);
+            }, 2000);
+        }
+
+        function simulateData(posture) {
+            const data = {
+                postureName: posture.name,
+                totalWeight: posture.weight,
+                lc0: Math.random() * 2000,
+                lc1: Math.random() * 2000,
+                lc2: Math.random() * 2000,
+                lc3: Math.random() * 2000
+            };
+            parseAndUpdateData(data);
+        }
+
+        // === SERIAL DATA ===
         async function readSerialData() {
             const decoder = new TextDecoderStream();
             const readableStreamClosed = port.readable.pipeTo(decoder.writable);
             reader = decoder.readable.getReader();
 
-            let buffer = '';
-
             try {
                 while (true) {
                     const { value, done } = await reader.read();
                     if (done) break;
-
-                    buffer += value;
-                    const lines = buffer.split('\n');
-                    buffer = lines.pop();
-
+                    
+                    const lines = value.split('\n');
                     for (const line of lines) {
                         if (line.startsWith('DATA,')) {
-                            parseAndUpdateData(line);
+                            const data = parseSerialLine(line);
+                            parseAndUpdateData(data);
                         }
                     }
                 }
             } catch (error) {
-                console.error('Read error:', error);
-            } finally {
-                reader.releaseLock();
+                console.error('Serial read error:', error);
             }
         }
 
-        // Parse Data from Arduino
-        function parseAndUpdateData(line) {
-            const parts = line.trim().split(',');
-            if (parts.length < 11) return;
-
-            const data = {
-                timestamp: parseInt(parts[1]),
-                lc0: parseFloat(parts[2]),
-                lc1: parseFloat(parts[3]),
-                lc2: parseFloat(parts[4]),
-                lc3: parseFloat(parts[5]),
-                totalWeight: parseFloat(parts[6]),
-                centerX: parseFloat(parts[7]),
-                centerY: parseFloat(parts[8]),
-                postureCode: parseInt(parts[9]),
-                postureName: parts[10].trim()
+        function parseSerialLine(line) {
+            const parts = line.split(',');
+            return {
+                timestamp: parseInt(parts[1] || 0),
+                lc0: parseFloat(parts[2] || 0),
+                lc1: parseFloat(parts[3] || 0),
+                lc2: parseFloat(parts[4] || 0),
+                lc3: parseFloat(parts[5] || 0),
+                totalWeight: parseFloat(parts[6] || 0),
+                centerX: parseFloat(parts[7] || 0),
+                centerY: parseFloat(parts[8] || 0),
+                postureCode: parseInt(parts[9] || 0),
+                postureName: parts[10]?.trim() || 'UNKNOWN'
             };
+        }
 
+        // === DATA PROCESSING ===
+        function parseAndUpdateData(data) {
             dataHistory.push(data);
-            if (dataHistory.length > 1000) dataHistory.shift();
+            if (dataHistory.length > 100) dataHistory.shift();
 
             totalCount++;
             if (data.postureName === 'CORRETTA') correctCount++;
 
-            updateDashboard(data);
+            updateUI(data);
         }
 
-        // Update Dashboard
-        function updateDashboard(data) {
-            // Update count
-            dataCount.textContent = `Data: ${totalCount}`;
-
-            // Update status
-            let statusClass = 'status-correct';
-            let displayName = data.postureName.toUpperCase();
-
-            if (data.postureName === 'ASSENTE') {
-                displayName = 'AWAY';
-                statusClass = 'status-away';
-            } else if (data.postureName !== 'CORRETTA') {
-                statusClass = 'status-warning';
-                displayName = displayName.replace('_', ' ');
-            } else {
-                displayName = 'CORRECT';
-            }
-
-            statusText.textContent = displayName;
-            statusText.className = `status-text ${statusClass}`;
-
-            // Update score
-            const score = Math.round((correctCount / totalCount) * 100);
-            scoreValue.textContent = score;
-            scoreCircle.style.setProperty('--score-percent', `${score * 3.6}deg`);
-
-            // Update session time
+        function updateUI(data) {
+            // Status
+            updateStatus(data.postureName);
+            
+            // Score
+            const score = Math.max(0, Math.min(100, Math.round((correctCount / totalCount) * 100)));
+            elements.scoreValue.textContent = score;
+            elements.scoreCircle.style.setProperty('--score-percent', `${score * 3.6}deg`);
+            
+            // Data count
+            elements.dataCount.textContent = `Data: ${totalCount}`;
+            
+            // Session time
             const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
-            sessionTime.textContent = minutes;
-
-            // Update metrics
-            correctPercent.textContent = `${score}%`;
-            stabilityScore.textContent = Math.round(score * 0.8 + 20);
-
-            // Update posture map
+            elements.sessionTime.textContent = minutes;
+            
+            // Metrics
+            elements.correctPercent.textContent = `${score}%`;
+            elements.stabilityScore.textContent = Math.round(score * 0.85 + 15);
+            
+            // Posture map
             updatePostureMap(data.postureName);
-
-            // Update label
-            postureLabel.textContent = displayName;
+            
+            // Radar (advanced)
+            if (!elements.basicModeContent.classList.contains('hidden')) {
+                updateRadar(data);
+                updateTimeline();
+            }
         }
 
-        // Update Posture Map (2x2 grid)
+        function updateStatus(postureName) {
+            let displayName = postureName === 'ASSENTE' ? 'AWAY' : 
+                            postureName === 'CORRETTA' ? 'CORRECT' : 
+                            postureName.replace('_', ' ').toUpperCase();
+            
+            let statusClass = postureName === 'CORRETTA' ? 'status-correct' :
+                            postureName === 'ASSENTE' ? 'status-away' : 'status-warning';
+            
+            elements.statusText.textContent = displayName;
+            elements.statusText.className = `status-text ${statusClass}`;
+            elements.postureLabel.textContent = displayName;
+        }
+
         function updatePostureMap(postureName) {
-            const cells = [
-                document.getElementById('cell-0'),
-                document.getElementById('cell-1'),
-                document.getElementById('cell-2'),
-                document.getElementById('cell-3')
-            ];
-
-            // Clear all
+            const cells = ['cell-0', 'cell-1', 'cell-2', 'cell-3'].map(id => document.getElementById(id));
+            
+            // Reset
             cells.forEach(cell => cell.classList.remove('active'));
-
-            // Activate based on posture
+            
+            // Activate
             switch (postureName) {
-                case 'LEAN_FORWARD':
                 case 'INCLINATO_AVANTI':
+                case 'LEAN_FORWARD':
                     cells[0].classList.add('active');
                     cells[1].classList.add('active');
                     break;
-                case 'LEAN_BACK':
                 case 'INCLINATO_INDIETRO':
+                case 'LEAN_BACK':
                     cells[2].classList.add('active');
                     cells[3].classList.add('active');
                     break;
-                case 'LEAN_LEFT':
                 case 'INCLINATO_SINISTRA':
+                case 'LEAN_LEFT':
                     cells[0].classList.add('active');
                     cells[2].classList.add('active');
                     break;
-                case 'LEAN_RIGHT':
                 case 'INCLINATO_DESTRA':
+                case 'LEAN_RIGHT':
                     cells[1].classList.add('active');
                     cells[3].classList.add('active');
                     break;
                 case 'CORRETTA':
+                case 'CORRECT':
                     cells.forEach(cell => cell.classList.add('active'));
                     break;
             }
         }
 
-        // Check Web Serial API support
-        if (!('serial' in navigator)) {
-            errorMessage.textContent = 'Web Serial API not supported. Use Chrome/Edge browser.';
-            errorMessage.style.display = 'block';
-            connectBtn.disabled = true;
+        function updateRadar(data) {
+            const weights = [data.lc0 || 0, data.lc1 || 0, data.lc2 || 0, data.lc3 || 0];
+            const maxWeight = Math.max(...weights, 100);
+            const normalized = weights.map(w => (w / maxWeight) * 100);
+            
+            // Simple radar path (FRONT, RIGHT, BACK, LEFT)
+            const angles = [0, 90, 180, 270];
+            let path = '';
+            angles.forEach((angle, i) => {
+                const rad = angle * Math.PI / 180;
+                const radius = (normalized[i] / 100) * 90;
+                const x = 150 + Math.cos(rad) * radius;
+                const y = 150 + Math.sin(rad) * radius;
+                path += (i === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`);
+            });
+            path += ' Z';
+            
+            elements.radarPath.setAttribute('d', path);
+            
+            const balanceStatus = data.postureName === 'CORRETTA' ? 'BALANCED' : 
+                                 data.postureName === 'ASSENTE' ? 'AWAY' : 'ADJUSTING';
+            elements.radarStatus.textContent = balanceStatus;
+            elements.radarStatus.style.color = data.postureName === 'CORRETTA' ? 
+                                             'var(--color-accent)' : 'var(--color-yellow)';
+        }
+
+        function updateTimeline() {
+            const recentData = dataHistory.slice(-24);
+            elements.timeline.innerHTML = '';
+            
+            recentData.forEach((data, i) => {
+                const bar = document.createElement('div');
+                bar.style.width = '8px';
+                bar.style.height = '30px';
+                bar.style.background = data.postureName === 'CORRETTA' ? 
+                                     'var(--color-accent)' : '#666';
+                bar.style.borderRadius = '4px';
+                bar.style.opacity = '0.8';
+                bar.style.transition = 'all 0.3s';
+                bar.dataset.posture = data.postureName;
+                elements.timeline.appendChild(bar);
+            });
+        }
+
+        // === UI MODE ===
+        function switchMode(mode) {
+            const isAdvanced = mode === 'advanced';
+            
+            elements.basicModeBtn.classList.toggle('active', !isAdvanced);
+            elements.advancedModeBtn.classList.toggle('active', isAdvanced);
+            
+            elements.basicModeContent.classList.toggle('hidden', isAdvanced);
+            elements.advancedModeContent.classList.toggle('hidden', !isAdvanced);
+        }
+
+        // === UTILS ===
+        function showDashboard() {
+            elements.loginScreen.classList.add('hidden');
+            elements.dashboard.classList.remove('hidden');
+            elements.statusDot.classList.add('connected');
+        }
+
+        function showLogin() {
+            elements.dashboard.classList.add('hidden');
+            elements.loginScreen.classList.remove('hidden');
+            elements.statusDot.classList.remove('connected');
+        }
+
+        function showError(message) {
+            elements.errorMessage.textContent = message;
+            elements.errorMessage.style.display = 'block';
+            setTimeout(() => {
+                elements.errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function resetData() {
+            dataHistory = [];
+            sessionStartTime = Date.now();
+            correctCount = 0;
+            totalCount = 0;
+        }
+
+        // Stop test mode on disconnect
+        function stopTestMode() {
+            if (testInterval) {
+                clearInterval(testInterval);
+                testInterval = null;
+            }
         }
     </script>
 </body>
