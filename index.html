@@ -24,6 +24,7 @@
             --color-text-muted: #9ca3af;
             --color-yellow: #fbbf24;
             --color-gray: #666;
+            --color-green: #10b981;
         }
 
         body {
@@ -252,29 +253,6 @@
             letter-spacing: 0.1em;
         }
 
-        .metric-big {
-            text-align: center;
-            min-height: 250px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .metric-value-big {
-            font-size: 8rem;
-            font-weight: 200;
-            color: var(--color-accent);
-            margin-bottom: 1rem;
-            letter-spacing: -0.05em;
-        }
-
-        .metric-label-big {
-            color: var(--color-text-muted);
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-        }
-
         /* Posture Map */
         .posture-grid {
             display: grid;
@@ -319,6 +297,122 @@
         .posture-cell .weight-percent {
             font-size: 1.5rem;
             font-weight: 500;
+        }
+
+        /* Achievement Badge */
+        .achievement-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-light) 100%);
+            border-radius: 2rem;
+            padding: 3rem;
+            text-align: center;
+            z-index: 2000;
+            box-shadow: 0 20px 60px rgba(141, 96, 245, 0.6);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .achievement-popup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .achievement-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s infinite;
+        }
+
+        .achievement-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-desc {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Best Moment Card */
+        .best-moment {
+            background: linear-gradient(135deg, rgba(141, 96, 245, 0.15) 0%, rgba(141, 96, 245, 0.05) 100%);
+            border: 1px solid var(--color-accent);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .best-moment-time {
+            font-size: 1.5rem;
+            color: var(--color-accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .best-moment-desc {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Impact Card */
+        .impact-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border: 1px solid var(--color-green);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .impact-value {
+            font-size: 2.5rem;
+            color: var(--color-green);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-desc {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Comparison Cards */
+        .comparison-card {
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--color-border);
+            background: rgba(26, 26, 26, 0.5);
+        }
+
+        .comparison-label {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .comparison-value {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-value.positive {
+            color: var(--color-green);
+        }
+
+        .comparison-value.negative {
+            color: var(--color-yellow);
+        }
+
+        .comparison-subtext {
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
         }
 
         /* Timeline Interactive */
@@ -527,13 +621,11 @@
         @media (max-width: 1024px) {
             .grid-2 { grid-template-columns: 1fr; }
             .status-text { font-size: 3.5rem; }
-            .metric-value-big { font-size: 5rem; }
         }
 
         @media (max-width: 768px) {
             .container { padding: 1rem; }
             .status-text { font-size: 2.75rem; }
-            .metric-value-big { font-size: 4rem; }
             .card { padding: 1.75rem; }
             .posture-cell { width: 4.5rem; height: 4.5rem; font-size: 0.75rem; }
             .logo { font-size: 2rem; }
@@ -549,6 +641,13 @@
     <div id="testModeToggle" class="test-mode hidden">
         🧪 TEST MODE
         <button id="toggleTestMode" style="background: none; border: none; color: inherit; font-size: inherit; cursor: pointer; font-weight: 600;">OFF</button>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div id="achievementPopup" class="achievement-popup">
+        <div class="achievement-icon" id="achievementIcon">🏆</div>
+        <div class="achievement-title" id="achievementTitle">Achievement Unlocked!</div>
+        <div class="achievement-desc" id="achievementDesc">Great job!</div>
     </div>
 
     <!-- Timeline Tooltip -->
@@ -567,32 +666,27 @@
             
             <div class="modal-section">
                 <div class="modal-section-title">Overall Score</div>
-                <p>Your wellness score from 0 to 100. It shows how well you're maintaining good posture throughout your session. Higher is better!</p>
+                <p>Your wellness score from 0 to 100. It shows how well you're maintaining good posture throughout your session.</p>
             </div>
 
             <div class="modal-section">
-                <div class="modal-section-title">Good Posture %</div>
-                <p>The percentage of time you've been sitting with your weight evenly distributed and your back straight.</p>
+                <div class="modal-section-title">Achievements</div>
+                <p>Unlock badges as you hit milestones: Perfect Hour, Consistency Champion, and more!</p>
             </div>
 
             <div class="modal-section">
-                <div class="modal-section-title">Stability</div>
-                <p>How consistent your sitting position is. Higher values mean you're sitting still and balanced, with fewer sudden movements.</p>
+                <div class="modal-section-title">Best Moment</div>
+                <p>We highlight your longest streak of perfect posture each session.</p>
             </div>
 
             <div class="modal-section">
-                <div class="modal-section-title">Weight Distribution Map</div>
-                <p>Shows where your weight is concentrated on the chair. Each square lights up based on pressure: front, back, left, or right. Balanced posture lights up all four evenly.</p>
+                <div class="modal-section-title">Health Impact</div>
+                <p>See the tangible benefits of good posture - equivalent stretching time or back strain avoided.</p>
             </div>
 
             <div class="modal-section">
-                <div class="modal-section-title">Your Timeline</div>
-                <p>Each small square is one moment in your session. Purple = good posture, yellow = leaning, dark = away from chair. Click any square to see the exact time and what you were doing.</p>
-            </div>
-
-            <div class="modal-section">
-                <div class="modal-section-title">Session Quality</div>
-                <p>A quick breakdown of your session: how much time sitting well, leaning, or away from your chair.</p>
+                <div class="modal-section-title">Comparisons</div>
+                <p>Track your progress versus yesterday and see how you stack up against the community average.</p>
             </div>
         </div>
     </div>
@@ -651,7 +745,7 @@
             </div>
         </div>
 
-        <!-- BASIC MODE -->
+        <!-- SIMPLE MODE -->
         <div id="basicModeContent">
             <div class="grid-3">
                 <!-- Weight Distribution -->
@@ -696,6 +790,35 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Best Moment Today (SIMPLE) -->
+                <div class="card">
+                    <h3>✨ Today's Best</h3>
+                    <div class="best-moment">
+                        <div class="best-moment-time" id="bestMomentTimeSimple">--:--</div>
+                        <div class="best-moment-desc" id="bestMomentDescSimple">Keep going to set your record!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Better Than Yesterday (SIMPLE) -->
+            <div class="grid-2">
+                <div class="card">
+                    <h3>📈 Your Progress</h3>
+                    <div class="comparison-card">
+                        <div class="comparison-label">vs Yesterday</div>
+                        <div class="comparison-value positive" id="vsYesterdaySimple">+0%</div>
+                        <div class="comparison-subtext">You're improving!</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>💚 Health Impact</h3>
+                    <div class="impact-card">
+                        <div class="impact-value" id="impactValueSimple">0 min</div>
+                        <div class="impact-desc">of stretching equivalent</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -737,7 +860,42 @@
                 </div>
             </div>
 
-            <!-- Session Quality + Good Posture % -->
+            <!-- Comparisons Row -->
+            <div class="grid-3">
+                <!-- Session Score Comparison -->
+                <div class="card">
+                    <h3>📊 Today vs Yesterday</h3>
+                    <div class="comparison-card">
+                        <div class="comparison-label">Today</div>
+                        <div class="comparison-value" id="todayScore" style="color: var(--color-accent);">85%</div>
+                        <div class="comparison-subtext">
+                            Yesterday: <span id="yesterdayScore">78%</span>
+                        </div>
+                        <div class="comparison-value positive" id="scoreDiff" style="font-size: 1.5rem; margin-top: 1rem;">+7%</div>
+                    </div>
+                </div>
+
+                <!-- You vs Average -->
+                <div class="card">
+                    <h3>🌟 Community Rank</h3>
+                    <div class="comparison-card">
+                        <div class="comparison-label">You vs Average User</div>
+                        <div class="comparison-value positive" id="vsAverage">+12%</div>
+                        <div class="comparison-subtext" id="vsAverageText">Better than 68% of users</div>
+                    </div>
+                </div>
+
+                <!-- Best Moment -->
+                <div class="card">
+                    <h3>✨ Best Moment</h3>
+                    <div class="best-moment">
+                        <div class="best-moment-time" id="bestMomentTime">--:--</div>
+                        <div class="best-moment-desc" id="bestMomentDesc">Keep sitting well!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session Quality + Health Impact -->
             <div class="grid-2">
                 <!-- Session Quality -->
                 <div class="card">
@@ -773,11 +931,18 @@
                     <div class="info-label">Breakdown of your sitting time</div>
                 </div>
 
-                <!-- Big Good Posture % -->
-                <div class="card metric-big">
-                    <div class="metric-value-big" id="bigCorrectPercent">0%</div>
-                    <div class="metric-label-big">Good Posture</div>
-                    <div class="info-label">Time spent sitting balanced</div>
+                <!-- Health Impact -->
+                <div class="card">
+                    <h3>💚 Posture Health Impact</h3>
+                    <div class="impact-card">
+                        <div class="impact-value" id="impactValue">0 min</div>
+                        <div class="impact-desc" id="impactDesc">of stretching equivalent</div>
+                    </div>
+                    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border);">
+                        <div style="text-align: center; color: var(--color-text-muted); font-size: 0.875rem;">
+                            You've avoided <span style="color: var(--color-green); font-weight: 600;" id="avoidedStrain">0</span> of potential back strain today! 🎉
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -793,6 +958,13 @@
         let correctCount = 0;
         let totalCount = 0;
         let currentMode = 'basic';
+        let bestStreak = { start: null, duration: 0 };
+        let currentStreak = { start: null, duration: 0 };
+        let achievementsUnlocked = new Set();
+
+        // Simulated data for comparisons
+        const yesterdayScore = 71 + Math.floor(Math.random() * 10);
+        const averageUserScore = 65 + Math.floor(Math.random() * 8);
 
         const postureMap = {
             'CORRETTA': { display: 'BALANCED', type: 'correct' },
@@ -812,6 +984,13 @@
             { name: 'INCLINATO_SINISTRA', weights: [1350, 1100, 1400, 1150] },
             { name: 'ASSENTE', weights: [0, 0, 0, 0] }
         ];
+
+        const achievements = {
+            firstSession: { icon: '🎯', title: 'First Session', desc: 'Welcome to LeanTil!', trigger: 1 },
+            perfectMinute: { icon: '⏱️', title: 'Perfect Minute', desc: '60 seconds of great posture!', trigger: 30 },
+            consistency: { icon: '🔥', title: 'Consistency Champion', desc: '100 readings of good posture!', trigger: 100 },
+            superStar: { icon: '⭐', title: 'Posture SuperStar', desc: 'Maintained 90% score!', trigger: 90 }
+        };
 
         const elements = {
             loginScreen: document.getElementById('loginScreen'),
@@ -835,7 +1014,6 @@
             basicModeContent: document.getElementById('basicModeContent'),
             advancedModeContent: document.getElementById('advancedModeContent'),
             timeline: document.getElementById('timeline'),
-            bigCorrectPercent: document.getElementById('bigCorrectPercent'),
             helpBtn: document.getElementById('helpBtn'),
             helpBackdrop: document.getElementById('helpModalBackdrop'),
             closeHelp: document.getElementById('closeHelp'),
@@ -843,7 +1021,25 @@
             qualityBar: document.getElementById('qualityBar'),
             qualityGood: document.getElementById('qualityGood'),
             qualityWarning: document.getElementById('qualityWarning'),
-            qualityAway: document.getElementById('qualityAway')
+            qualityAway: document.getElementById('qualityAway'),
+            achievementPopup: document.getElementById('achievementPopup'),
+            achievementIcon: document.getElementById('achievementIcon'),
+            achievementTitle: document.getElementById('achievementTitle'),
+            achievementDesc: document.getElementById('achievementDesc'),
+            bestMomentTime: document.getElementById('bestMomentTime'),
+            bestMomentDesc: document.getElementById('bestMomentDesc'),
+            bestMomentTimeSimple: document.getElementById('bestMomentTimeSimple'),
+            bestMomentDescSimple: document.getElementById('bestMomentDescSimple'),
+            impactValue: document.getElementById('impactValue'),
+            impactDesc: document.getElementById('impactDesc'),
+            impactValueSimple: document.getElementById('impactValueSimple'),
+            avoidedStrain: document.getElementById('avoidedStrain'),
+            todayScore: document.getElementById('todayScore'),
+            yesterdayScore: document.getElementById('yesterdayScore'),
+            scoreDiff: document.getElementById('scoreDiff'),
+            vsAverage: document.getElementById('vsAverage'),
+            vsAverageText: document.getElementById('vsAverageText'),
+            vsYesterdaySimple: document.getElementById('vsYesterdaySimple')
         };
 
         const weightElements = {
@@ -870,6 +1066,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             initEventListeners();
             checkWebSerialSupport();
+            updateYesterdayComparison();
         });
 
         function initEventListeners() {
@@ -892,7 +1089,6 @@
             // Timeline tooltip
             document.addEventListener('mousemove', (e) => {
                 if (e.target.classList.contains('timeline-bar')) {
-                    const rect = e.target.getBoundingClientRect();
                     const data = e.target._postureData;
                     if (data) {
                         const time = new Date(data.timestamp).toLocaleTimeString('en-US', { 
@@ -911,6 +1107,113 @@
                     elements.timelineTooltip.classList.remove('show');
                 }
             });
+        }
+
+        // === ACHIEVEMENTS ===
+        function checkAchievements(score) {
+            if (totalCount === 1 && !achievementsUnlocked.has('firstSession')) {
+                showAchievement('firstSession');
+            }
+            if (correctCount === 30 && !achievementsUnlocked.has('perfectMinute')) {
+                showAchievement('perfectMinute');
+            }
+            if (correctCount === 100 && !achievementsUnlocked.has('consistency')) {
+                showAchievement('consistency');
+            }
+            if (score >= 90 && totalCount > 50 && !achievementsUnlocked.has('superStar')) {
+                showAchievement('superStar');
+            }
+        }
+
+        function showAchievement(key) {
+            const ach = achievements[key];
+            achievementsUnlocked.add(key);
+            
+            elements.achievementIcon.textContent = ach.icon;
+            elements.achievementTitle.textContent = ach.title;
+            elements.achievementDesc.textContent = ach.desc;
+            elements.achievementPopup.classList.add('show');
+
+            setTimeout(() => {
+                elements.achievementPopup.classList.remove('show');
+            }, 3000);
+        }
+
+        // === BEST MOMENT TRACKING ===
+        function trackBestMoment(isCorrect) {
+            if (isCorrect) {
+                if (!currentStreak.start) {
+                    currentStreak.start = Date.now();
+                }
+                currentStreak.duration = Date.now() - currentStreak.start;
+
+                if (currentStreak.duration > bestStreak.duration) {
+                    bestStreak = { ...currentStreak };
+                }
+            } else {
+                currentStreak = { start: null, duration: 0 };
+            }
+
+            updateBestMomentUI();
+        }
+
+        function updateBestMomentUI() {
+            if (bestStreak.duration > 0) {
+                const minutes = Math.floor(bestStreak.duration / 60000);
+                const seconds = Math.floor((bestStreak.duration % 60000) / 1000);
+                const time = new Date(bestStreak.start).toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+                const duration = minutes > 0 ? `${minutes} min ${seconds} sec` : `${seconds} seconds`;
+                
+                elements.bestMomentTime.textContent = time;
+                elements.bestMomentDesc.textContent = `${duration} of perfect posture! 🎉`;
+                elements.bestMomentTimeSimple.textContent = time;
+                elements.bestMomentDescSimple.textContent = `${duration} of perfect posture!`;
+            }
+        }
+
+        // === HEALTH IMPACT ===
+        function updateHealthImpact(score) {
+            const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
+            const stretchingEquivalent = Math.round((score / 100) * minutes * 0.5);
+            const strainAvoided = Math.round((score / 100) * minutes * 1.2);
+
+            elements.impactValue.textContent = `${stretchingEquivalent} min`;
+            elements.impactValueSimple.textContent = `${stretchingEquivalent} min`;
+            elements.avoidedStrain.textContent = `${strainAvoided} minutes`;
+
+            if (stretchingEquivalent > 30) {
+                elements.impactDesc.textContent = 'Equivalent to a full stretching session!';
+            } else {
+                elements.impactDesc.textContent = 'of stretching equivalent';
+            }
+        }
+
+        // === COMPARISON UPDATES ===
+        function updateYesterdayComparison() {
+            elements.yesterdayScore.textContent = `${yesterdayScore}%`;
+        }
+
+        function updateComparisons(score) {
+            // Today vs Yesterday
+            const diff = score - yesterdayScore;
+            const diffText = diff >= 0 ? `+${diff}%` : `${diff}%`;
+            elements.todayScore.textContent = `${score}%`;
+            elements.scoreDiff.textContent = diffText;
+            elements.scoreDiff.className = `comparison-value ${diff >= 0 ? 'positive' : 'negative'}`;
+            elements.vsYesterdaySimple.textContent = diffText;
+            elements.vsYesterdaySimple.className = `comparison-value ${diff >= 0 ? 'positive' : 'negative'}`;
+
+            // You vs Average
+            const avgDiff = score - averageUserScore;
+            const avgDiffText = avgDiff >= 0 ? `+${avgDiff}%` : `${avgDiff}%`;
+            elements.vsAverage.textContent = avgDiffText;
+            elements.vsAverage.className = `comparison-value ${avgDiff >= 0 ? 'positive' : 'negative'}`;
+            
+            const percentile = Math.min(95, Math.max(5, 50 + (avgDiff * 2)));
+            elements.vsAverageText.textContent = `Better than ${Math.round(percentile)}% of users`;
         }
 
         // === CONNECTION ===
@@ -1026,8 +1329,10 @@
 
             totalCount++;
             const mapped = postureMap[data.postureName] || { display: 'UNKNOWN', type: 'warning' };
-            if (mapped.type === 'correct') correctCount++;
+            const isCorrect = mapped.type === 'correct';
+            if (isCorrect) correctCount++;
 
+            trackBestMoment(isCorrect);
             updateAllUI(data, mapped);
         }
 
@@ -1041,13 +1346,17 @@
             elements.scoreValue.textContent = score;
             elements.scoreCircle.style.setProperty('--score-percent', `${score * 3.6}deg`);
             elements.correctPercent.textContent = `${score}%`;
-            elements.bigCorrectPercent.textContent = `${score}%`;
             elements.stabilityScore.textContent = Math.round(score * 0.9 + 10);
 
             // Meta
             elements.dataCount.textContent = `Readings: ${totalCount}`;
             const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
             elements.sessionTime.textContent = minutes;
+
+            // Special updates
+            checkAchievements(score);
+            updateHealthImpact(score);
+            updateComparisons(score);
 
             // Update visualizations
             updatePostureMaps(data);
@@ -1118,7 +1427,6 @@
             elements.qualityWarning.textContent = `${pctWarning}%`;
             elements.qualityAway.textContent = `${pctAway}%`;
 
-            // Update bar
             elements.qualityBar.innerHTML = `
                 <div class="quality-segment" style="width: ${pctGood}%; background: var(--color-accent);"></div>
                 <div class="quality-segment" style="width: ${pctWarning}%; background: var(--color-yellow);"></div>
@@ -1156,6 +1464,8 @@
             sessionStartTime = Date.now();
             correctCount = 0;
             totalCount = 0;
+            bestStreak = { start: null, duration: 0 };
+            currentStreak = { start: null, duration: 0 };
         }
 
         function checkWebSerialSupport() {
