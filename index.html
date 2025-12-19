@@ -216,6 +216,11 @@
             animation: pulse 2s infinite;
         }
 
+        .status-dot.disconnected {
+            background: var(--color-gray);
+            animation: none;
+        }
+
         /* Grid Layout */
         .grid-2 {
             display: grid;
@@ -779,7 +784,7 @@
     <div id="loginScreen" class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
         <div style="text-align: center; max-width: 500px;">
             <img src="leantil-logo.png" alt="LeanTil" class="logo-img" style="margin-bottom: 2rem; height: 80px;">
-            <div class="status-dot" style="margin: 0 auto 2rem;"></div>
+            <div class="status-dot disconnected" style="margin: 0 auto 2rem;"></div>
             <p style="color: var(--color-text-muted); margin-bottom: 3rem; font-size: 1.25rem; line-height: 1.6;">
                 Monitor your posture in real time
             </p>
@@ -799,7 +804,7 @@
             <div class="header-controls">
                 <div class="status-info">
                     <span id="statusDot" class="status-dot"></span>
-                    <span id="dataCount">Readings: 0</span>
+                    <span id="connectionText">Connected</span>
                 </div>
                 <div style="display: flex; gap: 0.5rem;">
                     <button id="basicModeBtn" class="btn btn-toggle active">Simple</button>
@@ -879,27 +884,6 @@
         <div id="advancedExtras" class="hidden">
             <div class="mode-divider">📊 Advanced Insights</div>
 
-            <!-- Health Impact - HERO CARD (TOP PLACEMENT) -->
-            <div class="card">
-                <div class="impact-card-hero">
-                    <div class="impact-icon">💚</div>
-                    <h3 style="margin-bottom: 1rem; font-size: 1.75rem; position: relative; z-index: 1;">Posture Health Impact</h3>
-                    <div class="impact-value-hero" id="impactValueHero">0 min</div>
-                    <div class="impact-desc-hero" id="impactDescHero">of stretching equivalent</div>
-                    
-                    <div class="impact-stats">
-                        <div class="impact-stat">
-                            <div class="impact-stat-value" id="stretchEquiv">0</div>
-                            <div class="impact-stat-label">Min Stretching</div>
-                        </div>
-                        <div class="impact-stat">
-                            <div class="impact-stat-value" id="strainAvoided">0</div>
-                            <div class="impact-stat-label">Min Strain Avoided</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- Timeline Interactive -->
             <div class="card">
                 <h3>Your Posture Timeline</h3>
@@ -912,21 +896,8 @@
                 </div>
             </div>
 
-            <!-- Comparisons & Insights Row -->
-            <div class="grid-3">
-                <!-- Today vs Yesterday -->
-                <div class="card">
-                    <h3>📊 Today vs Yesterday</h3>
-                    <div class="comparison-card">
-                        <div class="comparison-label">Today</div>
-                        <div class="comparison-value" id="todayScore" style="color: var(--color-accent);">85%</div>
-                        <div class="comparison-subtext">
-                            Yesterday: <span id="yesterdayScore">78%</span>
-                        </div>
-                        <div class="comparison-value positive" id="scoreDiff" style="font-size: 1.5rem; margin-top: 1rem;">+7%</div>
-                    </div>
-                </div>
-
+            <!-- Session Quality + Health Impact SIDE BY SIDE -->
+            <div class="grid-2">
                 <!-- Session Quality -->
                 <div class="card">
                     <h3>Session Quality</h3>
@@ -957,6 +928,43 @@
                                 <div style="color: var(--color-text-muted); font-size: 0.75rem;">Away</div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Health Impact HERO -->
+                <div class="card">
+                    <div class="impact-card-hero">
+                        <div class="impact-icon">💚</div>
+                        <h3 style="margin-bottom: 1rem; font-size: 1.5rem; position: relative; z-index: 1; font-weight: 300;">Posture Health Impact</h3>
+                        <div class="impact-value-hero" id="impactValueHero">0</div>
+                        <div class="impact-desc-hero" id="impactDescHero">minutes of stretching equivalent</div>
+                        
+                        <div class="impact-stats">
+                            <div class="impact-stat">
+                                <div class="impact-stat-value" id="stretchEquiv">0</div>
+                                <div class="impact-stat-label">Min Stretching</div>
+                            </div>
+                            <div class="impact-stat">
+                                <div class="impact-stat-value" id="strainAvoided">0</div>
+                                <div class="impact-stat-label">Min Strain Avoided</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparisons & Highlights Row -->
+            <div class="grid-2">
+                <!-- Today vs Yesterday -->
+                <div class="card">
+                    <h3>📊 Today vs Yesterday</h3>
+                    <div class="comparison-card">
+                        <div class="comparison-label">Today</div>
+                        <div class="comparison-value" id="todayScore" style="color: var(--color-accent);">85%</div>
+                        <div class="comparison-subtext">
+                            Yesterday: <span id="yesterdayScore">78%</span>
+                        </div>
+                        <div class="comparison-value positive" id="scoreDiff" style="font-size: 1.5rem; margin-top: 1rem;">+7%</div>
                     </div>
                 </div>
 
@@ -1035,7 +1043,7 @@
             statusText: document.getElementById('statusText'),
             scoreValue: document.getElementById('scoreValue'),
             scoreCircle: document.getElementById('scoreCircle'),
-            dataCount: document.getElementById('dataCount'),
+            connectionText: document.getElementById('connectionText'),
             errorMessage: document.getElementById('errorMessage'),
             sessionTime: document.getElementById('sessionTime'),
             correctPercent: document.getElementById('correctPercent'),
@@ -1066,7 +1074,8 @@
             vsAverageCombined: document.getElementById('vsAverageCombined'),
             vsAverageTextCombined: document.getElementById('vsAverageTextCombined'),
             bestMomentTimeCombined: document.getElementById('bestMomentTimeCombined'),
-            bestMomentDescCombined: document.getElementById('bestMomentDescCombined')
+            bestMomentDescCombined: document.getElementById('bestMomentDescCombined'),
+            statusDot: document.getElementById('statusDot')
         };
 
         const weightElements = [
@@ -1083,6 +1092,7 @@
             initEventListeners();
             checkWebSerialSupport();
             updateYesterdayComparison();
+            updateConnectionStatus();
         });
 
         function initEventListeners() {
@@ -1123,6 +1133,17 @@
                     elements.timelineTooltip.classList.remove('show');
                 }
             });
+        }
+
+        // === CONNECTION STATUS ===
+        function updateConnectionStatus() {
+            if (isConnected || isTestMode) {
+                elements.connectionText.textContent = 'Connected';
+                elements.statusDot.classList.remove('disconnected');
+            } else {
+                elements.connectionText.textContent = 'Disconnected';
+                elements.statusDot.classList.add('disconnected');
+            }
         }
 
         // === ACHIEVEMENTS ===
@@ -1194,7 +1215,7 @@
             const stretchingEquivalent = Math.round((score / 100) * minutes * 0.5);
             const strainAvoided = Math.round((score / 100) * minutes * 1.2);
 
-            elements.impactValueHero.textContent = `${stretchingEquivalent}`;
+            elements.impactValueHero.textContent = stretchingEquivalent;
             elements.stretchEquiv.textContent = stretchingEquivalent;
             elements.strainAvoided.textContent = strainAvoided;
 
@@ -1233,6 +1254,7 @@
                 port = await navigator.serial.requestPort();
                 await port.open({ baudRate: 9600 });
                 isConnected = true;
+                updateConnectionStatus();
                 showDashboard();
                 readSerialData();
             } catch (error) {
@@ -1249,6 +1271,7 @@
                 try { await port.close(); } catch {}
             }
             isConnected = false;
+            updateConnectionStatus();
             showLogin();
             resetData();
         }
@@ -1262,10 +1285,12 @@
             elements.toggleTestMode.textContent = isTestMode ? 'ON' : 'OFF';
 
             if (isTestMode && !isConnected) {
+                updateConnectionStatus();
                 showDashboard();
                 startTestData();
             } else if (!isTestMode && !isConnected) {
                 stopTestMode();
+                updateConnectionStatus();
                 showLogin();
             }
         }
@@ -1360,7 +1385,6 @@
             elements.stabilityScore.textContent = Math.round(score * 0.9 + 10);
 
             // Meta
-            elements.dataCount.textContent = `Readings: ${totalCount}`;
             const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
             elements.sessionTime.textContent = minutes;
 
