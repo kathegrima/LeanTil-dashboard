@@ -1,1056 +1,1306 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LeanTil Dashboard - Posture Monitoring</title>
-    <meta name="description" content="Real-time posture monitoring dashboard for LeanTil smart chair">
-    
-    <style>
-        /* Nothing X Theme - #8d60f5 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeanTil Dashboard - Posture Monitoring</title>
+  <meta
+    name="description"
+    content="Real-time posture monitoring dashboard for LeanTil smart chair"
+  />
 
-        :root {
-            --color-bg: #0a0a0a;
-            --color-card: #1a1a1a;
-            --color-border: #2a2a2a;
-            --color-accent: #8d60f5;
-            --color-accent-light: #a27bf7;
-            --color-text: #ffffff;
-            --color-text-muted: #9ca3af;
-            --color-yellow: #fbbf24;
-            --color-gray: #666;
-        }
+  <style>
+    /* === THEME ======================================================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--color-bg);
-            color: var(--color-text);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+    :root {
+      --color-bg: #0a0a0a;
+      --color-card: #1a1a1a;
+      --color-border: #2a2a2a;
+      --color-accent: #8d60f5;
+      --color-accent-light: #a27bf7;
+      --color-text: #ffffff;
+      --color-text-muted: #9ca3af;
+      --color-yellow: #fbbf24;
+      --color-gray: #666;
+    }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 1.5rem;
-        }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
 
-        .logo {
-            font-size: 2.5rem;
-            font-weight: 300;
-            letter-spacing: 0.05em;
-        }
+    /* === HEADER ====================================================== */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
 
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: 0.05em;
+    }
 
-        /* Cards */
-        .card {
-            background: var(--color-card);
-            border: 1px solid var(--color-border);
-            border-radius: 1.5rem;
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            transition: transform 0.2s;
-        }
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
 
-        .card:hover {
-            transform: translateY(-2px);
-        }
+    /* === CARDS ======================================================= */
+    .card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: 1.5rem;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      transition: transform 0.2s;
+    }
 
-        .card h3 {
-            font-size: 1.5rem;
-            font-weight: 300;
-            margin-bottom: 1.5rem;
-        }
+    .card:hover {
+      transform: translateY(-2px);
+    }
 
-        /* Status Display */
-        .status-display {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
+    .card h3 {
+      font-size: 1.5rem;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
 
-        .status-text {
-            font-size: 5rem;
-            font-weight: 300;
-            letter-spacing: 0.08em;
-            margin-bottom: 0.75rem;
-        }
+    /* === STATUS + SCORE ============================================= */
+    .status-display {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
 
-        .status-label {
-            color: var(--color-text-muted);
-            font-size: 1.125rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-        }
+    .status-text {
+      font-size: 5rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
 
-        .status-correct { color: var(--color-accent); }
-        .status-away { color: var(--color-text-muted); }
-        .status-warning { color: var(--color-yellow); }
+    .status-label {
+      color: var(--color-text-muted);
+      font-size: 1.125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
 
-        /* Score Circle */
-        .score-circle {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            background: conic-gradient(var(--color-accent) var(--score-percent, 0deg), var(--color-card) 0deg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
+    .status-correct {
+      color: var(--color-accent);
+    }
+    .status-away {
+      color: var(--color-text-muted);
+    }
+    .status-warning {
+      color: var(--color-yellow);
+    }
 
-        .score-inner {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            background: var(--color-card);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.25rem;
-            font-weight: 300;
-        }
+    .score-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: conic-gradient(
+        var(--color-accent) var(--score-percent, 0deg),
+        var(--color-card) 0deg
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
 
-        /* Buttons */
-        .btn {
-            padding: 0.875rem 1.75rem;
-            border: 1px solid var(--color-border);
-            background: var(--color-card);
-            color: var(--color-text);
-            border-radius: 0.75rem;
-            cursor: pointer;
-            font-size: 0.875rem;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
+    .score-inner {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: var(--color-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.25rem;
+      font-weight: 300;
+    }
 
-        .btn:hover {
-            background: var(--color-border);
-            transform: scale(1.02);
-        }
+    /* === BUTTONS ===================================================== */
+    .btn {
+      padding: 0.875rem 1.75rem;
+      border: 1px solid var(--color-border);
+      background: var(--color-card);
+      color: var(--color-text);
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
 
-        .btn-primary {
-            background: var(--color-accent);
-            color: #ffffff;
-            border-color: var(--color-accent);
-        }
+    .btn:hover {
+      background: var(--color-border);
+      transform: scale(1.02);
+    }
 
-        .btn-primary:hover {
-            background: var(--color-accent-light);
-        }
+    .btn-primary {
+      background: var(--color-accent);
+      color: #ffffff;
+      border-color: var(--color-accent);
+    }
 
-        .btn-toggle {
-            background: transparent;
-            border-color: var(--color-accent);
-            color: var(--color-accent);
-            padding: 0.75rem 1.5rem;
-        }
+    .btn-primary:hover {
+      background: var(--color-accent-light);
+    }
 
-        .btn-toggle.active {
-            background: var(--color-accent);
-            color: #ffffff;
-        }
+    .btn-toggle {
+      background: transparent;
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+      padding: 0.75rem 1.5rem;
+    }
 
-        /* Status & Connection */
-        .status-info {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--color-card);
-            border: 1px solid var(--color-border);
-            border-radius: 2rem;
-            font-size: 0.875rem;
-        }
+    .btn-toggle.active {
+      background: var(--color-accent);
+      color: #ffffff;
+    }
 
-        .status-dot {
-            width: 0.625rem;
-            height: 0.625rem;
-            border-radius: 50%;
-            background: var(--color-accent);
-            animation: pulse 2s infinite;
-        }
+    /* === STATUS & HELP ============================================== */
+    .status-info {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: 2rem;
+      font-size: 0.875rem;
+    }
 
-        /* Grid Layout */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-        }
+    .status-dot {
+      width: 0.625rem;
+      height: 0.625rem;
+      border-radius: 50%;
+      background: var(--color-accent);
+      animation: pulse 2s infinite;
+    }
 
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
+    .help-button {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid var(--color-border);
+      background: var(--color-card);
+      color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
 
-        /* Metrics */
-        .metric-card {
-            text-align: center;
-            padding: 1.5rem;
-            background: rgba(26, 26, 26, 0.5);
-            border-radius: 1rem;
-            border: 1px solid var(--color-border);
-        }
+    .help-button:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
 
-        .metric-value {
-            font-size: 3rem;
-            font-weight: 200;
-            color: var(--color-accent);
-            margin-bottom: 0.5rem;
-        }
+    /* === GRID LAYOUT ================================================= */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+    }
 
-        .metric-label {
-            color: var(--color-text-muted);
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
 
-        .metric-big {
-            text-align: center;
-            min-height: 250px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+    /* === METRICS ===================================================== */
+    .metric-card {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(26, 26, 26, 0.5);
+      border-radius: 1rem;
+      border: 1px solid var(--color-border);
+    }
 
-        .metric-value-big {
-            font-size: 8rem;
-            font-weight: 200;
-            color: var(--color-accent);
-            margin-bottom: 1rem;
-            letter-spacing: -0.05em;
-        }
+    .metric-value {
+      font-size: 3rem;
+      font-weight: 200;
+      color: var(--color-accent);
+      margin-bottom: 0.5rem;
+    }
 
-        .metric-label-big {
-            color: var(--color-text-muted);
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-        }
+    .metric-label {
+      color: var(--color-text-muted);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
 
-        /* Posture Map */
-        .posture-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.25rem;
-            margin: 1.5rem auto;
-            width: fit-content;
-        }
+    .metric-big {
+      text-align: center;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
-        .posture-cell {
-            width: 5.5rem;
-            height: 5.5rem;
-            border-radius: 1.25rem;
-            border: 3px solid var(--color-border);
-            background: rgba(107, 114, 128, 0.3);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--color-text-muted);
-        }
+    .metric-value-big {
+      font-size: 8rem;
+      font-weight: 200;
+      color: var(--color-accent);
+      margin-bottom: 1rem;
+      letter-spacing: -0.05em;
+    }
 
-        .posture-cell.active {
-            background: var(--color-accent);
-            border-color: var(--color-accent);
-            box-shadow: 0 0 30px rgba(141, 96, 245, 0.5);
-            transform: scale(1.08);
-            color: #ffffff;
-        }
+    .metric-label-big {
+      color: var(--color-text-muted);
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
 
-        .posture-cell .sensor-name {
-            font-size: 0.75rem;
-            margin-bottom: 0.25rem;
-            opacity: 0.9;
-        }
+    /* === POSTURE MAP ================================================= */
+    .posture-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin: 1.5rem auto;
+      width: fit-content;
+    }
 
-        .posture-cell .weight-percent {
-            font-size: 1.5rem;
-            font-weight: 500;
-        }
+    .posture-cell {
+      width: 5.5rem;
+      height: 5.5rem;
+      border-radius: 1.25rem;
+      border: 3px solid var(--color-border);
+      background: rgba(107, 114, 128, 0.3);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text-muted);
+    }
 
-        /* Sensor Charts */
-        .charts-container {
-            height: 300px;
-            position: relative;
-            padding: 1rem 0;
-        }
+    .posture-cell.active {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      box-shadow: 0 0 30px rgba(141, 96, 245, 0.5);
+      transform: scale(1.08);
+      color: #ffffff;
+    }
 
-        .chart-canvas {
-            width: 100%;
-            height: 100%;
-        }
+    .posture-cell .sensor-name {
+      font-size: 0.75rem;
+      margin-bottom: 0.25rem;
+      opacity: 0.9;
+    }
 
-        .chart-legend {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1rem;
-            font-size: 0.75rem;
-            flex-wrap: wrap;
-        }
+    .posture-cell .weight-percent {
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+    /* === SENSOR CHARTS ============================================== */
+    .charts-container {
+      height: 300px;
+      position: relative;
+      padding: 1rem 0;
+    }
 
-        .legend-color {
-            width: 20px;
-            height: 3px;
-            border-radius: 2px;
-        }
+    .chart-canvas {
+      width: 100%;
+      height: 100%;
+    }
 
-        /* Timeline */
-        .timeline-container {
-            height: 70px;
-            display: flex;
-            align-items: flex-end;
-            gap: 0.375rem;
-            overflow-x: auto;
-            padding: 1rem 0;
-        }
+    .chart-legend {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      flex-wrap: wrap;
+    }
 
-        .timeline-bar {
-            flex: 1;
-            min-width: 14px;
-            height: 50px;
-            border-radius: 8px 8px 3px 3px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-        .timeline-bar.correct { background: var(--color-accent); }
-        .timeline-bar.warning { background: var(--color-yellow); }
-        .timeline-bar.away { background: var(--color-gray); opacity: 0.6; }
+    .legend-color {
+      width: 20px;
+      height: 3px;
+      border-radius: 2px;
+    }
 
-        .timeline-bar:hover {
-            opacity: 0.8;
-            transform: scaleY(1.1);
-        }
+    /* === TIMELINE ==================================================== */
+    .timeline-container {
+      height: 70px;
+      display: flex;
+      align-items: flex-end;
+      gap: 0.375rem;
+      overflow-x: auto;
+      padding: 1rem 0;
+    }
 
-        /* Labels & Help */
-        .info-label {
-            color: var(--color-text-muted);
-            font-size: 0.875rem;
-            margin-top: 1rem;
-            text-align: center;
-            font-style: italic;
-            line-height: 1.5;
-        }
+    .timeline-bar {
+      flex: 1;
+      min-width: 14px;
+      height: 50px;
+      border-radius: 8px 8px 3px 3px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
 
-        /* Animations */
-        @keyframes pulse {
-            0%, 100% { 
-                opacity: 1; 
-                transform: scale(1); 
-                box-shadow: 0 0 0 0 rgba(141, 96, 245, 0.7);
-            }
-            50% { 
-                opacity: 0.8; 
-                transform: scale(1.1); 
-                box-shadow: 0 0 0 10px rgba(141, 96, 245, 0);
-            }
-        }
+    .timeline-bar.correct {
+      background: var(--color-accent);
+    }
+    .timeline-bar.warning {
+      background: var(--color-yellow);
+    }
+    .timeline-bar.away {
+      background: var(--color-gray);
+      opacity: 0.6;
+    }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .grid-2 { grid-template-columns: 1fr; }
-            .status-text { font-size: 3.5rem; }
-            .metric-value-big { font-size: 5rem; }
-        }
+    .timeline-bar:hover {
+      opacity: 0.8;
+      transform: scaleY(1.1);
+    }
 
-        @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            .status-text { font-size: 2.75rem; }
-            .metric-value-big { font-size: 4rem; }
-            .card { padding: 1.75rem; }
-            .posture-cell { width: 4.5rem; height: 4.5rem; font-size: 0.75rem; }
-            .logo { font-size: 2rem; }
-            .header { flex-direction: column; align-items: flex-start; }
-            .header-controls { width: 100%; justify-content: space-between; }
-        }
+    /* === LABELS ====================================================== */
+    .info-label {
+      color: var(--color-text-muted);
+      font-size: 0.875rem;
+      margin-top: 1rem;
+      text-align: center;
+      font-style: italic;
+      line-height: 1.5;
+    }
 
-        .hidden { display: none !important; }
-        
-        .test-mode { 
-            position: fixed; 
-            top: 1rem; 
-            right: 1rem; 
-            background: var(--color-accent); 
-            color: #000; 
-            padding: 0.5rem 1rem; 
-            border-radius: 1rem; 
-            font-size: 0.75rem; 
-            font-weight: 500; 
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-    </style>
+    /* === TEST MODE BADGE ============================================ */
+    .test-mode {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: var(--color-accent);
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* === HELP MODAL ================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1200;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: #111;
+      border-radius: 1.5rem;
+      border: 1px solid var(--color-border);
+      max-width: 520px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 400;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--color-text-muted);
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+
+    .modal-section-title {
+      font-weight: 600;
+      margin-top: 1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .modal p {
+      font-size: 0.9rem;
+      color: var(--color-text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    /* === ANIMATIONS & RESPONSIVE ==================================== */
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(141, 96, 245, 0.7);
+      }
+      50% {
+        opacity: 0.8;
+        transform: scale(1.1);
+        box-shadow: 0 0 0 10px rgba(141, 96, 245, 0);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .status-text {
+        font-size: 3.5rem;
+      }
+      .metric-value-big {
+        font-size: 5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      .status-text {
+        font-size: 2.75rem;
+      }
+      .metric-value-big {
+        font-size: 4rem;
+      }
+      .card {
+        padding: 1.75rem;
+      }
+      .posture-cell {
+        width: 4.5rem;
+        height: 4.5rem;
+        font-size: 0.75rem;
+      }
+      .logo {
+        font-size: 2rem;
+      }
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-controls {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
 </head>
 <body>
-    <!-- Test Mode Indicator -->
-    <div id="testModeToggle" class="test-mode hidden">
-        🧪 TEST MODE 
-        <button id="toggleTestMode" style="background: none; border: none; color: inherit; font-size: inherit; cursor: pointer; font-weight: 600;">OFF</button>
+  <!-- Test Mode badge -->
+  <div id="testModeToggle" class="test-mode hidden">
+    🧪 TEST MODE
+    <button
+      id="toggleTestMode"
+      style="
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: inherit;
+        cursor: pointer;
+        font-weight: 600;
+      "
+    >
+      OFF
+    </button>
+  </div>
+
+  <!-- Help modal -->
+  <div id="helpModalBackdrop" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">What these numbers mean</div>
+        <button id="closeHelp" class="modal-close">&times;</button>
+      </div>
+      <div>
+        <div class="modal-section-title">Overall Score</div>
+        <p>
+          Single score from 0 to 100 that summarizes how often you keep a
+          neutral, balanced posture during the session.
+        </p>
+
+        <div class="modal-section-title">Good Posture %</div>
+        <p>
+          Percentage of time spent in a correct posture (weight centered, back
+          straight, both sides balanced).
+        </p>
+
+        <div class="modal-section-title">Stability</div>
+        <p>
+          How stable your posture is: higher values mean fewer sudden shifts or
+          extreme leans.
+        </p>
+
+        <div class="modal-section-title">Posture Map</div>
+        <p>
+          Four squares represent the four sensors under the seat: FL (front
+          left), FR (front right), BL (back left), BR (back right). Bright
+          squares and higher % mean more load in that area.
+        </p>
+
+        <div class="modal-section-title">Sensor Trends</div>
+        <p>
+          The four colored lines show how your weight moves between sensors over
+          time (% of total weight on each sensor).
+        </p>
+
+        <div class="modal-section-title">Posture Timeline</div>
+        <p>
+          Each bar is one reading: purple = correct, yellow = leaning, dark =
+          away from the chair.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Screen -->
+  <div
+    id="loginScreen"
+    class="container"
+    style="
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <div style="text-align: center; max-width: 500px;">
+      <h1 class="logo" style="margin-bottom: 1rem;">LEANTIL</h1>
+      <div class="status-dot" style="margin: 0 auto 2rem;"></div>
+      <p
+        style="
+          color: var(--color-text-muted);
+          margin-bottom: 3rem;
+          font-size: 1.25rem;
+          line-height: 1.6;
+        "
+      >
+        Monitor your posture in real time
+      </p>
+      <div
+        style="
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+        "
+      >
+        <button id="connectBtn" class="btn btn-primary">
+          🔗 Connect Device
+        </button>
+        <button id="testModeBtn" class="btn">🧪 Demo Mode</button>
+      </div>
+      <p
+        id="errorMessage"
+        style="color: #ef4444; margin-top: 1.5rem; display: none; font-size: 1rem;"
+      ></p>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard" class="container hidden">
+    <!-- Header -->
+    <div class="header">
+      <h1 class="logo">LEANTIL</h1>
+      <div class="header-controls">
+        <div class="status-info">
+          <span id="statusDot" class="status-dot"></span>
+          <span id="dataCount">Data: 0</span>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button id="basicModeBtn" class="btn btn-toggle active">Basic</button>
+          <button id="advancedModeBtn" class="btn btn-toggle">
+            Advanced
+          </button>
+        </div>
+        <button id="disconnectBtn" class="btn">🔌 Disconnect</button>
+        <button id="helpBtn" class="help-button">?</button>
+      </div>
     </div>
 
-    <!-- Login Screen -->
-    <div id="loginScreen" class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-        <div style="text-align: center; max-width: 500px;">
-            <h1 class="logo" style="margin-bottom: 1rem;">LEANTIL</h1>
-            <div class="status-dot" style="margin: 0 auto 2rem;"></div>
-            <p style="color: var(--color-text-muted); margin-bottom: 3rem; font-size: 1.25rem; line-height: 1.6;">
-                Monitor your posture in real time
-            </p>
-            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                <button id="connectBtn" class="btn btn-primary">🔗 Connect Device</button>
-                <button id="testModeBtn" class="btn">🧪 Demo Mode</button>
-            </div>
-            <p id="errorMessage" style="color: #ef4444; margin-top: 1.5rem; display: none; font-size: 1rem;"></p>
+    <!-- Status + Score -->
+    <div class="card">
+      <div class="status-display">
+        <div style="flex: 1;">
+          <div id="statusText" class="status-text status-correct">CORRECT</div>
+          <div class="status-label">Current Status</div>
         </div>
+        <div style="text-align: center;">
+          <div
+            class="score-circle"
+            id="scoreCircle"
+            style="--score-percent: 306deg;"
+          >
+            <div class="score-inner">
+              <span id="scoreValue">85</span>
+            </div>
+          </div>
+          <h3 style="font-weight: 300; margin-top: 1.25rem; font-size: 1.75rem;">
+            Overall Score
+          </h3>
+          <p class="status-label">Your posture wellness score</p>
+        </div>
+      </div>
     </div>
 
-    <!-- Dashboard -->
-    <div id="dashboard" class="container hidden">
-        <!-- Header -->
-        <div class="header">
-            <h1 class="logo">LEANTIL</h1>
-            <div class="header-controls">
-                <div class="status-info">
-                    <span id="statusDot" class="status-dot"></span>
-                    <span id="dataCount">Data: 0</span>
-                </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button id="basicModeBtn" class="btn btn-toggle active">Basic</button>
-                    <button id="advancedModeBtn" class="btn btn-toggle">Advanced</button>
-                </div>
-                <button id="disconnectBtn" class="btn">🔌 Disconnect</button>
-            </div>
-        </div>
-
-        <!-- Status + Score -->
+    <!-- BASIC MODE -->
+    <div id="basicModeContent">
+      <div class="grid-3">
+        <!-- Posture Map -->
         <div class="card">
-            <div class="status-display">
-                <div style="flex: 1;">
-                    <div id="statusText" class="status-text status-correct">CORRECT</div>
-                    <div class="status-label">Current Status</div>
-                </div>
-                <div style="text-align: center;">
-                    <div class="score-circle" id="scoreCircle" style="--score-percent: 306deg; margin: 0 auto;">
-                        <div class="score-inner">
-                            <span id="scoreValue">85</span>
-                        </div>
-                    </div>
-                    <h3 style="font-weight: 300; margin-top: 1.25rem; font-size: 1.75rem;">Overall Score</h3>
-                    <p class="status-label">Your posture wellness score</p>
-                </div>
+          <h3>Posture Map</h3>
+          <div class="posture-grid">
+            <div class="posture-cell" id="cell-basic-0">
+              <div class="sensor-name">FL</div>
+              <div class="weight-percent" id="basic-weight-0">0%</div>
             </div>
+            <div class="posture-cell" id="cell-basic-1">
+              <div class="sensor-name">FR</div>
+              <div class="weight-percent" id="basic-weight-1">0%</div>
+            </div>
+            <div class="posture-cell" id="cell-basic-2">
+              <div class="sensor-name">BL</div>
+              <div class="weight-percent" id="basic-weight-2">0%</div>
+            </div>
+            <div class="posture-cell" id="cell-basic-3">
+              <div class="sensor-name">BR</div>
+              <div class="weight-percent" id="basic-weight-3">0%</div>
+            </div>
+          </div>
+          <div class="info-label">
+            FL=Front Left | FR=Front Right | BL=Back Left | BR=Back Right
+          </div>
         </div>
 
-        <!-- BASIC MODE -->
-        <div id="basicModeContent">
-            <div class="grid-3">
-                <!-- Posture Map -->
-                <div class="card">
-                    <h3>Posture Map</h3>
-                    <div class="posture-grid">
-                        <div class="posture-cell" id="cell-basic-0">
-                            <div class="sensor-name">FL</div>
-                            <div class="weight-percent" id="basic-weight-0">0%</div>
-                        </div>
-                        <div class="posture-cell" id="cell-basic-1">
-                            <div class="sensor-name">FR</div>
-                            <div class="weight-percent" id="basic-weight-1">0%</div>
-                        </div>
-                        <div class="posture-cell" id="cell-basic-2">
-                            <div class="sensor-name">BL</div>
-                            <div class="weight-percent" id="basic-weight-2">0%</div>
-                        </div>
-                        <div class="posture-cell" id="cell-basic-3">
-                            <div class="sensor-name">BR</div>
-                            <div class="weight-percent" id="basic-weight-3">0%</div>
-                        </div>
-                    </div>
-                    <div class="info-label">FL=Front Left | FR=Front Right | BL=Back Left | BR=Back Right</div>
-                </div>
-
-                <!-- Session Summary -->
-                <div class="card">
-                    <h3>Session Summary</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
-                        <div class="metric-card">
-                            <div class="metric-value" id="sessionTime">0</div>
-                            <div class="metric-label">Minutes</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" id="correctPercent">0%</div>
-                            <div class="metric-label">Good Posture</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value" id="stabilityScore">0</div>
-                            <div class="metric-label">Stability</div>
-                        </div>
-                    </div>
-                </div>
+        <!-- Session Summary -->
+        <div class="card">
+          <h3>Session Summary</h3>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+              gap: 1.5rem;
+              margin-top: 1rem;
+            "
+          >
+            <div class="metric-card">
+              <div class="metric-value" id="sessionTime">0</div>
+              <div class="metric-label">Minutes</div>
             </div>
+            <div class="metric-card">
+              <div class="metric-value" id="correctPercent">0%</div>
+              <div class="metric-label">Good Posture</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value" id="stabilityScore">0</div>
+              <div class="metric-label">Stability</div>
+            </div>
+          </div>
         </div>
-
-        <!-- ADVANCED MODE -->
-        <div id="advancedModeContent" class="hidden">
-            <!-- Posture Map with Weights -->
-            <div class="card">
-                <h3 style="text-align: center;">Posture & Weight Distribution</h3>
-                <div class="posture-grid">
-                    <div class="posture-cell" id="cell-adv-0">
-                        <div class="sensor-name">FL</div>
-                        <div class="weight-percent" id="adv-weight-0">0%</div>
-                    </div>
-                    <div class="posture-cell" id="cell-adv-1">
-                        <div class="sensor-name">FR</div>
-                        <div class="weight-percent" id="adv-weight-1">0%</div>
-                    </div>
-                    <div class="posture-cell" id="cell-adv-2">
-                        <div class="sensor-name">BL</div>
-                        <div class="weight-percent" id="adv-weight-2">0%</div>
-                    </div>
-                    <div class="posture-cell" id="cell-adv-3">
-                        <div class="sensor-name">BR</div>
-                        <div class="weight-percent" id="adv-weight-3">0%</div>
-                    </div>
-                </div>
-                <div class="info-label">Real-time weight distribution (%) across 4 sensors</div>
-            </div>
-
-            <!-- Sensor Charts -->
-            <div class="card">
-                <h3>Sensor Trends (Last 60 readings)</h3>
-                <div class="charts-container">
-                    anvas id="sensorChart" class="chart-canvas"></canvas>
-                </div>
-                <div class="chart-legend">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #8d60f5;"></div>
-                        <span>Front Left</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #a27bf7;"></div>
-                        <span>Front Right</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #fbbf24;"></div>
-                        <span>Back Left</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #f59e0b;"></div>
-                        <span>Back Right</span>
-                    </div>
-                </div>
-                <div class="info-label">Live sensor curves showing weight distribution (%) over time</div>
-            </div>
-
-            <!-- Big Metrics + Timeline -->
-            <div class="grid-2">
-                <!-- Big Metrics -->
-                <div class="card metric-big">
-                    <div class="metric-value-big" id="bigCorrectPercent">0%</div>
-                    <div class="metric-label-big">Good Posture</div>
-                    <div class="info-label">Percentage of time in correct posture this session</div>
-                </div>
-                
-                <!-- Timeline -->
-                <div class="card">
-                    <h3>Posture Timeline (Last 30)</h3>
-                    <div id="timeline" class="timeline-container"></div>
-                    <div class="info-label">
-                        <span style="color: var(--color-accent);">🟣</span> Correct 
-                        <span style="color: var(--color-yellow); margin-left: 1rem;">🟡</span> Leaning 
-                        <span style="color: var(--color-gray); margin-left: 1rem;">⚫</span> Away
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- ADVANCED MODE -->
+    <div id="advancedModeContent" class="hidden">
+      <!-- Posture Map with Weights -->
+      <div class="card">
+        <h3 style="text-align: center;">Posture & Weight Distribution</h3>
+        <div class="posture-grid">
+          <div class="posture-cell" id="cell-adv-0">
+            <div class="sensor-name">FL</div>
+            <div class="weight-percent" id="adv-weight-0">0%</div>
+          </div>
+          <div class="posture-cell" id="cell-adv-1">
+            <div class="sensor-name">FR</div>
+            <div class="weight-percent" id="adv-weight-1">0%</div>
+          </div>
+          <div class="posture-cell" id="cell-adv-2">
+            <div class="sensor-name">BL</div>
+            <div class="weight-percent" id="adv-weight-2">0%</div>
+          </div>
+          <div class="posture-cell" id="cell-adv-3">
+            <div class="sensor-name">BR</div>
+            <div class="weight-percent" id="adv-weight-3">0%</div>
+          </div>
+        </div>
+        <div class="info-label">
+          Real-time weight distribution (%) across 4 sensors
+        </div>
+      </div>
 
-    <script>
-        // === GLOBAL STATE ===
-        const ACCENT_COLOR = '#8d60f5';
-        let isTestMode = false;
-        let port, reader;
-        let isConnected = false;
-        let dataHistory = [];
-        let sessionStartTime = Date.now();
-        let correctCount = 0;
-        let totalCount = 0;
-        let currentMode = 'basic';
-        let chart = null;
+      <!-- Sensor Charts -->
+      <div class="card">
+        <h3>Sensor Trends (Last 60 readings)</h3>
+        <div class="charts-container">
+          <nvas id="sensorChart" class="chart-canvas"></canvas>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background: #8d60f5;"></div>
+            <span>Front Left</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #a27bf7;"></div>
+            <span>Front Right</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #fbbf24;"></div>
+            <span>Back Left</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #f59e0b;"></div>
+            <span>Back Right</span>
+          </div>
+        </div>
+        <div class="info-label">
+          Live sensor curves showing weight distribution (%) over time
+        </div>
+      </div>
 
-        // Arduino posture mapping
-        const postureMap = {
-            'CORRETTA': { display: 'CORRECT', type: 'correct' },
-            'INCLINATO_AVANTI': { display: 'LEAN FORWARD', type: 'warning' },
-            'INCLINATO_INDIETRO': { display: 'LEAN BACK', type: 'warning' },
-            'INCLINATO_SINISTRA': { display: 'LEAN LEFT', type: 'warning' },
-            'INCLINATO_DESTRA': { display: 'LEAN RIGHT', type: 'warning' },
-            'ASSENTE': { display: 'AWAY', type: 'away' },
-            'CORRECT': { display: 'CORRECT', type: 'correct' }
-        };
+      <!-- Big Metrics + Timeline -->
+      <div class="grid-2">
+        <div class="card metric-big">
+          <div class="metric-value-big" id="bigCorrectPercent">0%</div>
+          <div class="metric-label-big">Good Posture</div>
+          <div class="info-label">
+            Percentage of time in correct posture this session
+          </div>
+        </div>
 
-        // Test data patterns
-        const testPostures = [
-            { name: 'CORRETTA', weights: [1200, 1250, 1180, 1220] },
-            { name: 'INCLINATO_INDIETRO', weights: [800, 850, 1450, 1480] },
-            { name: 'INCLINATO_AVANTI', weights: [1400, 1420, 950, 980] },
-            { name: 'INCLINATO_DESTRA', weights: [1100, 1350, 1150, 1400] },
-            { name: 'INCLINATO_SINISTRA', weights: [1350, 1100, 1400, 1150] },
-            { name: 'ASSENTE', weights: [0, 0, 0, 0] }
-        ];
+        <div class="card">
+          <h3>Posture Timeline (Last 30)</h3>
+          <div id="timeline" class="timeline-container"></div>
+          <div class="info-label">
+            <span style="color: var(--color-accent);">🟣</span> Correct
+            <span style="color: var(--color-yellow); margin-left: 1rem;"
+              >🟡</span
+            >
+            Leaning
+            <span style="color: var(--color-gray); margin-left: 1rem;"
+              >⚫</span
+            >
+            Away
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        // DOM Elements
-        const elements = {
-            loginScreen: document.getElementById('loginScreen'),
-            dashboard: document.getElementById('dashboard'),
-            connectBtn: document.getElementById('connectBtn'),
-            testModeBtn: document.getElementById('testModeBtn'),
-            disconnectBtn: document.getElementById('disconnectBtn'),
-            testModeToggle: document.getElementById('testModeToggle'),
-            toggleTestMode: document.getElementById('toggleTestMode'),
-            statusText: document.getElementById('statusText'),
-            scoreValue: document.getElementById('scoreValue'),
-            scoreCircle: document.getElementById('scoreCircle'),
-            dataCount: document.getElementById('dataCount'),
-            errorMessage: document.getElementById('errorMessage'),
-            sessionTime: document.getElementById('sessionTime'),
-            correctPercent: document.getElementById('correctPercent'),
-            stabilityScore: document.getElementById('stabilityScore'),
-            statusDot: document.getElementById('statusDot'),
-            basicModeBtn: document.getElementById('basicModeBtn'),
-            advancedModeBtn: document.getElementById('advancedModeBtn'),
-            basicModeContent: document.getElementById('basicModeContent'),
-            advancedModeContent: document.getElementById('advancedModeContent'),
-            timeline: document.getElementById('timeline'),
-            bigCorrectPercent: document.getElementById('bigCorrectPercent'),
-            sensorChart: document.getElementById('sensorChart')
-        };
+  <!-- Chart.js MUST come BEFORE our script -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-        // Weight elements (both modes)
-        const weightElements = {
-            basic: {
-                0: document.getElementById('basic-weight-0'),
-                1: document.getElementById('basic-weight-1'),
-                2: document.getElementById('basic-weight-2'),
-                3: document.getElementById('basic-weight-3')
+  <script>
+    // === GLOBAL STATE ==================================================
+    const ACCENT_COLOR = "#8d60f5";
+    let isTestMode = false;
+    let port, reader;
+    let isConnected = false;
+    let dataHistory = [];
+    let sessionStartTime = Date.now();
+    let correctCount = 0;
+    let totalCount = 0;
+    let currentMode = "basic";
+    let chart = null;
+
+    const postureMap = {
+      CORRETTA: { display: "CORRECT", type: "correct" },
+      INCLINATO_AVANTI: { display: "LEAN FORWARD", type: "warning" },
+      INCLINATO_INDIETRO: { display: "LEAN BACK", type: "warning" },
+      INCLINATO_SINISTRA: { display: "LEAN LEFT", type: "warning" },
+      INCLINATO_DESTRA: { display: "LEAN RIGHT", type: "warning" },
+      ASSENTE: { display: "AWAY", type: "away" },
+      CORRECT: { display: "CORRECT", type: "correct" },
+    };
+
+    const testPostures = [
+      { name: "CORRETTA", weights: [1200, 1250, 1180, 1220] },
+      { name: "INCLINATO_INDIETRO", weights: [800, 850, 1450, 1480] },
+      { name: "INCLINATO_AVANTI", weights: [1400, 1420, 950, 980] },
+      { name: "INCLINATO_DESTRA", weights: [1100, 1350, 1150, 1400] },
+      { name: "INCLINATO_SINISTRA", weights: [1350, 1100, 1400, 1150] },
+      { name: "ASSENTE", weights: [0, 0, 0, 0] },
+    ];
+
+    const elements = {
+      loginScreen: document.getElementById("loginScreen"),
+      dashboard: document.getElementById("dashboard"),
+      connectBtn: document.getElementById("connectBtn"),
+      testModeBtn: document.getElementById("testModeBtn"),
+      disconnectBtn: document.getElementById("disconnectBtn"),
+      testModeToggle: document.getElementById("testModeToggle"),
+      toggleTestMode: document.getElementById("toggleTestMode"),
+      statusText: document.getElementById("statusText"),
+      scoreValue: document.getElementById("scoreValue"),
+      scoreCircle: document.getElementById("scoreCircle"),
+      dataCount: document.getElementById("dataCount"),
+      errorMessage: document.getElementById("errorMessage"),
+      sessionTime: document.getElementById("sessionTime"),
+      correctPercent: document.getElementById("correctPercent"),
+      stabilityScore: document.getElementById("stabilityScore"),
+      statusDot: document.getElementById("statusDot"),
+      basicModeBtn: document.getElementById("basicModeBtn"),
+      advancedModeBtn: document.getElementById("advancedModeBtn"),
+      basicModeContent: document.getElementById("basicModeContent"),
+      advancedModeContent: document.getElementById("advancedModeContent"),
+      timeline: document.getElementById("timeline"),
+      bigCorrectPercent: document.getElementById("bigCorrectPercent"),
+      sensorChart: document.getElementById("sensorChart"),
+      helpBtn: document.getElementById("helpBtn"),
+      helpBackdrop: document.getElementById("helpModalBackdrop"),
+      helpClose: document.getElementById("closeHelp"),
+    };
+
+    const weightElements = {
+      basic: {
+        0: document.getElementById("basic-weight-0"),
+        1: document.getElementById("basic-weight-1"),
+        2: document.getElementById("basic-weight-2"),
+        3: document.getElementById("basic-weight-3"),
+      },
+      adv: {
+        0: document.getElementById("adv-weight-0"),
+        1: document.getElementById("adv-weight-1"),
+        2: document.getElementById("adv-weight-2"),
+        3: document.getElementById("adv-weight-3"),
+      },
+    };
+
+    const postureCells = {
+      basic: ["cell-basic-0", "cell-basic-1", "cell-basic-2", "cell-basic-3"],
+      adv: ["cell-adv-0", "cell-adv-1", "cell-adv-2", "cell-adv-3"],
+    };
+
+    // === INIT =========================================================
+    init();
+
+    function init() {
+      initEventListeners();
+      initChart();
+      checkWebSerialSupport();
+    }
+
+    function initEventListeners() {
+      elements.connectBtn.onclick = connectDevice;
+      elements.testModeBtn.onclick = toggleTestMode;
+      elements.toggleTestMode.onclick = toggleTestMode;
+      elements.disconnectBtn.onclick = disconnectDevice;
+      elements.basicModeBtn.onclick = () => switchMode("basic");
+      elements.advancedModeBtn.onclick = () => switchMode("advanced");
+
+      elements.helpBtn.onclick = () =>
+        elements.helpBackdrop.classList.add("open");
+      elements.helpClose.onclick = () =>
+        elements.helpBackdrop.classList.remove("open");
+      elements.helpBackdrop.addEventListener("click", (e) => {
+        if (e.target === elements.helpBackdrop) {
+          elements.helpBackdrop.classList.remove("open");
+        }
+      });
+    }
+
+    function initChart() {
+      const ctx = elements.sensorChart.getContext("2d");
+      chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: "Front Left",
+              borderColor: "#8d60f5",
+              backgroundColor: "rgba(141, 96, 245, 0.1)",
+              tension: 0.4,
+              fill: false,
+              borderWidth: 2,
+              pointRadius: 0,
+              data: [],
             },
-            adv: {
-                0: document.getElementById('adv-weight-0'),
-                1: document.getElementById('adv-weight-1'),
-                2: document.getElementById('adv-weight-2'),
-                3: document.getElementById('adv-weight-3')
-            }
+            {
+              label: "Front Right",
+              borderColor: "#a27bf7",
+              backgroundColor: "rgba(162, 123, 247, 0.1)",
+              tension: 0.4,
+              fill: false,
+              borderWidth: 2,
+              pointRadius: 0,
+              data: [],
+            },
+            {
+              label: "Back Left",
+              borderColor: "#fbbf24",
+              backgroundColor: "rgba(251, 191, 36, 0.1)",
+              tension: 0.4,
+              fill: false,
+              borderWidth: 2,
+              pointRadius: 0,
+              data: [],
+            },
+            {
+              label: "Back Right",
+              borderColor: "#f59e0b",
+              backgroundColor: "rgba(245, 158, 11, 0.1)",
+              tension: 0.4,
+              fill: false,
+              borderWidth: 2,
+              pointRadius: 0,
+              data: [],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: {
+              display: false,
+              grid: { display: false },
+            },
+            y: {
+              min: 0,
+              max: 100,
+              ticks: {
+                stepSize: 25,
+                color: "#666",
+                callback: (v) => v + "%",
+              },
+              grid: { color: "#2a2a2a" },
+            },
+          },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              mode: "index",
+              intersect: false,
+              backgroundColor: "#1a1a1a",
+              titleColor: "#fff",
+              bodyColor: "#9ca3af",
+              borderColor: "#2a2a2a",
+              borderWidth: 1,
+            },
+          },
+          interaction: {
+            mode: "nearest",
+            axis: "x",
+            intersect: false,
+          },
+          animation: { duration: 0 },
+        },
+      });
+    }
+
+    // === CONNECTION ===================================================
+    async function connectDevice() {
+      try {
+        port = await navigator.serial.requestPort();
+        await port.open({ baudRate: 9600 });
+        isConnected = true;
+        showDashboard();
+        readSerialData();
+      } catch (error) {
+        showError("Connection failed. Use Demo Mode to test.");
+      }
+    }
+
+    async function disconnectDevice() {
+      stopTestMode();
+      if (reader) {
+        try {
+          await reader.cancel();
+        } catch {}
+      }
+      if (port) {
+        try {
+          await port.close();
+        } catch {}
+      }
+      isConnected = false;
+      showLogin();
+      resetData();
+    }
+
+    // === TEST MODE ====================================================
+    let testInterval;
+
+    function toggleTestMode() {
+      isTestMode = !isTestMode;
+      elements.testModeToggle.classList.toggle("hidden", !isTestMode);
+      elements.toggleTestMode.textContent = isTestMode ? "ON" : "OFF";
+
+      if (isTestMode && !isConnected) {
+        showDashboard();
+        startTestData();
+      } else if (!isTestMode && !isConnected) {
+        stopTestMode();
+        showLogin();
+      }
+    }
+
+    function startTestData() {
+      testInterval = setInterval(() => {
+        const posture =
+          testPostures[Math.floor(Math.random() * testPostures.length)];
+        const data = {
+          postureName: posture.name,
+          lc0: posture.weights[0],
+          lc1: posture.weights[1],
+          lc2: posture.weights[2],
+          lc3: posture.weights[3],
         };
+        parseAndUpdateData(data);
+      }, 2000);
+    }
 
-        // Posture cells (both modes)
-        const postureCells = {
-            basic: ['cell-basic-0', 'cell-basic-1', 'cell-basic-2', 'cell-basic-3'],
-            adv: ['cell-adv-0', 'cell-adv-1', 'cell-adv-2', 'cell-adv-3']
-        };
+    function stopTestMode() {
+      if (testInterval) {
+        clearInterval(testInterval);
+        testInterval = null;
+      }
+    }
 
-        // === INIT ===
-        init();
-        
-        function init() {
-            initEventListeners();
-            initChart();
-            checkWebSerialSupport();
-        }
+    // === SERIAL =======================================================
+    async function readSerialData() {
+      const decoder = new TextDecoderStream();
+      port.readable.pipeTo(decoder.writable);
+      reader = decoder.readable.getReader();
 
-        function initEventListeners() {
-            elements.connectBtn.onclick = connectDevice;
-            elements.testModeBtn.onclick = toggleTestMode;
-            elements.toggleTestMode.onclick = toggleTestMode;
-            elements.disconnectBtn.onclick = disconnectDevice;
-            elements.basicModeBtn.onclick = () => switchMode('basic');
-            elements.advancedModeBtn.onclick = () => switchMode('advanced');
-        }
-
-        function initChart() {
-            const ctx = elements.sensorChart.getContext('2d');
-            chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [
-                        { 
-                            label: 'Front Left', 
-                            borderColor: '#8d60f5', 
-                            backgroundColor: 'rgba(141, 96, 245, 0.1)', 
-                            tension: 0.4, 
-                            fill: false,
-                            borderWidth: 2,
-                            pointRadius: 0,
-                            data: []
-                        },
-                        { 
-                            label: 'Front Right', 
-                            borderColor: '#a27bf7', 
-                            backgroundColor: 'rgba(162, 123, 247, 0.1)', 
-                            tension: 0.4, 
-                            fill: false,
-                            borderWidth: 2,
-                            pointRadius: 0,
-                            data: []
-                        },
-                        { 
-                            label: 'Back Left', 
-                            borderColor: '#fbbf24', 
-                            backgroundColor: 'rgba(251, 191, 36, 0.1)', 
-                            tension: 0.4, 
-                            fill: false,
-                            borderWidth: 2,
-                            pointRadius: 0,
-                            data: []
-                        },
-                        { 
-                            label: 'Back Right', 
-                            borderColor: '#f59e0b', 
-                            backgroundColor: 'rgba(245, 158, 11, 0.1)', 
-                            tension: 0.4, 
-                            fill: false,
-                            borderWidth: 2,
-                            pointRadius: 0,
-                            data: []
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { 
-                            display: false,
-                            grid: { display: false }
-                        },
-                        y: { 
-                            min: 0, 
-                            max: 100,
-                            ticks: { 
-                                stepSize: 25,
-                                color: '#666',
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            },
-                            grid: {
-                                color: '#2a2a2a'
-                            }
-                        }
-                    },
-                    plugins: { 
-                        legend: { display: false },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            backgroundColor: '#1a1a1a',
-                            titleColor: '#fff',
-                            bodyColor: '#9ca3af',
-                            borderColor: '#2a2a2a',
-                            borderWidth: 1
-                        }
-                    },
-                    interaction: {
-                        mode: 'nearest',
-                        axis: 'x',
-                        intersect: false
-                    },
-                    animation: { duration: 0 }
-                }
-            });
-        }
-
-        // === CONNECTION ===
-        async function connectDevice() {
-            try {
-                port = await navigator.serial.requestPort();
-                await port.open({ baudRate: 9600 });
-                isConnected = true;
-                showDashboard();
-                readSerialData();
-            } catch (error) {
-                showError('Connection failed. Use Demo Mode to test.');
+      try {
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          const lines = value.split("\n");
+          for (const line of lines) {
+            if (line.startsWith("DATA,")) {
+              const data = parseSerialLine(line);
+              parseAndUpdateData(data);
             }
+          }
         }
+      } catch (error) {
+        console.error("Serial error:", error);
+      }
+    }
 
-        async function disconnectDevice() {
-            stopTestMode();
-            if (reader) {
-                try {
-                    await reader.cancel();
-                } catch (e) {}
-            }
-            if (port) {
-                try {
-                    await port.close();
-                } catch (e) {}
-            }
-            isConnected = false;
-            showLogin();
-            resetData();
-        }
+    function parseSerialLine(line) {
+      const parts = line.split(",");
+      return {
+        lc0: parseFloat(parts[2] || 0),
+        lc1: parseFloat(parts[3] || 0),
+        lc2: parseFloat(parts[4] || 0),
+        lc3: parseFloat(parts[5] || 0),
+        postureName: (parts[10] || "").trim() || "UNKNOWN",
+      };
+    }
 
-        // === TEST MODE ===
-        let testInterval;
-        function toggleTestMode() {
-            isTestMode = !isTestMode;
-            elements.testModeToggle.classList.toggle('hidden', !isTestMode);
-            elements.toggleTestMode.textContent = isTestMode ? 'ON' : 'OFF';
-            
-            if (isTestMode && !isConnected) {
-                showDashboard();
-                startTestData();
-            } else if (!isTestMode && !isConnected) {
-                stopTestMode();
-                showLogin();
-            }
-        }
+    // === DATA PIPELINE ===============================================
+    function parseAndUpdateData(data) {
+      const totalWeight = data.lc0 + data.lc1 + data.lc2 + data.lc3;
+      data.percentages = [
+        totalWeight > 0 ? (data.lc0 / totalWeight) * 100 : 25,
+        totalWeight > 0 ? (data.lc1 / totalWeight) * 100 : 25,
+        totalWeight > 0 ? (data.lc2 / totalWeight) * 100 : 25,
+        totalWeight > 0 ? (data.lc3 / totalWeight) * 100 : 25,
+      ];
 
-        function startTestData() {
-            testInterval = setInterval(() => {
-                const posture = testPostures[Math.floor(Math.random() * testPostures.length)];
-                const data = {
-                    postureName: posture.name,
-                    lc0: posture.weights[0],
-                    lc1: posture.weights[1],
-                    lc2: posture.weights[2],
-                    lc3: posture.weights[3],
-                    totalWeight: posture.weights.reduce((a, b) => a + b, 0)
-                };
-                parseAndUpdateData(data);
-            }, 2000);
-        }
+      dataHistory.push({
+        ...data,
+        timestamp: Date.now(),
+        percentages: data.percentages,
+      });
+      if (dataHistory.length > 200) dataHistory.shift();
 
-        function stopTestMode() {
-            if (testInterval) {
-                clearInterval(testInterval);
-                testInterval = null;
-            }
-        }
+      totalCount++;
+      const mapped =
+        postureMap[data.postureName] || { display: "UNKNOWN", type: "warning" };
+      if (mapped.type === "correct") correctCount++;
 
-        // === SERIAL ===
-        async function readSerialData() {
-            const decoder = new TextDecoderStream();
-            const readableStreamClosed = port.readable.pipeTo(decoder.writable);
-            reader = decoder.readable.getReader();
+      updateAllUI(data, mapped);
+    }
 
-            try {
-                while (true) {
-                    const { value, done } = await reader.read();
-                    if (done) break;
-                    
-                    const lines = value.split('\n');
-                    for (const line of lines) {
-                        if (line.startsWith('DATA,')) {
-                            const data = parseSerialLine(line);
-                            parseAndUpdateData(data);
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error('Serial error:', error);
-            }
-        }
+    function updateAllUI(data, posture) {
+      // status
+      elements.statusText.textContent = posture.display;
+      elements.statusText.className = `status-text status-${posture.type}`;
 
-        function parseSerialLine(line) {
-            const parts = line.split(',');
-            return {
-                lc0: parseFloat(parts[2] || 0),
-                lc1: parseFloat(parts[3] || 0),
-                lc2: parseFloat(parts[4] || 0),
-                lc3: parseFloat(parts[5] || 0),
-                totalWeight: parseFloat(parts[6] || 0),
-                postureName: parts[10]?.trim() || 'UNKNOWN'
-            };
-        }
+      // scores
+      const score =
+        totalCount > 0
+          ? Math.max(
+              0,
+              Math.min(100, Math.round((correctCount / totalCount) * 100))
+            )
+          : 85;
+      elements.scoreValue.textContent = score;
+      elements.scoreCircle.style.setProperty(
+        "--score-percent",
+        `${score * 3.6}deg`
+      );
+      elements.correctPercent.textContent = `${score}%`;
+      elements.bigCorrectPercent.textContent = `${score}%`;
+      elements.stabilityScore.textContent = Math.round(score * 0.9 + 10);
 
-        // === DATA PROCESSING ===
-        function parseAndUpdateData(data) {
-            const totalWeight = data.lc0 + data.lc1 + data.lc2 + data.lc3;
-            data.percentages = [
-                totalWeight > 0 ? (data.lc0 / totalWeight * 100) : 25,
-                totalWeight > 0 ? (data.lc1 / totalWeight * 100) : 25,
-                totalWeight > 0 ? (data.lc2 / totalWeight * 100) : 25,
-                totalWeight > 0 ? (data.lc3 / totalWeight * 100) : 25
-            ];
+      // meta
+      elements.dataCount.textContent = `Data: ${totalCount}`;
+      const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
+      elements.sessionTime.textContent = minutes;
 
-            dataHistory.push({...data, timestamp: Date.now(), percentages: data.percentages});
-            if (dataHistory.length > 200) dataHistory.shift();
+      updatePostureMaps(data);
+      updateSensorChart();
+      updateTimeline();
+    }
 
-            totalCount++;
-            const mappedPosture = postureMap[data.postureName] || { display: 'UNKNOWN', type: 'warning' };
-            if (mappedPosture.type === 'correct') correctCount++;
+    function updatePostureMaps(data) {
+      const activeCells = getActiveCells(data.postureName);
 
-            updateAllUI(data, mappedPosture);
-        }
+      ["basic", "adv"].forEach((mode) => {
+        postureCells[mode].forEach((cellId, i) => {
+          const cell = document.getElementById(cellId);
+          const weightEl = weightElements[mode][i];
+          if (cell) {
+            cell.classList.toggle("active", activeCells.includes(i));
+          }
+          if (weightEl) {
+            weightEl.textContent = `${Math.round(data.percentages[i])}%`;
+          }
+        });
+      });
+    }
 
-        function updateAllUI(data, posture) {
-            // Status
-            elements.statusText.textContent = posture.display;
-            elements.statusText.className = `status-text status-${posture.type}`;
+    function getActiveCells(name) {
+      if (name === "CORRETTA" || name === "CORRECT") return [0, 1, 2, 3];
+      if (name.includes("AVANTI") || name.includes("FORWARD")) return [0, 1];
+      if (name.includes("INDIETRO") || name.includes("BACK")) return [2, 3];
+      if (name.includes("SINISTRA") || name.includes("LEFT")) return [0, 2];
+      if (name.includes("DESTRA") || name.includes("RIGHT")) return [1, 3];
+      return [];
+    }
 
-            // Score
-            const score = totalCount > 0 ? Math.max(0, Math.min(100, Math.round((correctCount / totalCount) * 100))) : 85;
-            elements.scoreValue.textContent = score;
-            elements.scoreCircle.style.setProperty('--score-percent', `${score * 3.6}deg`);
-            elements.correctPercent.textContent = `${score}%`;
-            elements.bigCorrectPercent.textContent = `${score}%`;
-            elements.stabilityScore.textContent = Math.round(score * 0.9 + 10);
+    function updateSensorChart() {
+      if (!chart) return;
+      const recent = dataHistory.slice(-60);
+      const labels = recent.map(() => "");
+      chart.data.labels = labels;
+      chart.data.datasets.forEach((ds, i) => {
+        ds.data = recent.map((d) => d.percentages[i] || 0);
+      });
+      chart.update("none");
+    }
 
-            // Data count & time
-            elements.dataCount.textContent = `Data: ${totalCount}`;
-            const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
-            elements.sessionTime.textContent = minutes;
+    function updateTimeline() {
+      const recent = dataHistory.slice(-30);
+      elements.timeline.innerHTML = "";
+      recent.forEach((d) => {
+        const div = document.createElement("div");
+        const mapped = postureMap[d.postureName];
+        div.className = `timeline-bar ${mapped?.type || "warning"}`;
+        div.title = mapped?.display || "Unknown";
+        elements.timeline.appendChild(div);
+      });
+    }
 
-            // Update visualizations
-            updatePostureMaps(data);
-            updateSensorChart(data);
-            updateTimeline();
-        }
+    function switchMode(mode) {
+      currentMode = mode;
+      elements.basicModeBtn.classList.toggle("active", mode === "basic");
+      elements.advancedModeBtn.classList.toggle("active", mode === "advanced");
+      elements.basicModeContent.classList.toggle("hidden", mode === "advanced");
+      elements.advancedModeContent.classList.toggle(
+        "hidden",
+        mode === "basic"
+      );
+    }
 
-        function updatePostureMaps(data) {
-            const activeCells = getActiveCells(data.postureName);
-            
-            // Update both modes
-            ['basic', 'adv'].forEach(mode => {
-                postureCells[mode].forEach((cellId, i) => {
-                    const cell = document.getElementById(cellId);
-                    const weightPercentEl = weightElements[mode][i];
-                    
-                    if (cell) {
-                        // Posture state
-                        cell.classList.toggle('active', activeCells.includes(i));
-                    }
-                    
-                    // Weight %
-                    if (weightPercentEl) {
-                        weightPercentEl.textContent = `${Math.round(data.percentages[i])}%`;
-                    }
-                });
-            });
-        }
+    // === UTILS =======================================================
+    function showDashboard() {
+      elements.loginScreen.classList.add("hidden");
+      elements.dashboard.classList.remove("hidden");
+    }
 
-        function getActiveCells(postureName) {
-            if (postureName === 'CORRETTA' || postureName === 'CORRECT') return [0,1,2,3];
-            if (postureName.includes('AVANTI') || postureName.includes('FORWARD')) return [0,1];
-            if (postureName.includes('INDIETRO') || postureName.includes('BACK')) return [2,3];
-            if (postureName.includes('SINISTRA') || postureName.includes('LEFT')) return [0,2];
-            if (postureName.includes('DESTRA') || postureName.includes('RIGHT')) return [1,3];
-            return [];
-        }
+    function showLogin() {
+      elements.dashboard.classList.add("hidden");
+      elements.loginScreen.classList.remove("hidden");
+    }
 
-        function updateSensorChart(data) {
-            if (!chart) return;
-            
-            const recent = dataHistory.slice(-60);
-            const labels = recent.map((_, i) => '');
-            
-            chart.data.labels = labels;
-            chart.data.datasets.forEach((dataset, i) => {
-                dataset.data = recent.map(d => d.percentages[i] || 0);
-            });
-            chart.update('none');
-        }
+    function showError(msg) {
+      elements.errorMessage.textContent = msg;
+      elements.errorMessage.style.display = "block";
+      setTimeout(() => (elements.errorMessage.style.display = "none"), 5000);
+    }
 
-        function updateTimeline() {
-            const recent = dataHistory.slice(-30);
-            elements.timeline.innerHTML = '';
+    function resetData() {
+      dataHistory = [];
+      sessionStartTime = Date.now();
+      correctCount = 0;
+      totalCount = 0;
+      if (chart) {
+        chart.data.labels = [];
+        chart.data.datasets.forEach((ds) => (ds.data = []));
+        chart.update();
+      }
+    }
 
-            recent.forEach(data => {
-                const bar = document.createElement('div');
-                const posture = postureMap[data.postureName];
-                bar.className = `timeline-bar ${posture?.type || 'warning'}`;
-                bar.title = posture?.display || 'Unknown';
-                elements.timeline.appendChild(bar);
-            });
-        }
-
-        function switchMode(mode) {
-            currentMode = mode;
-            elements.basicModeBtn.classList.toggle('active', mode === 'basic');
-            elements.advancedModeBtn.classList.toggle('active', mode === 'advanced');
-            elements.basicModeContent.classList.toggle('hidden', mode === 'advanced');
-            elements.advancedModeContent.classList.toggle('hidden', mode === 'basic');
-        }
-
-        // === UTILS ===
-        function showDashboard() {
-            elements.loginScreen.classList.add('hidden');
-            elements.dashboard.classList.remove('hidden');
-        }
-
-        function showLogin() {
-            elements.dashboard.classList.add('hidden');
-            elements.loginScreen.classList.remove('hidden');
-        }
-
-        function showError(msg) {
-            elements.errorMessage.textContent = msg;
-            elements.errorMessage.style.display = 'block';
-            setTimeout(() => elements.errorMessage.style.display = 'none', 5000);
-        }
-
-        function resetData() {
-            dataHistory = [];
-            sessionStartTime = Date.now();
-            correctCount = 0;
-            totalCount = 0;
-            if (chart) {
-                chart.data.labels = [];
-                chart.data.datasets.forEach(dataset => dataset.data = []);
-                chart.update();
-            }
-        }
-
-        function checkWebSerialSupport() {
-            if (!('serial' in navigator)) {
-                elements.connectBtn.style.opacity = '0.5';
-                elements.connectBtn.title = 'Web Serial API requires Chrome/Edge browser';
-            }
-        }
-    </script>
+    function checkWebSerialSupport() {
+      if (!("serial" in navigator)) {
+        elements.connectBtn.style.opacity = "0.5";
+        elements.connectBtn.title =
+          "Web Serial API requires Chrome or Edge browser";
+      }
+    }
+  </script>
 </body>
 </html>
