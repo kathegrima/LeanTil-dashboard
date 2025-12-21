@@ -15,17 +15,30 @@
         }
 
         :root {
+            /* DARK THEME (default) */
             --color-bg: #0a0a0a;
             --color-card: #1a1a1a;
             --color-border: #2a2a2a;
-            --color-accent: #8d60f5;
-            --color-accent-light: #a27bf7;
             --color-text: #ffffff;
             --color-text-muted: #9ca3af;
+            
+            /* ACCENT COLORS (invariati) */
+            --color-accent: #8d60f5;
+            --color-accent-light: #a27bf7;
             --color-yellow: #fbbf24;
             --color-gray: #666;
             --color-green: #10b981;
+            
             font-size: 16px;
+        }
+
+        /* LIGHT THEME */
+        [data-theme="light"] {
+            --color-bg: #f5f5f5;
+            --color-card: #ffffff;
+            --color-border: #e0e0e0;
+            --color-text: #1a1a1a;
+            --color-text-muted: #6b7280;
         }
 
         body {
@@ -34,6 +47,7 @@
             color: var(--color-text);
             line-height: 1.6;
             overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .container {
@@ -55,6 +69,7 @@
         .logo-img {
             height: 50px;
             width: auto;
+            transition: opacity 0.3s ease;
         }
 
         .header-controls {
@@ -64,6 +79,27 @@
             flex-wrap: wrap;
         }
 
+        /* Theme Toggle Button */
+        .theme-toggle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--color-border);
+            background: var(--color-card);
+            color: var(--color-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.125rem;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--color-accent);
+            transform: scale(1.05);
+        }
+
         /* Cards */
         .card {
             background: var(--color-card);
@@ -71,7 +107,7 @@
             border-radius: 1.5rem;
             padding: 1.75rem;
             margin-bottom: 1.5rem;
-            transition: transform 0.2s;
+            transition: transform 0.2s, background 0.3s ease, border 0.3s ease;
         }
 
         .card:hover {
@@ -163,16 +199,57 @@
             background: var(--color-accent-light);
         }
 
-        .btn-toggle {
-            background: transparent;
-            border-color: var(--color-accent);
-            color: var(--color-accent);
-            padding: 0.75rem 1.5rem;
+        /* Mode Toggle (Simple/Advanced) */
+        .mode-toggle-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
         }
 
-        .btn-toggle.active {
+        .mode-toggle-container:hover {
+            border-color: var(--color-accent);
+        }
+
+        .mode-toggle-label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .mode-toggle-switch {
+            position: relative;
+            width: 42px;
+            height: 24px;
+            background: var(--color-border);
+            border-radius: 12px;
+            transition: background 0.3s;
+        }
+
+        .mode-toggle-switch.active {
             background: var(--color-accent);
-            color: #ffffff;
+        }
+
+        .mode-toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .mode-toggle-switch.active .mode-toggle-slider {
+            transform: translateX(18px);
         }
 
         .help-button {
@@ -242,6 +319,10 @@
             background: rgba(26, 26, 26, 0.5);
             border-radius: 1rem;
             border: 1px solid var(--color-border);
+        }
+
+        [data-theme="light"] .metric-card {
+            background: rgba(0, 0, 0, 0.03);
         }
 
         .metric-value {
@@ -468,11 +549,12 @@
             padding-top: 0.75rem;
             border-top: 1px solid rgba(16, 185, 129, 0.2);
             font-size: 0.65rem;
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--color-text-muted);
             text-align: center;
             font-style: italic;
             position: relative;
             z-index: 1;
+            opacity: 0.7;
         }
 
         /* Comparison Cards - OTTIMIZZATE */
@@ -481,6 +563,10 @@
             border-radius: 1rem;
             border: 1px solid var(--color-border);
             background: rgba(26, 26, 26, 0.5);
+        }
+
+        [data-theme="light"] .comparison-card {
+            background: rgba(0, 0, 0, 0.03);
         }
 
         .comparison-stats-grid {
@@ -592,7 +678,7 @@
 
         .timeline-tooltip {
             position: fixed;
-            background: #111;
+            background: var(--color-card);
             border: 1px solid var(--color-border);
             border-radius: 0.75rem;
             padding: 0.75rem 1rem;
@@ -677,7 +763,7 @@
             margin-right: 0.5rem;
         }
 
-        /* HISTORY CALENDAR */
+        /* HISTORY CALENDAR - FIXED MOBILE OVERFLOW */
         .calendar-header {
             display: flex;
             justify-content: space-between;
@@ -747,15 +833,16 @@
             transition: all 0.2s;
         }
 
+        /* COLORI SWITCHATI: EXCELLENT = VERDE, GOOD = VIOLA */
         .calendar-circle.excellent {
-            background: var(--color-accent);
-            border-color: var(--color-accent);
+            background: var(--color-green);
+            border-color: var(--color-green);
             color: #fff;
         }
 
         .calendar-circle.good {
-            background: var(--color-green);
-            border-color: var(--color-green);
+            background: var(--color-accent);
+            border-color: var(--color-accent);
             color: #fff;
         }
 
@@ -802,7 +889,7 @@
         }
 
         .modal {
-            background: #111;
+            background: var(--color-card);
             border-radius: 1.5rem;
             border: 1px solid var(--color-border);
             max-width: 600px;
@@ -977,14 +1064,16 @@
                 grid-template-columns: 1fr; 
             }
             
+            /* FIX CALENDARIO MOBILE - RIDUZIONE DIMENSIONI */
             .calendar-circle { 
-                width: 32px; 
-                height: 32px; 
-                font-size: 0.7rem; 
+                width: 30px; 
+                height: 30px; 
+                font-size: 0.65rem; 
             }
             
             .history-calendar { 
-                grid-template-columns: repeat(7, 1fr); 
+                grid-template-columns: repeat(7, 1fr);
+                gap: 0.35rem;
             }
             
             .comparison-stats-grid { 
@@ -1061,23 +1150,24 @@
                 font-size: 1rem; 
             }
             
+            /* FIX CALENDARIO EXTRA SMALL */
             .calendar-circle { 
-                width: 28px; 
-                height: 28px; 
-                font-size: 0.65rem; 
+                width: 26px; 
+                height: 26px; 
+                font-size: 0.6rem; 
             }
             
             .calendar-day-label { 
-                font-size: 0.55rem; 
+                font-size: 0.5rem; 
+            }
+            
+            .history-calendar {
+                gap: 0.25rem;
             }
             
             .btn { 
                 padding: 0.625rem 1.25rem; 
                 font-size: 0.75rem; 
-            }
-            
-            .btn-toggle { 
-                padding: 0.5rem 1rem; 
             }
             
             .quality-legend { 
@@ -1210,7 +1300,7 @@
 
             <div class="modal-section">
                 <div class="modal-section-title">Monthly History</div>
-                <p>Track your progress over the last 30 days. Purple = excellent (90+), Green = good (70-89), Yellow = needs improvement, Gray = no data.</p>
+                <p>Track your progress over the last 30 days. Green = excellent (90+), Purple = good (70-89), Yellow = needs improvement, Gray = no data.</p>
             </div>
 
             <div class="modal-section">
@@ -1226,7 +1316,7 @@
     <!-- Login Screen -->
     <div id="loginScreen" class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
         <div style="text-align: center; max-width: 500px;">
-            <img src="leantil-logo.png" alt="LeanTil" class="logo-img" style="margin-bottom: 2rem; height: 80px;">
+            <img id="loginLogo" src="leantil-logo2.png" alt="LeanTil" class="logo-img" style="margin-bottom: 2rem; height: 80px;">
             <div class="status-dot disconnected" style="margin: 0 auto 2rem;"></div>
             <p style="color: var(--color-text-muted); margin-bottom: 3rem; font-size: 1.25rem; line-height: 1.6;">
                 Monitor your posture in real time
@@ -1243,16 +1333,24 @@
     <div id="dashboard" class="container hidden">
         <!-- Header -->
         <div class="header">
-            <img src="leantil-logo.png" alt="LeanTil" class="logo-img">
+            <img id="dashboardLogo" src="leantil-logo2.png" alt="LeanTil" class="logo-img">
             <div class="header-controls">
                 <div class="status-info">
                     <span id="statusDot" class="status-dot"></span>
                     <span id="connectionText">Connected</span>
                 </div>
-                <div style="display: flex; gap: 0.5rem;">
-                    <button id="basicModeBtn" class="btn btn-toggle active">Normal</button>
-                    <button id="advancedModeBtn" class="btn btn-toggle">Advanced</button>
+                
+                <!-- MODE TOGGLE (Simple/Advanced) -->
+                <div class="mode-toggle-container" id="modeToggleContainer">
+                    <span class="mode-toggle-label" id="modeLabel">Simple</span>
+                    <div class="mode-toggle-switch" id="modeToggleSwitch">
+                        <div class="mode-toggle-slider"></div>
+                    </div>
                 </div>
+                
+                <!-- THEME TOGGLE -->
+                <button id="themeToggle" class="theme-toggle" title="Toggle Theme">💡</button>
+                
                 <button id="disconnectBtn" class="btn">🔌 Disconnect</button>
                 <button id="helpBtn" class="help-button" title="Help">?</button>
             </div>
@@ -1277,7 +1375,7 @@
             </div>
         </div>
 
-        <!-- === Normal SECTION (Always visible) === -->
+        <!-- === SIMPLE SECTION (Always visible) === -->
         <div class="grid-2">
             <!-- Weight Distribution -->
             <div class="card">
@@ -1336,8 +1434,8 @@
                 <!-- Generated by JS -->
             </div>
             <div class="info-label">
-                <span style="color: var(--color-accent);">●</span> Excellent (90+)
-                <span style="color: var(--color-green); margin-left: 0.75rem;">●</span> Good (70-89)
+                <span style="color: var(--color-green);">●</span> Excellent (90+)
+                <span style="color: var(--color-accent); margin-left: 0.75rem;">●</span> Good (70-89)
                 <span style="color: var(--color-yellow); margin-left: 0.75rem;">●</span> Medium (50-69)
                 <span style="color: var(--color-gray); margin-left: 0.75rem;">●</span> Low / No data
             </div>
@@ -1486,7 +1584,8 @@
         let sessionStartTime = Date.now();
         let correctCount = 0;
         let totalCount = 0;
-        let currentMode = 'basic';
+        let currentMode = 'basic'; // 'basic' or 'advanced'
+        let currentTheme = 'dark'; // 'dark' or 'light'
         let bestStreak = { start: null, duration: 0 };
         let currentStreak = { start: null, duration: 0 };
         let achievementsUnlocked = new Set();
@@ -1545,8 +1644,10 @@
             sessionTime: document.getElementById('sessionTime'),
             correctPercent: document.getElementById('correctPercent'),
             stabilityScore: document.getElementById('stabilityScore'),
-            basicModeBtn: document.getElementById('basicModeBtn'),
-            advancedModeBtn: document.getElementById('advancedModeBtn'),
+            modeToggleContainer: document.getElementById('modeToggleContainer'),
+            modeToggleSwitch: document.getElementById('modeToggleSwitch'),
+            modeLabel: document.getElementById('modeLabel'),
+            themeToggle: document.getElementById('themeToggle'),
             advancedExtras: document.getElementById('advancedExtras'),
             timeline: document.getElementById('timeline'),
             timelineMarkers: document.getElementById('timelineMarkers'),
@@ -1585,7 +1686,9 @@
             statusDot: document.getElementById('statusDot'),
             historyCalendar: document.getElementById('historyCalendar'),
             viewWeek: document.getElementById('viewWeek'),
-            viewMonth: document.getElementById('viewMonth')
+            viewMonth: document.getElementById('viewMonth'),
+            loginLogo: document.getElementById('loginLogo'),
+            dashboardLogo: document.getElementById('dashboardLogo')
         };
 
         const weightElements = [
@@ -1596,6 +1699,44 @@
         ];
 
         const postureCells = ['cell-0', 'cell-1', 'cell-2', 'cell-3'];
+
+        // === THEME TOGGLE ===
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            
+            // Update logos
+            const logoSrc = currentTheme === 'dark' ? 'leantil-logo2.png' : 'leantil-logo.png';
+            elements.loginLogo.src = logoSrc;
+            elements.dashboardLogo.src = logoSrc;
+            
+            // Update theme toggle icon
+            elements.themeToggle.textContent = currentTheme === 'dark' ? '💡' : '🌙';
+            
+            // Save preference
+            localStorage.setItem('theme', currentTheme);
+        }
+
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                toggleTheme();
+            }
+        }
+
+        // === MODE TOGGLE (Simple/Advanced) ===
+        function toggleMode() {
+            currentMode = currentMode === 'basic' ? 'advanced' : 'basic';
+            elements.modeToggleSwitch.classList.toggle('active', currentMode === 'advanced');
+            elements.modeLabel.textContent = currentMode === 'basic' ? 'Simple' : 'Advanced';
+            elements.advancedExtras.classList.toggle('hidden', currentMode === 'basic');
+            
+            if (currentMode === 'advanced' && dataHistory.length > 0) {
+                updateTimeline();
+                updateTimelineMarkers();
+                updateQualityBreakdown();
+            }
+        }
 
         // === MONTHLY HISTORY GENERATION ===
         function generateMonthlyHistory() {
@@ -1648,16 +1789,17 @@
                 
                 circle.textContent = day.date.getDate();
                 
+                // COLORI SWITCHATI: EXCELLENT = VERDE, GOOD = VIOLA
                 if (day.score === null) {
                     circle.classList.add('poor');
                 } else if (day.score >= 90) {
-                    circle.classList.add('excellent');
+                    circle.classList.add('excellent'); // VERDE
                 } else if (day.score >= 70) {
-                    circle.classList.add('good');
+                    circle.classList.add('good'); // VIOLA
                 } else if (day.score >= 50) {
-                    circle.classList.add('medium');
+                    circle.classList.add('medium'); // GIALLO
                 } else {
-                    circle.classList.add('poor');
+                    circle.classList.add('poor'); // GRIGIO
                 }
                 
                 dayEl.onclick = () => {
@@ -1693,14 +1835,14 @@
 
         function calculateBestStreak() {
             let maxStreak = 0;
-            let currentStreak = 0;
+            let currentStreakCount = 0;
             
             monthlyHistory.forEach(day => {
                 if (day.score && day.score >= 70) {
-                    currentStreak++;
-                    maxStreak = Math.max(maxStreak, currentStreak);
+                    currentStreakCount++;
+                    maxStreak = Math.max(maxStreak, currentStreakCount);
                 } else {
-                    currentStreak = 0;
+                    currentStreakCount = 0;
                 }
             });
             
@@ -1714,7 +1856,6 @@
             const sessionHours = Math.floor((currentTime - startTime) / 3600000);
             
             const markers = [];
-            const startHour = startTime.getHours();
             
             if (sessionHours < 2) {
                 for (let i = 0; i <= 4; i++) {
@@ -1801,6 +1942,7 @@
             updateConnectionStatus();
             renderCalendar();
             updateProgressStats();
+            loadThemePreference();
         });
 
         function initEventListeners() {
@@ -1808,8 +1950,8 @@
             elements.testModeBtn.onclick = toggleTestMode;
             elements.toggleTestMode.onclick = toggleTestMode;
             elements.disconnectBtn.onclick = disconnectDevice;
-            elements.basicModeBtn.onclick = () => switchMode('basic');
-            elements.advancedModeBtn.onclick = () => switchMode('advanced');
+            elements.modeToggleContainer.onclick = toggleMode;
+            elements.themeToggle.onclick = toggleTheme;
             
             elements.viewWeek.onclick = () => switchCalendarView('week');
             elements.viewMonth.onclick = () => switchCalendarView('month');
@@ -2186,19 +2328,6 @@
             `;
 
             generateInsight(pctGood, pctWarning, pctAway);
-        }
-
-        function switchMode(mode) {
-            currentMode = mode;
-            elements.basicModeBtn.classList.toggle('active', mode === 'basic');
-            elements.advancedModeBtn.classList.toggle('active', mode === 'advanced');
-            elements.advancedExtras.classList.toggle('hidden', mode === 'basic');
-            
-            if (mode === 'advanced' && dataHistory.length > 0) {
-                updateTimeline();
-                updateTimelineMarkers();
-                updateQualityBreakdown();
-            }
         }
 
         function showDashboard() {
