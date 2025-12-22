@@ -1578,25 +1578,18 @@
                         </div>
                     </div>
 
-                    <!-- Stats Grid - 3 BOXES: Daily Goal, Week Avg, Best Streak -->
+                    <!-- Stats Grid - 3 BOXES -->
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.875rem; padding: 1.25rem 1rem;">
-                        <!-- Daily Goal Box -->
-                        <div style="text-align: center; padding: 1rem 0.75rem; background: rgba(141, 96, 245, 0.08); border: 1px solid rgba(141, 96, 245, 0.2); border-radius: 12px; transition: all 0.3s ease;">
+                        <div style="text-align: center; padding: 1rem 0.75rem; background: rgba(141, 96, 245, 0.08); border: 1px solid rgba(141, 96, 245, 0.2); border-radius: 12px;">
                             <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Daily Goal</div>
                             <div id="dailyGoalValue" style="font-size: 1.85rem; font-weight: 700; color: var(--color-accent); line-height: 1; margin-bottom: 0.6rem;">60%</div>
-                            <button id="editGoalBtn" style="padding: 0.4rem 0.75rem; background: var(--color-accent); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.7rem; font-weight: 700; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(141, 96, 245, 0.25); width: 100%; text-transform: uppercase; letter-spacing: 0.3px;">
-                                Edit
-                            </button>
+                            <button id="editGoalBtn" style="padding: 0.4rem 0.75rem; background: var(--color-accent); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.7rem; font-weight: 700; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(141, 96, 245, 0.25); width: 100%; text-transform: uppercase; letter-spacing: 0.3px;">Edit</button>
                         </div>
-
-                        <!-- Week Avg Box -->
-                        <div style="text-align: center; padding: 1rem 0.75rem; background: var(--color-border); border-radius: 12px; transition: all 0.3s ease;">
+                        <div style="text-align: center; padding: 1rem 0.75rem; background: var(--color-border); border-radius: 12px;">
                             <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Week Avg</div>
                             <div id="weekAvg" style="font-size: 1.85rem; font-weight: 700; color: var(--color-text); line-height: 1;">69%</div>
                         </div>
-
-                        <!-- Best Streak Box -->
-                        <div style="text-align: center; padding: 1rem 0.75rem; background: var(--color-border); border-radius: 12px; transition: all 0.3s ease;">
+                        <div style="text-align: center; padding: 1rem 0.75rem; background: var(--color-border); border-radius: 12px;">
                             <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Best Streak</div>
                             <div id="bestStreak" style="font-size: 1.85rem; font-weight: 700; color: var(--color-text); line-height: 1;">7d</div>
                         </div>
@@ -1635,52 +1628,21 @@
     <div id="goalModal" class="modal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); justify-content: center; align-items: center; backdrop-filter: blur(4px);">
         <div class="modal-content" style="background: var(--color-card); padding: 2.5rem; border-radius: 20px; max-width: 520px; width: 90%; box-shadow: 0 25px 70px rgba(0,0,0,0.6); border: 1px solid var(--color-border);">
             <h3 style="margin-bottom: 0.75rem; color: var(--color-text); font-size: 1.75rem; font-weight: 700;">🎯 Set Your Daily Goal</h3>
-            <p style="color: var(--color-text-muted); margin-bottom: 2rem; font-size: 1rem; line-height: 1.5;">How much time do you want to maintain good posture each day?</p>
-
+            <p style="color: var(--color-text-muted); margin-bottom: 2rem; font-size: 1rem;">How much time do you want to maintain good posture each day?</p>
             <div style="margin-bottom: 2.5rem;">
-                <label for="goalRange" style="display: block; margin-bottom: 1rem; color: var(--color-text); font-size: 1rem; font-weight: 500;">
-                    Target: <span id="goalRangeValue" style="color: var(--color-accent); font-weight: 700; font-size: 1.5rem;">60%</span>
-                </label>
+                <label for="goalRange" style="display: block; margin-bottom: 1rem; color: var(--color-text); font-size: 1rem; font-weight: 500;">Target: <span id="goalRangeValue" style="color: var(--color-accent); font-weight: 700; font-size: 1.5rem;">60%</span></label>
                 <input id="goalRange" type="range" min="30" max="90" value="60" step="5" style="width: 100%; height: 10px; border-radius: 5px; background: var(--color-border); outline: none; -webkit-appearance: none; cursor: pointer;">
                 <style>
-                    #goalRange::-webkit-slider-thumb {
-                        -webkit-appearance: none;
-                        appearance: none;
-                        width: 24px;
-                        height: 24px;
-                        border-radius: 50%;
-                        background: var(--color-accent);
-                        cursor: pointer;
-                        box-shadow: 0 2px 8px rgba(141, 96, 245, 0.4);
-                        transition: transform 0.2s ease;
-                    }
-                    #goalRange::-webkit-slider-thumb:hover {
-                        transform: scale(1.1);
-                    }
-                    #goalRange::-moz-range-thumb {
-                        width: 24px;
-                        height: 24px;
-                        border-radius: 50%;
-                        background: var(--color-accent);
-                        cursor: pointer;
-                        border: none;
-                        box-shadow: 0 2px 8px rgba(141, 96, 245, 0.4);
-                    }
+                    #goalRange::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--color-accent); cursor: pointer; box-shadow: 0 2px 8px rgba(141, 96, 245, 0.4); }
+                    #goalRange::-moz-range-thumb { width: 24px; height: 24px; border-radius: 50%; background: var(--color-accent); cursor: pointer; border: none; }
                 </style>
-                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--color-text-muted); margin-top: 0.75rem; font-weight: 500;">
-                    <span>30% (Easy)</span>
-                    <span>60% (Balanced)</span>
-                    <span>90% (Expert)</span>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--color-text-muted); margin-top: 0.75rem;">
+                    <span>30%</span><span>60%</span><span>90%</span>
                 </div>
             </div>
-
             <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                <button id="cancelGoalBtn" style="padding: 0.875rem 2rem; background: var(--color-border); color: var(--color-text); border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; font-weight: 600; font-size: 1rem;">
-                    Cancel
-                </button>
-                <button id="saveGoalBtn" style="padding: 0.875rem 2rem; background: var(--color-accent); color: white; border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; font-weight: 600; font-size: 1rem; box-shadow: 0 4px 12px rgba(141, 96, 245, 0.4);">
-                    Save Goal
-                </button>
+                <button id="cancelGoalBtn" style="padding: 0.875rem 2rem; background: var(--color-border); color: var(--color-text); border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">Cancel</button>
+                <button id="saveGoalBtn" style="padding: 0.875rem 2rem; background: var(--color-accent); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 12px rgba(141, 96, 245, 0.4);">Save Goal</button>
             </div>
         </div>
     </div>
@@ -1875,6 +1837,11 @@
 
         function renderCalendar() {
             const container = elements.historyCalendar;
+            // FIX: Check if element exists before using it
+            if (!container) {
+                console.warn('Posture History calendar element not ready yet');
+                return;
+            }
             container.innerHTML = '';
             
             const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -2474,15 +2441,11 @@
         }
     
         // ==================== DAILY GOAL & POSITIVE MESSAGING SYSTEM ====================
-        // Load saved goal or use default
         let dailyGoal = parseInt(localStorage.getItem('dailyGoal')) || 60;
-        let todayGoodPosture = 24; // Will be updated by real sensor data
-        let communityDeltaToMean = 44; // % below community average
-        let betterThanUsers = 5; // Percentile ranking
+        let todayGoodPosture = 24;
+        let communityDeltaToMean = 44;
+        let betterThanUsers = 5;
 
-        /**
-         * Updates the progress UI with positive, goal-oriented messaging
-         */
         function updateProgressUI() {
             const todayEl = document.getElementById('todayScore');
             const goalTextEl = document.getElementById('goalProgressText');
@@ -2492,67 +2455,38 @@
 
             if (!todayEl || !goalTextEl || !dailyGoalEl) return;
 
-            // Update main values
             todayEl.textContent = todayGoodPosture + '%';
             dailyGoalEl.textContent = dailyGoal + '%';
 
-            // Calculate progress ratio
             const ratio = todayGoodPosture / dailyGoal;
             const reached = Math.min(Math.round(ratio * 100), 100);
 
-            // Update progress bar and percentage
             if (goalPercentEl) goalPercentEl.textContent = reached + '%';
-            if (goalBarEl) {
-                goalBarEl.style.width = Math.min(reached, 100) + '%';
-            }
+            if (goalBarEl) goalBarEl.style.width = Math.min(reached, 100) + '%';
 
-            // Update text with always-positive framing
             if (ratio < 1) {
-                // Still working toward goal
-                goalTextEl.innerHTML = 
-                    `You've reached <strong style="color: var(--color-accent);">${reached}%</strong> of your daily goal`;
-                if (goalBarEl) {
-                    goalBarEl.style.background = 'linear-gradient(90deg, var(--color-accent), var(--color-accent-light))';
-                }
+                goalTextEl.innerHTML = `You've reached <strong style="color: var(--color-accent);">${reached}%</strong> of your daily goal`;
+                if (goalBarEl) goalBarEl.style.background = 'linear-gradient(90deg, var(--color-accent), var(--color-accent-light))';
             } else if (ratio >= 1 && ratio < 1.1) {
-                // Goal achieved!
-                goalTextEl.innerHTML = 
-                    `<strong style="color: var(--color-green);">Daily goal achieved 100%!</strong> 🎉 Excellent work!`;
-                if (goalBarEl) {
-                    goalBarEl.style.background = 'linear-gradient(90deg, var(--color-green), #34d399)';
-                }
+                goalTextEl.innerHTML = `<strong style="color: var(--color-green);">Daily goal achieved 100%!</strong> 🎉`;
+                if (goalBarEl) goalBarEl.style.background = 'linear-gradient(90deg, var(--color-green), #34d399)';
             } else {
-                // Exceeded goal
                 const extra = Math.round((todayGoodPosture - dailyGoal) / dailyGoal * 100);
-                goalTextEl.innerHTML = 
-                    `You've exceeded your goal by <strong style="color: var(--color-green);">+${extra}%</strong> today! 🚀`;
-                if (goalBarEl) {
-                    goalBarEl.style.background = 'linear-gradient(90deg, var(--color-green), #34d399)';
-                }
+                goalTextEl.innerHTML = `You've exceeded your goal by <strong style="color: var(--color-green);">+${extra}%</strong>! 🚀`;
+                if (goalBarEl) goalBarEl.style.background = 'linear-gradient(90deg, var(--color-green), #34d399)';
             }
         }
 
-        /**
-         * Updates community ranking with positive framing
-         */
         function updateCommunityUI() {
             const communityProgressEl = document.getElementById('communityProgress');
             const betterThanEl = document.getElementById('communityBetterThan');
             if (!communityProgressEl || !betterThanEl) return;
 
-            // Calculate positive progress toward average
             const progressToAverage = Math.max(0, 100 - communityDeltaToMean);
-
-            communityProgressEl.innerHTML = 
-                `You're <strong style="color: var(--color-accent);">${progressToAverage}%</strong> of the way to the community average`;
-
-            betterThanEl.innerHTML = 
-                `You've already surpassed <strong style="color: var(--color-green);">${betterThanUsers}%</strong> of users`;
+            communityProgressEl.innerHTML = `You're <strong style="color: var(--color-accent);">${progressToAverage}%</strong> of the way to the community average`;
+            betterThanEl.innerHTML = `You've already surpassed <strong style="color: var(--color-green);">${betterThanUsers}%</strong> of users`;
         }
 
-        /**
-         * Initializes the goal setting modal
-         */
         function initGoalModal() {
             const modal = document.getElementById('goalModal');
             const editBtn = document.getElementById('editGoalBtn');
@@ -2561,84 +2495,58 @@
             const range = document.getElementById('goalRange');
             const rangeValue = document.getElementById('goalRangeValue');
 
-            if (!modal || !editBtn || !cancelBtn || !saveBtn || !range || !rangeValue) {
-                console.warn('Goal modal elements not found');
-                return;
-            }
+            if (!modal || !editBtn) return;
 
-            // Open modal
             function openModal() {
                 range.value = dailyGoal;
                 rangeValue.textContent = dailyGoal + '%';
                 modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden'; // Prevent background scroll
             }
 
-            // Close modal
             function closeModal() {
                 modal.style.display = 'none';
-                document.body.style.overflow = ''; // Restore scroll
             }
 
-            // Event listeners
             editBtn.addEventListener('click', openModal);
             cancelBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
-            // Close on backdrop click
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) closeModal();
-            });
-
-            // Close on ESC key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && modal.style.display === 'flex') {
-                    closeModal();
-                }
-            });
-
-            // Update value display as slider moves
             range.addEventListener('input', () => {
                 rangeValue.textContent = range.value + '%';
             });
 
-            // Save goal
             saveBtn.addEventListener('click', () => {
-                const newGoal = parseInt(range.value, 10);
-                dailyGoal = newGoal;
-
-                // Save to localStorage for persistence
+                dailyGoal = parseInt(range.value, 10);
                 localStorage.setItem('dailyGoal', dailyGoal);
-
-                // Update UI
                 updateProgressUI();
                 closeModal();
 
-                // Visual feedback on save button
-                const btn = document.getElementById('editGoalBtn');
-                if (btn) {
-                    const originalText = btn.textContent;
-                    const originalBg = btn.style.background;
-                    btn.textContent = '✓ Saved!';
-                    btn.style.background = 'var(--color-green)';
+                if (editBtn) {
+                    const orig = editBtn.textContent;
+                    editBtn.textContent = '✓';
+                    editBtn.style.background = 'var(--color-green)';
                     setTimeout(() => {
-                        btn.textContent = originalText;
-                        btn.style.background = originalBg;
-                    }, 2000);
+                        editBtn.textContent = orig;
+                        editBtn.style.background = 'var(--color-accent)';
+                    }, 1500);
                 }
             });
         }
 
-        // Initialize everything when DOM is ready
         document.addEventListener('DOMContentLoaded', function() {
+            // FIX: Ensure calendar renders after DOM is ready
+            setTimeout(() => {
+                if (typeof renderCalendar === 'function') {
+                    renderCalendar();
+                }
+            }, 150);
+
             updateProgressUI();
             updateCommunityUI();
             initGoalModal();
-
-            console.log('✓ Daily goal system initialized');
-            console.log('Current goal:', dailyGoal + '%');
         });
 
-        // ==================== END DAILY GOAL SYSTEM ====================
+        // ==================== END SYSTEM ====================
 
 </script>
 </body>
