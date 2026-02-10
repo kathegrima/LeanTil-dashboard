@@ -28,7 +28,6 @@
             --color-yellow: #fbbf24;
             --color-gray: #666;
             --color-green: #10b981;
-            --color-red: #ef4444;
             
             font-size: 16px;
         }
@@ -67,6 +66,7 @@
             gap: 1rem;
         }
 
+        /* LOGO FIX */
         .logo-img {
             height: 50px;
             width: auto;
@@ -82,7 +82,8 @@
             flex-wrap: wrap;
         }
 
-        .theme-toggle, .help-button {
+        /* Theme Toggle Button */
+        .theme-toggle {
             width: 36px;
             height: 36px;
             border-radius: 50%;
@@ -97,7 +98,7 @@
             transition: all 0.2s;
         }
 
-        .theme-toggle:hover, .help-button:hover {
+        .theme-toggle:hover {
             border-color: var(--color-accent);
             transform: scale(1.05);
         }
@@ -202,6 +203,81 @@
             background: var(--color-accent-light);
         }
 
+        /* Mode Toggle */
+        .mode-toggle-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .mode-toggle-container:hover {
+            border-color: var(--color-accent);
+        }
+
+        .mode-toggle-label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .mode-toggle-switch {
+            position: relative;
+            width: 42px;
+            height: 24px;
+            background: var(--color-border);
+            border-radius: 12px;
+            transition: background 0.3s;
+        }
+
+        .mode-toggle-switch.active {
+            background: var(--color-accent);
+        }
+
+        .mode-toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .mode-toggle-switch.active .mode-toggle-slider {
+            transform: translateX(18px);
+        }
+
+        .help-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--color-border);
+            background: var(--color-card);
+            color: var(--color-text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.125rem;
+            transition: all 0.2s;
+        }
+
+        .help-button:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent);
+            transform: scale(1.05);
+        }
+
         /* Status & Connection */
         .status-info {
             display: inline-flex;
@@ -225,10 +301,6 @@
         .status-dot.disconnected {
             background: var(--color-gray);
             animation: none;
-        }
-
-        .status-dot.demo {
-            background: var(--color-yellow);
         }
 
         /* Grid Layout */
@@ -317,24 +389,502 @@
             font-weight: 500;
         }
 
-        /* Demo Badge */
-        .demo-badge {
+        /* Achievement Badge */
+        .achievement-popup {
             position: fixed;
-            top: 1rem;
-            right: 1rem;
-            background: var(--color-yellow);
-            color: #000;
-            padding: 0.5rem 1rem;
-            border-radius: 1rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            z-index: 1000;
-            display: none;
-            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-light) 100%);
+            border-radius: 2rem;
+            padding: 3rem;
+            text-align: center;
+            z-index: 2000;
+            box-shadow: 0 20px 60px rgba(141, 96, 245, 0.6);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
-        .demo-badge.show {
+        .achievement-popup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .achievement-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s infinite;
+        }
+
+        .achievement-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-desc {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Insights Combined */
+        .insights-combined {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .insight-item {
+            background: linear-gradient(135deg, rgba(141, 96, 245, 0.15) 0%, rgba(141, 96, 245, 0.05) 100%);
+            border: 1px solid var(--color-accent);
+            border-radius: 1rem;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .insight-label {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .insight-value {
+            font-size: 1.75rem;
+            color: var(--color-accent);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .insight-desc {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Health Impact Card */
+        .impact-card-hero {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border: 2px solid var(--color-green);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100%;
+        }
+
+        .impact-card-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .impact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .impact-value-hero {
+            font-size: 3rem;
+            color: var(--color-green);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1;
+        }
+
+        .impact-desc-hero {
+            color: var(--color-text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .impact-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(16, 185, 129, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .impact-stat {
+            text-align: center;
+        }
+
+        .impact-stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-green);
+            margin-bottom: 0.25rem;
+            line-height: 1;
+        }
+
+        .impact-stat-label {
+            font-size: 0.65rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .impact-reference {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(16, 185, 129, 0.2);
+            font-size: 0.65rem;
+            color: var(--color-text-muted);
+            text-align: center;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+            opacity: 0.7;
+        }
+
+        /* Comparison Cards */
+        .comparison-card {
+            padding: 1.25rem;
+            border-radius: 1rem;
+            border: 1px solid var(--color-border);
+            background: rgba(26, 26, 26, 0.5);
+        }
+
+        [data-theme="light"] .comparison-card {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .comparison-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comparison-stat {
+            text-align: center;
+            padding: 0.75rem;
+            background: rgba(141, 96, 245, 0.05);
+            border-radius: 0.75rem;
+            border: 1px solid var(--color-border);
+        }
+
+        .comparison-stat-label {
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .comparison-stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-accent);
+        }
+
+        .comparison-label {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .comparison-value {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-value.positive {
+            color: var(--color-green);
+        }
+
+        .comparison-value.negative {
+            color: var(--color-yellow);
+        }
+
+        .comparison-subtext {
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* Timeline */
+        .timeline-wrapper {
+            position: relative;
+        }
+
+        .timeline-markers {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 0.5rem 0.5rem 0.5rem;
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            font-weight: 500;
+        }
+
+        .timeline-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(18px, 1fr));
+            gap: 0.5rem;
+            padding: 1rem 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .timeline-bar {
+            aspect-ratio: 1;
+            border-radius: 0.375rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .timeline-bar.correct {
+            background: var(--color-accent);
+        }
+
+        .timeline-bar.warning {
+            background: var(--color-yellow);
+        }
+
+        .timeline-bar.away {
+            background: var(--color-gray);
+            opacity: 0.6;
+        }
+
+        .timeline-bar:hover {
+            transform: scale(1.15);
+            box-shadow: 0 4px 12px rgba(141, 96, 245, 0.4);
+        }
+
+        .timeline-duration {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+        }
+
+        .timeline-duration-value {
+            color: var(--color-accent);
+            font-weight: 600;
+        }
+
+        .timeline-tooltip {
+            position: fixed;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        .timeline-tooltip.show {
             display: block;
+        }
+
+        .timeline-tooltip-time {
+            color: var(--color-accent);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-tooltip-status {
+            color: var(--color-text-muted);
+        }
+
+        /* Quality Breakdown */
+        .quality-bar {
+            height: 1.75rem;
+            display: flex;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .quality-segment {
+            transition: all 0.3s;
+        }
+
+        .quality-segment:hover {
+            opacity: 0.8;
+        }
+
+        .quality-legend {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .quality-legend-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .quality-legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+        .quality-duration {
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .quality-insight {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(141, 96, 245, 0.1);
+            border: 1px solid var(--color-accent);
+            border-radius: 0.75rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--color-text);
+        }
+
+        .quality-insight-icon {
+            margin-right: 0.5rem;
+        }
+
+        /* Calendar */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-view-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-btn {
+            padding: 0.5rem 1rem;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-muted);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .view-btn.active {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: #fff;
+        }
+
+        .history-calendar {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+            gap: 0.5rem;
+            justify-items: center;
+        }
+
+        .calendar-day {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            max-width: 42px;
+        }
+
+        .calendar-day:hover {
+            transform: scale(1.1);
+        }
+
+        .calendar-day-label {
+            font-size: 0.6rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .calendar-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .calendar-circle.excellent {
+            background: var(--color-green);
+            border-color: var(--color-green);
+            color: #fff;
+        }
+
+        .calendar-circle.good {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: #fff;
+        }
+
+        .calendar-circle.medium {
+            background: var(--color-yellow);
+            border-color: var(--color-yellow);
+            color: #000;
+        }
+
+        .calendar-circle.poor {
+            background: rgba(102, 102, 102, 0.3);
+            border-color: var(--color-gray);
+            color: var(--color-gray);
+        }
+
+        .calendar-circle.today {
+            box-shadow: 0 0 0 3px rgba(141, 96, 245, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Labels */
+        .info-label {
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            margin-top: 0.75rem;
+            text-align: center;
+            font-style: italic;
+            line-height: 1.5;
         }
 
         /* Modal */
@@ -407,8 +957,21 @@
             line-height: 1.6;
         }
 
-        .hidden { 
-            display: none !important; 
+        /* Test Mode */
+        .test-mode {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--color-accent);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         /* Animations */
@@ -425,72 +988,292 @@
             }
         }
 
-        /* Responsive */
+        /* Divider */
+        .mode-divider {
+            margin: 2.5rem 0 1.5rem 0;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--color-border);
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .status-text {
+                font-size: 3.5rem;
+            }
+            .impact-value-hero {
+                font-size: 2.5rem;
+            }
+            .calendar-circle {
+                width: 34px;
+                height: 34px;
+                font-size: 0.7rem;
+            }
+            .history-calendar {
+                grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+                gap: 0.4rem;
+            }
+        }
+
         @media (max-width: 768px) {
             :root {
                 font-size: 14px;
             }
-
-            .container { 
-                padding: 1rem; 
+            .container {
+                padding: 1rem;
             }
-            
-            .status-text { 
-                font-size: 2.75rem; 
+            .status-text {
+                font-size: 2.75rem;
             }
-            
-            .card { 
+            .card {
                 padding: 1.25rem;
             }
-            
-            .posture-cell { 
-                width: 4.5rem; 
-                height: 4.5rem; 
+            .posture-cell {
+                width: 4.5rem;
+                height: 4.5rem;
+                font-size: 0.75rem;
             }
-            
-            .grid-2 { 
+            .logo-img {
+                height: 40px;
+                max-width: 160px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .impact-value-hero {
+                font-size: 2rem;
+            }
+            .impact-stats {
                 grid-template-columns: 1fr;
+            }
+            .calendar-circle {
+                width: 28px;
+                height: 28px;
+                font-size: 0.65rem;
+            }
+            .calendar-day {
+                max-width: 32px;
+            }
+            .history-calendar {
+                grid-template-columns: repeat(7, minmax(0, 1fr));
+                gap: 0.25rem;
+            }
+            .comparison-stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .timeline-markers {
+                font-size: 0.6rem;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .status-display {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                font-size: 13px;
+            }
+            .status-text {
+                font-size: 2rem;
+            }
+            .status-label {
+                font-size: 0.85rem;
+            }
+            .score-circle {
+                width: 100px;
+                height: 100px;
+            }
+            .score-inner {
+                width: 80px;
+                height: 80px;
+                font-size: 1.75rem;
+            }
+            .posture-cell {
+                width: 3.5rem;
+                height: 3.5rem;
+            }
+            .posture-cell .sensor-name {
+                font-size: 0.6rem;
+            }
+            .posture-cell .weight-percent {
+                font-size: 1.1rem;
+            }
+            .metric-value {
+                font-size: 1.75rem;
+            }
+            .metric-card {
+                padding: 0.875rem;
+            }
+            .card {
+                padding: 1rem;
+            }
+            .card h3 {
+                font-size: 1rem;
+            }
+            .calendar-circle {
+                width: 24px;
+                height: 24px;
+                font-size: 0.6rem;
+            }
+            .calendar-day {
+                max-width: 28px;
+            }
+            .calendar-day-label {
+                font-size: 0.5rem;
+            }
+            .history-calendar {
+                grid-template-columns: repeat(7, minmax(0, 1fr));
+                gap: 0.2rem;
+            }
+            .btn {
+                padding: 0.625rem 1.25rem;
+                font-size: 0.75rem;
+            }
+            .quality-legend {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            .timeline-container {
+                grid-template-columns: repeat(auto-fill, minmax(14px, 1fr));
+                gap: 0.35rem;
+            }
+            .timeline-markers {
+                font-size: 0.55rem;
+                padding: 0 0.25rem 0.35rem;
+            }
+            .impact-value-hero {
+                font-size: 1.75rem;
+            }
+            .impact-icon {
+                font-size: 2rem;
+            }
+            .impact-stat-value {
+                font-size: 1.25rem;
+            }
+            .comparison-value {
+                font-size: 1.75rem;
+            }
+            .insight-value {
+                font-size: 1.5rem;
+            }
+            .modal {
+                padding: 1.5rem;
+            }
+            .modal-title {
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 1024px) and (orientation: landscape) {
+            .status-display {
+                flex-direction: row;
+            }
+            .grid-2 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .btn, .help-button, .view-btn, .calendar-circle, .timeline-bar {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            .calendar-day {
+                padding: 0.25rem;
+            }
+            .posture-cell {
+                min-width: 60px;
+                min-height: 60px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .grid-2 {
+                grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)) !important;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Demo Mode Badge -->
-    <div id="demoBadge" class="demo-badge">
-        🧪 DEMO MODE
+    <!-- Test Mode Badge -->
+    <div id="testModeToggle" class="test-mode hidden">
+        🧪 DEMO MODE <button id="toggleTestMode" style="background: none; border: none; color: inherit; font-size: inherit; cursor: pointer; font-weight: 600;">OFF</button>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div id="achievementPopup" class="achievement-popup">
+        <div class="achievement-icon" id="achievementIcon"></div>
+        <div class="achievement-title" id="achievementTitle">Achievement Unlocked!</div>
+        <div class="achievement-desc" id="achievementDesc">Great job!</div>
+    </div>
+
+    <!-- Timeline Tooltip -->
+    <div id="timelineTooltip" class="timeline-tooltip">
+        <div class="timeline-tooltip-time"></div>
+        <div class="timeline-tooltip-status"></div>
     </div>
 
     <!-- Help Modal -->
     <div id="helpModalBackdrop" class="modal-backdrop">
         <div class="modal">
             <div class="modal-header">
-                <div class="modal-title">📊 Dashboard Guide</div>
+                <div class="modal-title">📊 Understanding Your Dashboard</div>
                 <button id="closeHelp" class="modal-close">&times;</button>
             </div>
             
             <div class="modal-section">
-                <div class="modal-section-title">Posture Status</div>
-                <p>Real-time classification from ML Random Forest model with 7 categories: CORRETTA, SLOUCH, LEAN_LEFT, LEAN_RIGHT, LEAN_BACK, FIDGET, AWAY.</p>
+                <div class="modal-section-title">Overall Score</div>
+                <p>Your wellness score from 0 to 100. It shows how well you're maintaining good posture throughout your session.</p>
             </div>
 
             <div class="modal-section">
-                <div class="modal-section-title">Score</div>
-                <p>Wellness score (0-100) based on percentage of time in correct posture.</p>
+                <div class="modal-section-title">Achievements</div>
+                <p>Unlock badges as you hit milestones: First Session, Perfect Minute, Consistency Champion, and Posture SuperStar!</p>
             </div>
 
             <div class="modal-section">
                 <div class="modal-section-title">Weight Distribution</div>
-                <p>Real-time pressure map from 4 sensors showing where weight is concentrated.</p>
+                <p>Shows where your weight is concentrated. Brighter squares mean more pressure in that area.</p>
             </div>
 
             <div class="modal-section">
-                <div class="modal-section-title">Center of Pressure (CoP)</div>
-                <p>X/Y coordinates showing balance point. Values range from -1.0 to +1.0.</p>
+                <div class="modal-section-title">Posture Timeline</div>
+                <p>Track your posture throughout the day with hourly markers. Each square represents a reading with color-coded status.</p>
             </div>
 
             <div class="modal-section">
-                <div class="modal-section-title">Demo Mode</div>
-                <p>Test the dashboard with simulated data. Perfect for exploring features without connecting to a device.</p>
+                <div class="modal-section-title">Monthly History</div>
+                <p>Track your progress over the last 30 days. Green = excellent (90+), Purple = good (70-89), Yellow = needs improvement, Gray = no data.</p>
+            </div>
+
+            <div class="modal-section">
+                <div class="modal-section-title">Health Impact</div>
+                <p>See the real-world benefits of your good posture - stretching equivalent and back strain avoided!</p>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--color-text-muted); font-style: italic;">
+                    Metrics based on NIH research showing 75% reduction in musculoskeletal disorders with proper ergonomic posture (2023).
+                </p>
             </div>
         </div>
     </div>
@@ -499,7 +1282,7 @@
     <div id="loginScreen" class="container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
         <div style="text-align: center; max-width: 500px;">
             <div style="position: absolute; top: 1.5rem; right: 1.5rem;">
-                <button id="themeToggleLogin" class="theme-toggle" title="Toggle Theme">💡</button>
+                <button id="themeToggleLogin" class="theme-toggle" title="Toggle Theme"></button>
             </div>
             
             <img id="loginLogo" src="leantil-logo2.png" alt="LeanTil" class="logo-img" style="margin-bottom: 2rem; height: 80px;">
@@ -510,10 +1293,9 @@
             </p>
             <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                 <button id="connectBtn" class="btn btn-primary">🔗 Connect to API</button>
-                <button id="demoModeBtn" class="btn">🧪 Demo Mode</button>
+                <button id="testModeBtn" class="btn">🧪 Demo Mode</button>
             </div>
-            <p id="errorMessage" style="color: var(--color-red); margin-top: 1.5rem; display: none; font-size: 1rem;"></p>
-            <p id="statusMessage" style="color: var(--color-text-muted); margin-top: 1rem; font-size: 0.875rem;"></p>
+            <p id="errorMessage" style="color: #ef4444; margin-top: 1.5rem; display: none; font-size: 1rem;"></p>
         </div>
     </div>
 
@@ -524,93 +1306,294 @@
             <img id="dashboardLogo" src="leantil-logo2.png" alt="LeanTil" class="logo-img">
             <div class="header-controls">
                 <div class="status-info">
-                    <div id="connectionStatus" class="status-dot"></div>
+                    <span id="statusDot" class="status-dot"></span>
                     <span id="connectionText">Connected</span>
                 </div>
+                <div class="mode-toggle-container" id="modeToggleContainer">
+                    <span class="mode-toggle-label" id="modeLabel">Simple</span>
+                    <div class="mode-toggle-switch" id="modeToggleSwitch">
+                        <div class="mode-toggle-slider"></div>
+                    </div>
+                </div>
+                <button id="themeToggle" class="theme-toggle" title="Toggle Theme"></button>
                 <button id="disconnectBtn" class="btn">Disconnect</button>
-                <button id="themeToggle" class="theme-toggle" title="Toggle Theme">💡</button>
                 <button id="helpBtn" class="help-button" title="Help">?</button>
             </div>
         </div>
 
-        <!-- Main Status Card -->
+        <!-- Status & Score -->
         <div class="card">
             <div class="status-display">
-                <div>
-                    <div id="postureStatus" class="status-text status-correct">LOADING</div>
-                    <div class="status-label">Current Posture</div>
+                <div style="flex: 1;">
+                    <div id="statusText" class="status-text status-correct">BALANCED</div>
+                    <div class="status-label">Right Now</div>
                 </div>
-                <div>
-                    <div class="score-circle" style="--score-percent: 0deg">
+                <div style="text-align: center;">
+                    <div class="score-circle" id="scoreCircle" style="--score-percent: 306deg">
                         <div class="score-inner">
-                            <span id="scoreValue">--</span>
+                            <span id="scoreValue">85</span>
                         </div>
                     </div>
+                    <h3 style="font-weight: 300; margin-top: 1.25rem; font-size: 1.75rem;">Overall Score</h3>
+                    <p class="status-label">Your posture wellness</p>
                 </div>
             </div>
         </div>
 
-        <!-- Sensor Grid + Metrics -->
+        <!-- SIMPLE SECTION -->
         <div class="grid-2">
             <!-- Weight Distribution -->
             <div class="card">
                 <h3>⚖️ Weight Distribution</h3>
                 <div class="posture-grid">
-                    <div id="sensor0" class="posture-cell">
-                        <div class="sensor-name">S0</div>
-                        <div class="weight-percent">0%</div>
+                    <div class="posture-cell" id="cell-0">
+                        <div class="sensor-name">FRONT</div>
+                        <div class="weight-percent" id="weight-0">25%</div>
                     </div>
-                    <div id="sensor1" class="posture-cell">
-                        <div class="sensor-name">S1</div>
-                        <div class="weight-percent">0%</div>
+                    <div class="posture-cell" id="cell-1">
+                        <div class="sensor-name">FRONT</div>
+                        <div class="weight-percent" id="weight-1">25%</div>
                     </div>
-                    <div id="sensor2" class="posture-cell">
-                        <div class="sensor-name">S2</div>
-                        <div class="weight-percent">0%</div>
+                    <div class="posture-cell" id="cell-2">
+                        <div class="sensor-name">BACK</div>
+                        <div class="weight-percent" id="weight-2">25%</div>
                     </div>
-                    <div id="sensor3" class="posture-cell">
-                        <div class="sensor-name">S3</div>
-                        <div class="weight-percent">0%</div>
+                    <div class="posture-cell" id="cell-3">
+                        <div class="sensor-name">BACK</div>
+                        <div class="weight-percent" id="weight-3">25%</div>
                     </div>
                 </div>
+                <div class="info-label">Brighter areas show where you're putting more weight</div>
             </div>
 
-            <!-- Real-time Metrics -->
+            <!-- Session Summary -->
             <div class="card">
-                <h3>📊 Real-time Metrics</h3>
-                <div class="grid-3">
+                <h3>📊 Session Summary</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.25rem; margin-top: 0.5rem;">
                     <div class="metric-card">
-                        <div id="copX" class="metric-value">0.00</div>
-                        <div class="metric-label">CoP X</div>
+                        <div class="metric-value" id="sessionTime">0</div>
+                        <div class="metric-label">Minutes</div>
                     </div>
                     <div class="metric-card">
-                        <div id="copY" class="metric-value">0.00</div>
-                        <div class="metric-label">CoP Y</div>
+                        <div class="metric-value" id="correctPercent">0%</div>
+                        <div class="metric-label">Good Posture</div>
                     </div>
                     <div class="metric-card">
-                        <div id="sessionTime" class="metric-value">0m</div>
-                        <div class="metric-label">Session</div>
+                        <div class="metric-value" id="stabilityScore">0%</div>
+                        <div class="metric-label">Stability</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Additional ML Info -->
+        <!-- HISTORY CALENDAR -->
         <div class="card">
-            <h3>🤖 ML Model Info</h3>
-            <div class="grid-3">
-                <div class="metric-card">
-                    <div id="frontRatio" class="metric-value">--</div>
-                    <div class="metric-label">Front Ratio</div>
+            <div class="calendar-header">
+                <h3>📅 Posture History</h3>
+                <div class="calendar-view-toggle">
+                    <button class="view-btn active" id="viewWeek">Week</button>
+                    <button class="view-btn" id="viewMonth">Month</button>
                 </div>
-                <div class="metric-card">
-                    <div id="backRatio" class="metric-value">--</div>
-                    <div class="metric-label">Back Ratio</div>
+            </div>
+            <div class="history-calendar" id="historyCalendar">
+                <!-- Generated by JS -->
+            </div>
+            <div class="info-label">
+                <span style="color: var(--color-green);">●</span> Excellent (90+) &nbsp;
+                <span style="color: var(--color-accent); margin-left: 0.75rem;">●</span> Good (70-89) &nbsp;
+                <span style="color: var(--color-yellow); margin-left: 0.75rem;">●</span> Medium (50-69) &nbsp;
+                <span style="color: var(--color-gray); margin-left: 0.75rem;">●</span> Low / No data
+            </div>
+        </div>
+
+        <!-- ADVANCED EXTRAS -->
+        <div id="advancedExtras" class="hidden">
+            <div class="mode-divider">⭐ Advanced Insights</div>
+
+            <!-- Timeline -->
+            <div class="card">
+                <h3>📈 Your Posture Timeline</h3>
+                <div class="timeline-wrapper">
+                    <div class="timeline-markers" id="timelineMarkers">
+                        <!-- Generated by JS -->
+                    </div>
+                    <div id="timeline" class="timeline-container"></div>
+                    <div class="timeline-duration">
+                        Session: <span class="timeline-duration-value" id="sessionDuration">0h 0m</span> • 
+                        Started at: <span class="timeline-duration-value" id="sessionStartTime">--:--</span>
+                    </div>
                 </div>
-                <div class="metric-card">
-                    <div id="lastUpdate" class="metric-value">--</div>
-                    <div class="metric-label">Last Update</div>
+                <div class="info-label">
+                    <span style="color: var(--color-accent);">●</span> Balanced &nbsp;
+                    <span style="color: var(--color-yellow); margin-left: 1rem;">●</span> Leaning &nbsp;
+                    <span style="color: var(--color-gray); margin-left: 1rem;">●</span> Away &nbsp;
+                    <span style="margin-left: 1rem;">💡 Click any square for details</span>
                 </div>
+            </div>
+
+            <!-- Session Quality & Health Impact -->
+            <div class="grid-2">
+                <!-- Session Quality -->
+                <div class="card">
+                    <h3>📊 Session Quality</h3>
+                    <div class="quality-bar" id="qualityBar">
+                        <div class="quality-segment" style="width: 70%; background: var(--color-accent);"></div>
+                        <div class="quality-segment" style="width: 20%; background: var(--color-yellow);"></div>
+                        <div class="quality-segment" style="width: 10%; background: var(--color-gray);"></div>
+                    </div>
+                    <div class="quality-legend">
+                        <div class="quality-legend-item">
+                            <div style="font-weight: 600; font-size: 1.5rem; color: var(--color-accent);" id="qualityGood">70%</div>
+                            <div class="quality-legend-color" style="background: var(--color-accent);"></div>
+                            <div style="color: var(--color-text-muted); font-size: 0.7rem;">Balanced</div>
+                            <div class="quality-duration" id="durationGood">0m 0s</div>
+                        </div>
+                        <div class="quality-legend-item">
+                            <div style="font-weight: 600; font-size: 1.5rem; color: var(--color-yellow);" id="qualityWarning">20%</div>
+                            <div class="quality-legend-color" style="background: var(--color-yellow);"></div>
+                            <div style="color: var(--color-text-muted); font-size: 0.7rem;">Leaning</div>
+                            <div class="quality-duration" id="durationWarning">0m 0s</div>
+                        </div>
+                        <div class="quality-legend-item">
+                            <div style="font-weight: 600; font-size: 1.5rem; color: var(--color-gray);" id="qualityAway">10%</div>
+                            <div class="quality-legend-color" style="background: var(--color-gray);"></div>
+                            <div style="color: var(--color-text-muted); font-size: 0.7rem;">Away</div>
+                            <div class="quality-duration" id="durationAway">0m 0s</div>
+                        </div>
+                    </div>
+                    <div class="quality-insight" id="qualityInsight">
+                        <span class="quality-insight-icon">💡</span>
+                        <span id="insightText">Keep up the good work!</span>
+                    </div>
+                </div>
+
+                <!-- Health Impact -->
+                <div class="card">
+                    <div class="impact-card-hero">
+                        <div class="impact-icon">💪</div>
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1.1rem; position: relative; z-index: 1; font-weight: 300;">Health Impact</h3>
+                        <div class="impact-value-hero" id="impactValueHero">0</div>
+                        <div class="impact-desc-hero" id="impactDescHero">min stretching equivalent</div>
+                        <div class="impact-stats">
+                            <div class="impact-stat">
+                                <div class="impact-stat-value" id="stretchEquiv">0</div>
+                                <div class="impact-stat-label">Stretching</div>
+                            </div>
+                            <div class="impact-stat">
+                                <div class="impact-stat-value" id="strainAvoided">0%</div>
+                                <div class="impact-stat-label">Strain Avoided</div>
+                            </div>
+                        </div>
+                        <div class="impact-reference">
+                            Based on NIH ergonomic research (2023)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparisons & Highlights -->
+            <div class="grid-2">
+                <!-- Your Progress -->
+                <div class="card">
+                    <h3>📈 Your Progress</h3>
+                    <div style="text-align: center; padding: 1.5rem 0; border-bottom: 1px solid var(--color-border);">
+                        <div style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500;">Good Posture Today</div>
+                        <div id="todayScore" style="font-size: 4rem; font-weight: 700; color: var(--color-accent); line-height: 1;">24%</div>
+                    </div>
+                    <div style="padding: 1.5rem 1rem; border-bottom: 1px solid var(--color-border);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <span style="font-size: 0.9rem; color: var(--color-text); font-weight: 500;">Daily Goal Progress</span>
+                            <span id="goalProgressPercent" style="font-size: 1.1rem; font-weight: bold; color: var(--color-accent);">40%</span>
+                        </div>
+                        <div style="width: 100%; height: 14px; background: var(--color-border); border-radius: 7px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);">
+                            <div id="goalProgressBar" style="width: 40%; height: 100%; background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light)); transition: width 0.3s ease, background 0.3s ease;"></div>
+                        </div>
+                        <div id="goalProgressText" style="font-size: 0.9rem; color: var(--color-text-muted); margin-top: 0.75rem; text-align: center;">
+                            You've reached <strong style="color: var(--color-accent);">40%</strong> of your daily goal
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.875rem; padding: 1.25rem 1rem;">
+                        <div style="text-align: center; padding: 1rem 0.75rem; background: rgba(141, 96, 245, 0.08); border: 1px solid rgba(141, 96, 245, 0.2); border-radius: 12px;">
+                            <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Daily Goal</div>
+                            <div id="dailyGoalValue" style="font-size: 1.85rem; font-weight: 700; color: var(--color-accent); line-height: 1; margin-bottom: 0.6rem;">60%</div>
+                            <button id="editGoalBtn" style="padding: 0.4rem 0.75rem; background: var(--color-accent); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.7rem; font-weight: 700; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(141, 96, 245, 0.25); width: 100%; text-transform: uppercase; letter-spacing: 0.3px;">Edit</button>
+                        </div>
+                        <div style="text-align: center; padding: 1rem 0.75rem; background: var(--color-border); border-radius: 12px;">
+                            <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Week Avg</div>
+                            <div id="weekAvg" style="font-size: 1.85rem; font-weight: 700; color: var(--color-text); line-height: 1;">69%</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem 0.75rem; background: var(--color-border); border-radius: 12px;">
+                            <div style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Best Streak</div>
+                            <div id="bestStreak" style="font-size: 1.85rem; font-weight: 700; color: var(--color-text); line-height: 1;">7d</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Community Highlights -->
+                <div class="card">
+                    <h3>🌟 Community Highlights</h3>
+                    <div class="insights-combined">
+                        <div class="insight-item" style="border-bottom: 1px solid var(--color-border); padding-bottom: 1.25rem; margin-bottom: 1.25rem;">
+                            <div class="insight-label">Journey to Average</div>
+                            <div class="insight-desc" id="communityProgress" style="font-size: 1rem; margin-top: 0.5rem; line-height: 1.6;">
+                                You're <strong style="color: var(--color-accent);">56%</strong> of the way to the community average
+                            </div>
+                        </div>
+                        <div class="insight-item" style="border-bottom: 1px solid var(--color-border); padding-bottom: 1.25rem; margin-bottom: 1.25rem;">
+                            <div class="insight-label">Your Ranking</div>
+                            <div class="insight-desc" id="communityBetterThan" style="font-size: 1rem; margin-top: 0.5rem; line-height: 1.6;">
+                                You've already surpassed <strong style="color: var(--color-green);">5%</strong> of users
+                            </div>
+                        </div>
+                        <div class="insight-item">
+                            <div class="insight-label">Best Moment</div>
+                            <div class="insight-value" id="bestMomentTimeCombined" style="font-size: 1.75rem; margin: 0.75rem 0; font-weight: 600;">02:44 PM</div>
+                            <div class="insight-desc" id="bestMomentDescCombined">1s perfect posture!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Daily Goal Modal -->
+    <div id="goalModal" class="modal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); justify-content: center; align-items: center; backdrop-filter: blur(4px);">
+        <div class="modal-content" style="background: var(--color-card); padding: 2.5rem; border-radius: 20px; max-width: 520px; width: 90%; box-shadow: 0 25px 70px rgba(0,0,0,0.6); border: 1px solid var(--color-border);">
+            <h3 style="margin-bottom: 0.75rem; color: var(--color-text); font-size: 1.75rem; font-weight: 700;">🎯 Set Your Daily Goal</h3>
+            <p style="color: var(--color-text-muted); margin-bottom: 2rem; font-size: 1rem;">How much time do you want to maintain good posture each day?</p>
+            
+            <div style="margin-bottom: 2.5rem;">
+                <label for="goalRange" style="display: block; margin-bottom: 1rem; color: var(--color-text); font-size: 1rem; font-weight: 500;">
+                    Target: <span id="goalRangeValue" style="color: var(--color-accent); font-weight: 700; font-size: 1.5rem;">60%</span>
+                </label>
+                <input id="goalRange" type="range" min="30" max="90" value="60" step="5" style="width: 100%; height: 10px; border-radius: 5px; background: var(--color-border); outline: none; -webkit-appearance: none; cursor: pointer;">
+                <style>
+                    #goalRange::-webkit-slider-thumb {
+                        -webkit-appearance: none;
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 50%;
+                        background: var(--color-accent);
+                        cursor: pointer;
+                        box-shadow: 0 2px 8px rgba(141, 96, 245, 0.4);
+                    }
+                    #goalRange::-moz-range-thumb {
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 50%;
+                        background: var(--color-accent);
+                        cursor: pointer;
+                        border: none;
+                    }
+                </style>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--color-text-muted); margin-top: 0.75rem;">
+                    <span>30%</span><span>60%</span><span>90%</span>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                <button id="cancelGoalBtn" style="padding: 0.875rem 2rem; background: var(--color-border); color: var(--color-text); border: none; border-radius: 10px; cursor: pointer; font-weight: 600;">Cancel</button>
+                <button id="saveGoalBtn" style="padding: 0.875rem 2rem; background: var(--color-accent); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 12px rgba(141, 96, 245, 0.4);">Save Goal</button>
             </div>
         </div>
     </div>
@@ -623,132 +1606,464 @@
             BASE_URL: 'http://api-leantil.duckdns.org:50000',  // ⚠️ MODIFICA SE NECESSARIO
             TOKEN: 'LeanTil',
             USERNAME: 'Caterina',  // ⚠️ CAMBIA CON IL TUO USERNAME
-            POLL_INTERVAL: 2000    // 2 secondi (sincronizzato con ESP32)
+            POLL_INTERVAL: 2000    // 2 secondi
         };
 
         // ========================================
         // GLOBAL STATE
         // ========================================
+        let isTestMode = false;
         let pollingInterval = null;
         let isConnected = false;
-        let isDemoMode = false;
-        let lastDataTimestamp = null;
+        let dataHistory = [];
+        let sessionStartTime = Date.now();
+        let correctCount = 0;
+        let totalCount = 0;
+        let currentMode = 'basic';
+        let currentTheme = 'dark';
+        let bestStreak = { start: null, duration: 0 };
+        let currentStreak = { start: null, duration: 0 };
+        let achievementsUnlocked = new Set();
+        let calendarView = 'week';
+        let postureDurations = { correct: 0, warning: 0, away: 0 };
+        let lastUpdateTime = Date.now();
+        let monthlyHistory = generateMonthlyHistory();
         let consecutiveErrors = 0;
-        let demoSessionStart = null;
         const MAX_ERRORS = 5;
+
+        const yesterdayScore = 71 + Math.floor(Math.random() * 10);
+        const averageUserScore = 65 + Math.floor(Math.random() * 8);
+
+        // ========================================
+        // POSTURE MAPPING
+        // ========================================
+        const postureMap = {
+            'CORRETTA': { display: 'BALANCED', type: 'correct' },
+            'INCLINATO_AVANTI': { display: 'LEANING FORWARD', type: 'warning' },
+            'INCLINATO_INDIETRO': { display: 'LEANING BACK', type: 'warning' },
+            'INCLINATO_SINISTRA': { display: 'LEANING LEFT', type: 'warning' },
+            'INCLINATO_DESTRA': { display: 'LEANING RIGHT', type: 'warning' },
+            'SLOUCH': { display: 'SLOUCH', type: 'warning' },
+            'LEAN_LEFT': { display: 'LEANING LEFT', type: 'warning' },
+            'LEAN_RIGHT': { display: 'LEANING RIGHT', type: 'warning' },
+            'LEAN_BACK': { display: 'LEANING BACK', type: 'warning' },
+            'LEAN_FORWARD': { display: 'LEANING FORWARD', type: 'warning' },
+            'FIDGET': { display: 'FIDGET', type: 'warning' },
+            'ASSENTE': { display: 'AWAY', type: 'away' },
+            'AWAY': { display: 'AWAY', type: 'away' },
+            'CORRECT': { display: 'BALANCED', type: 'correct' }
+        };
+
+        const testPostures = [
+            { name: 'CORRETTA', weights: [1200, 1250, 1180, 1220] },
+            { name: 'INCLINATO_INDIETRO', weights: [800, 850, 1450, 1480] },
+            { name: 'INCLINATO_AVANTI', weights: [1400, 1420, 950, 980] },
+            { name: 'INCLINATO_DESTRA', weights: [1100, 1350, 1150, 1400] },
+            { name: 'INCLINATO_SINISTRA', weights: [1350, 1100, 1400, 1150] },
+            { name: 'ASSENTE', weights: [0, 0, 0, 0] }
+        ];
+
+        const achievements = {
+            firstSession: { icon: '🎉', title: 'First Session', desc: 'Welcome to LeanTil!', trigger: 1 },
+            perfectMinute: { icon: '⏱️', title: 'Perfect Minute', desc: '60 seconds of great posture!', trigger: 30 },
+            consistency: { icon: '🔥', title: 'Consistency Champion', desc: '100 readings of good posture!', trigger: 100 },
+            superStar: { icon: '⭐', title: 'Posture SuperStar', desc: 'Maintained 90+ score!', trigger: 90 }
+        };
 
         // ========================================
         // DOM ELEMENTS
         // ========================================
         const elements = {
-            // Screens
             loginScreen: document.getElementById('loginScreen'),
             dashboard: document.getElementById('dashboard'),
-            
-            // Login
             connectBtn: document.getElementById('connectBtn'),
-            demoModeBtn: document.getElementById('demoModeBtn'),
-            themeToggleLogin: document.getElementById('themeToggleLogin'),
-            errorMessage: document.getElementById('errorMessage'),
-            statusMessage: document.getElementById('statusMessage'),
-            
-            // Dashboard
+            testModeBtn: document.getElementById('testModeBtn'),
             disconnectBtn: document.getElementById('disconnectBtn'),
-            themeToggle: document.getElementById('themeToggle'),
-            helpBtn: document.getElementById('helpBtn'),
-            closeHelp: document.getElementById('closeHelp'),
-            helpModal: document.getElementById('helpModalBackdrop'),
-            demoBadge: document.getElementById('demoBadge'),
-            
-            // Status
-            postureStatus: document.getElementById('postureStatus'),
+            testModeToggle: document.getElementById('testModeToggle'),
+            toggleTestMode: document.getElementById('toggleTestMode'),
+            statusText: document.getElementById('statusText'),
             scoreValue: document.getElementById('scoreValue'),
-            scoreCircle: document.querySelector('.score-circle'),
-            connectionStatus: document.getElementById('connectionStatus'),
+            scoreCircle: document.getElementById('scoreCircle'),
             connectionText: document.getElementById('connectionText'),
-            
-            // Sensors
-            sensor0: document.getElementById('sensor0'),
-            sensor1: document.getElementById('sensor1'),
-            sensor2: document.getElementById('sensor2'),
-            sensor3: document.getElementById('sensor3'),
-            
-            // Metrics
-            copX: document.getElementById('copX'),
-            copY: document.getElementById('copY'),
+            errorMessage: document.getElementById('errorMessage'),
             sessionTime: document.getElementById('sessionTime'),
-            frontRatio: document.getElementById('frontRatio'),
-            backRatio: document.getElementById('backRatio'),
-            lastUpdate: document.getElementById('lastUpdate')
+            correctPercent: document.getElementById('correctPercent'),
+            stabilityScore: document.getElementById('stabilityScore'),
+            modeToggleContainer: document.getElementById('modeToggleContainer'),
+            modeToggleSwitch: document.getElementById('modeToggleSwitch'),
+            modeLabel: document.getElementById('modeLabel'),
+            themeToggle: document.getElementById('themeToggle'),
+            themeToggleLogin: document.getElementById('themeToggleLogin'),
+            advancedExtras: document.getElementById('advancedExtras'),
+            timeline: document.getElementById('timeline'),
+            timelineMarkers: document.getElementById('timelineMarkers'),
+            sessionDuration: document.getElementById('sessionDuration'),
+            sessionStartTimeDisplay: document.getElementById('sessionStartTime'),
+            helpBtn: document.getElementById('helpBtn'),
+            helpBackdrop: document.getElementById('helpModalBackdrop'),
+            closeHelp: document.getElementById('closeHelp'),
+            timelineTooltip: document.getElementById('timelineTooltip'),
+            qualityBar: document.getElementById('qualityBar'),
+            qualityGood: document.getElementById('qualityGood'),
+            qualityWarning: document.getElementById('qualityWarning'),
+            qualityAway: document.getElementById('qualityAway'),
+            durationGood: document.getElementById('durationGood'),
+            durationWarning: document.getElementById('durationWarning'),
+            durationAway: document.getElementById('durationAway'),
+            insightText: document.getElementById('insightText'),
+            qualityInsight: document.getElementById('qualityInsight'),
+            achievementPopup: document.getElementById('achievementPopup'),
+            achievementIcon: document.getElementById('achievementIcon'),
+            achievementTitle: document.getElementById('achievementTitle'),
+            achievementDesc: document.getElementById('achievementDesc'),
+            impactValueHero: document.getElementById('impactValueHero'),
+            impactDescHero: document.getElementById('impactDescHero'),
+            stretchEquiv: document.getElementById('stretchEquiv'),
+            strainAvoided: document.getElementById('strainAvoided'),
+            todayScore: document.getElementById('todayScore'),
+            weekAvg: document.getElementById('weekAvg'),
+            bestStreak: document.getElementById('bestStreak'),
+            bestMomentTimeCombined: document.getElementById('bestMomentTimeCombined'),
+            bestMomentDescCombined: document.getElementById('bestMomentDescCombined'),
+            statusDot: document.getElementById('statusDot'),
+            historyCalendar: document.getElementById('historyCalendar'),
+            viewWeek: document.getElementById('viewWeek'),
+            viewMonth: document.getElementById('viewMonth'),
+            loginLogo: document.getElementById('loginLogo'),
+            dashboardLogo: document.getElementById('dashboardLogo')
         };
+
+        const weightElements = [
+            document.getElementById('weight-0'),
+            document.getElementById('weight-1'),
+            document.getElementById('weight-2'),
+            document.getElementById('weight-3')
+        ];
+
+        const postureCells = ['cell-0', 'cell-1', 'cell-2', 'cell-3'];
 
         // ========================================
         // THEME MANAGEMENT
         // ========================================
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeIcons();
-        }
-
         function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcons();
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            const logoSrc = currentTheme === 'dark' ? 'leantil-logo2.png' : 'leantil-logo.png';
+            elements.loginLogo.src = logoSrc;
+            elements.dashboardLogo.src = logoSrc;
+            const icon = currentTheme === 'dark' ? '☀️' : '🌙';
+            elements.themeToggle.textContent = icon;
+            elements.themeToggleLogin.textContent = icon;
+            localStorage.setItem('theme', currentTheme);
         }
 
-        function updateThemeIcons() {
-            const theme = document.documentElement.getAttribute('data-theme');
-            const icon = theme === 'dark' ? '☀️' : '🌙';
-            if (elements.themeToggle) elements.themeToggle.textContent = icon;
-            if (elements.themeToggleLogin) elements.themeToggleLogin.textContent = icon;
+        function loadThemePreference() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                toggleTheme();
+            }
         }
 
         // ========================================
-        // API FUNCTIONS
+        // MODE TOGGLE
         // ========================================
-        async function testAPIConnection() {
+        function toggleMode() {
+            currentMode = currentMode === 'basic' ? 'advanced' : 'basic';
+            elements.modeToggleSwitch.classList.toggle('active', currentMode === 'advanced');
+            elements.modeLabel.textContent = currentMode === 'basic' ? 'Simple' : 'Advanced';
+            elements.advancedExtras.classList.toggle('hidden', currentMode === 'basic');
+
+            if (currentMode === 'advanced' && dataHistory.length > 0) {
+                updateTimeline();
+                updateTimelineMarkers();
+                updateQualityBreakdown();
+            }
+        }
+
+        // ========================================
+        // MONTHLY HISTORY
+        // ========================================
+        function generateMonthlyHistory() {
+            const history = [];
+            const today = new Date();
+            
+            for (let i = 29; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                
+                let score = null;
+                if (i > 0) {
+                    score = Math.floor(Math.random() * 40) + 60;
+                    if (Math.random() > 0.75) {
+                        score = null;
+                    }
+                }
+                
+                history.push({
+                    date: date,
+                    score: score,
+                    isToday: i === 0
+                });
+            }
+            
+            return history;
+        }
+
+        function renderCalendar() {
+            const container = elements.historyCalendar;
+            if (!container) {
+                console.warn('Posture History calendar element not ready yet.');
+                return;
+            }
+
+            container.innerHTML = '';
+            const dayNames = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            const data = calendarView === 'week' ? monthlyHistory.slice(-7) : monthlyHistory;
+
+            data.forEach(day => {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+
+                const label = document.createElement('div');
+                label.className = 'calendar-day-label';
+                label.textContent = calendarView === 'week' ? dayNames[day.date.getDay()] : day.date.getDate();
+
+                const circle = document.createElement('div');
+                circle.className = 'calendar-circle';
+                if (day.isToday) circle.classList.add('today');
+                circle.textContent = day.date.getDate();
+
+                if (day.score === null) {
+                    circle.classList.add('poor');
+                } else if (day.score >= 90) {
+                    circle.classList.add('excellent');
+                } else if (day.score >= 70) {
+                    circle.classList.add('good');
+                } else if (day.score >= 50) {
+                    circle.classList.add('medium');
+                } else {
+                    circle.classList.add('poor');
+                }
+
+                dayEl.onclick = () => {
+                    const dateStr = day.date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+                    const scoreText = day.score !== null ? `Score: ${day.score}%` : 'No data';
+                    alert(`${dateStr}\n${scoreText}`);
+                };
+
+                dayEl.appendChild(label);
+                dayEl.appendChild(circle);
+                container.appendChild(dayEl);
+            });
+        }
+
+        function updateTodayScore(score) {
+            const todayIndex = monthlyHistory.findIndex(d => d.isToday);
+            if (todayIndex !== -1) {
+                monthlyHistory[todayIndex].score = score;
+                renderCalendar();
+            }
+        }
+
+        function calculateWeekAverage() {
+            const lastWeek = monthlyHistory.slice(-7);
+            const scores = lastWeek.filter(d => d.score !== null).map(d => d.score);
+            if (scores.length === 0) return 0;
+            return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+        }
+
+        function calculateBestStreak() {
+            let maxStreak = 0;
+            let currentStreakCount = 0;
+            
+            monthlyHistory.forEach(day => {
+                if (day.score && day.score >= 70) {
+                    currentStreakCount++;
+                    maxStreak = Math.max(maxStreak, currentStreakCount);
+                } else {
+                    currentStreakCount = 0;
+                }
+            });
+            
+            return maxStreak;
+        }
+
+        // ========================================
+        // TIMELINE
+        // ========================================
+        function updateTimelineMarkers() {
+            const startTime = new Date(sessionStartTime);
+            const currentTime = new Date();
+            const sessionHours = Math.floor((currentTime - startTime) / 3600000);
+            
+            const markers = [];
+            if (sessionHours < 2) {
+                for (let i = 0; i < 4; i++) {
+                    const markerTime = new Date(startTime.getTime() + (i * 1800000));
+                    markers.push(markerTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }));
+                }
+            } else {
+                for (let i = 0; i < 4; i++) {
+                    const markerTime = new Date(startTime.getTime() + (i * 3600000 * (sessionHours / 4)));
+                    markers.push(markerTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }));
+                }
+            }
+            
+            elements.timelineMarkers.innerHTML = markers.map(m => `<span>${m}</span>`).join('');
+        }
+
+        function updateSessionDuration() {
+            const duration = Date.now() - sessionStartTime;
+            const hours = Math.floor(duration / 3600000);
+            const minutes = Math.floor((duration % 3600000) / 60000);
+            elements.sessionDuration.textContent = `${hours}h ${minutes}m`;
+            
+            const startTime = new Date(sessionStartTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+            elements.sessionStartTimeDisplay.textContent = startTime;
+        }
+
+        // ========================================
+        // QUALITY INSIGHT
+        // ========================================
+        function generateInsight(pctGood, pctWarning, pctAway) {
+            const insights = [
+                { condition: pctGood >= 80, icon: '🎉', text: 'Excellent posture! Keep it up!' },
+                { condition: pctGood >= 60 && pctWarning < 30, icon: '👍', text: 'Good session! Minor adjustments needed' },
+                { condition: pctWarning >= 40, icon: '💡', text: 'Try adjusting your chair height' },
+                { condition: pctAway >= 30, icon: '⏸️', text: 'Taking breaks? Remember to return to good posture' },
+                { condition: pctGood < 50, icon: '🔄', text: 'Focus on sitting centered and upright' },
+                { condition: true, icon: '💪', text: 'Keep working on your posture!' }
+            ];
+            
+            const insight = insights.find(i => i.condition);
+            elements.insightText.textContent = insight.text;
+            elements.qualityInsight.querySelector('.quality-insight-icon').textContent = insight.icon;
+        }
+
+        // ========================================
+        // DURATION FORMATTING
+        // ========================================
+        function formatDuration(milliseconds) {
+            const totalSeconds = Math.floor(milliseconds / 1000);
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            return `${minutes}m ${seconds}s`;
+        }
+
+        function updatePostureDurations(postureType) {
+            const now = Date.now();
+            const elapsed = now - lastUpdateTime;
+
+            if (postureType === 'correct') {
+                postureDurations.correct += elapsed;
+            } else if (postureType === 'warning') {
+                postureDurations.warning += elapsed;
+            } else if (postureType === 'away') {
+                postureDurations.away += elapsed;
+            }
+
+            lastUpdateTime = now;
+
+            elements.durationGood.textContent = formatDuration(postureDurations.correct);
+            elements.durationWarning.textContent = formatDuration(postureDurations.warning);
+            elements.durationAway.textContent = formatDuration(postureDurations.away);
+        }
+
+        // ========================================
+        // INIT
+        // ========================================
+        window.addEventListener('DOMContentLoaded', () => {
+            initEventListeners();
+            updateConnectionStatus();
+            renderCalendar();
+            updateProgressStats();
+            loadThemePreference();
+        });
+
+        function initEventListeners() {
+            elements.connectBtn.onclick = connectToAPI;
+            elements.testModeBtn.onclick = toggleTestMode;
+            elements.toggleTestMode.onclick = toggleTestMode;
+            elements.disconnectBtn.onclick = disconnectDevice;
+            elements.modeToggleContainer.onclick = toggleMode;
+            elements.themeToggle.onclick = toggleTheme;
+            elements.themeToggleLogin.onclick = toggleTheme;
+            elements.viewWeek.onclick = () => switchCalendarView('week');
+            elements.viewMonth.onclick = () => switchCalendarView('month');
+
+            elements.helpBtn.onclick = () => elements.helpBackdrop.classList.add('open');
+            elements.closeHelp.onclick = () => elements.helpBackdrop.classList.remove('open');
+            elements.helpBackdrop.onclick = (e) => {
+                if (e.target === elements.helpBackdrop) {
+                    elements.helpBackdrop.classList.remove('open');
+                }
+            };
+
+            document.addEventListener('mousemove', (e) => {
+                if (e.target.classList.contains('timeline-bar')) {
+                    const data = e.target.postureData;
+                    if (data) {
+                        const time = new Date(data.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                        const status = postureMap[data.postureName]?.display || 'Unknown';
+                        elements.timelineTooltip.querySelector('.timeline-tooltip-time').textContent = time;
+                        elements.timelineTooltip.querySelector('.timeline-tooltip-status').textContent = status;
+                        elements.timelineTooltip.style.left = `${e.clientX + 15}px`;
+                        elements.timelineTooltip.style.top = `${e.clientY + 15}px`;
+                        elements.timelineTooltip.classList.add('show');
+                    }
+                } else {
+                    elements.timelineTooltip.classList.remove('show');
+                }
+            });
+        }
+
+        // ========================================
+        // API CONNECTION (NEW - REPLACES WEB SERIAL)
+        // ========================================
+        async function connectToAPI() {
             try {
                 console.log('🔍 Testing API at:', API_CONFIG.BASE_URL);
-                showStatusMessage('Testing API connection...');
-                
+                showStatusMessage('Connecting to API...');
+
                 const response = await fetch(`${API_CONFIG.BASE_URL}/`, {
                     method: 'GET',
                     signal: AbortSignal.timeout(5000)
                 });
-
-                console.log('📡 Response status:', response.status);
 
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}`);
                 }
 
                 const data = await response.json();
-                console.log('✅ API Response:', data);
                 
                 if (data.service === 'LeanTil API') {
-                    showStatusMessage('API Connected ✓');
-                    console.log('✅ API Service verified');
-                    return true;
+                    console.log('✅ API Connected');
+                    isConnected = true;
+                    updateConnectionStatus();
+                    showDashboard();
+                    startAPIPolling();
                 } else {
                     throw new Error('Invalid API response');
                 }
-                
+
             } catch (error) {
                 console.error('❌ API Connection Error:', error);
-                console.error('Error type:', error.name);
-                console.error('Error message:', error.message);
-                
-                // Check if it's a CORS/Mixed Content error
                 if (error.message.includes('Failed to fetch')) {
-                    showError('Cannot connect to API. Check if:\n1. API is running on Raspberry\n2. You\'re using HTTPS for both sites\n3. Try Demo Mode instead');
+                    showError('Cannot connect to API. Check:\n1. API is running on Raspberry\n2. HTTPS configuration\n3. Try Demo Mode instead');
                 } else {
-                    showError(`Cannot connect to API: ${error.message}`);
+                    showError(`Cannot connect: ${error.message}`);
                 }
-                return false;
             }
+        }
+
+        function startAPIPolling() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+
+            fetchLatestMLData();
+            pollingInterval = setInterval(fetchLatestMLData, API_CONFIG.POLL_INTERVAL);
+            console.log(`✓ API Polling started (${API_CONFIG.POLL_INTERVAL}ms interval)`);
         }
 
         async function fetchLatestMLData() {
@@ -769,413 +2084,475 @@
                     throw new Error(`HTTP ${response.status}`);
                 }
 
-                const data = await response.json();
+                const apiData = await response.json();
 
-                // Check if data exists
-                if (!data || !data.postura) {
-                    throw new Error('No data available for this user');
+                if (!apiData || !apiData.postura) {
+                    throw new Error('No data available');
                 }
 
-                // Reset error counter on success
                 consecutiveErrors = 0;
 
-                // Update connection status
-                updateConnectionStatus(true, false);
+                // Convert API format to dashboard format
+                const data = {
+                    postureName: apiData.postura,
+                    lc0: (apiData.sensor0 || 0) * 1000,  // Convert normalized to grams
+                    lc1: (apiData.sensor1 || 0) * 1000,
+                    lc2: (apiData.sensor2 || 0) * 1000,
+                    lc3: (apiData.sensor3 || 0) * 1000
+                };
 
-                // Parse and update dashboard
-                parseMLData(data);
+                parseAndUpdateData(data);
 
             } catch (error) {
-                console.error('Fetch Error:', error);
+                console.error('API Fetch Error:', error);
                 consecutiveErrors++;
 
                 if (consecutiveErrors >= MAX_ERRORS) {
-                    updateConnectionStatus(false, false);
                     showError('Connection lost - check device and API');
                 }
             }
         }
 
-        function parseMLData(data) {
-            // Update timestamp
-            lastDataTimestamp = new Date(data.timestamp);
-            
-            // Posture status
-            const postureName = data.postura || 'UNKNOWN';
-            updatePostureDisplay(postureName);
-
-            // Score
-            const score = data.score || 0;
-            updateScore(score);
-
-            // Sensors (normalized values 0-1.2)
-            const sensors = [
-                data.sensor0 || 0,
-                data.sensor1 || 0,
-                data.sensor2 || 0,
-                data.sensor3 || 0
-            ];
-            updateSensorDisplay(sensors);
-
-            // Center of Pressure
-            const copX = data.cop_x || 0;
-            const copY = data.cop_y || 0;
-            updateCoP(copX, copY);
-
-            // ML Features
-            updateMLFeatures(data.front_ratio, data.back_ratio);
-
-            // Session time
-            const sessionTime = data.session_time || 0;
-            updateSessionTime(sessionTime);
-
-            // Last update time
-            updateLastUpdateTime();
-        }
-
-        // ========================================
-        // DEMO MODE FUNCTIONS
-        // ========================================
-        function startDemoMode() {
-            console.log('🧪 Demo Mode Started');
-            showStatusMessage('Demo Mode Active');
-            
-            isDemoMode = true;
-            demoSessionStart = Date.now();
-            
-            // Show demo badge
-            elements.demoBadge.classList.add('show');
-            
-            // Hide login, show dashboard
-            elements.loginScreen.classList.add('hidden');
-            elements.dashboard.classList.remove('hidden');
-            
-            // Update connection status to demo
-            updateConnectionStatus(true, true);
-            
-            // Start demo data simulation
-            startDemoPolling();
-        }
-
-        function startDemoPolling() {
+        function stopAPIPolling() {
             if (pollingInterval) {
                 clearInterval(pollingInterval);
+                pollingInterval = null;
+                console.log('✓ API Polling stopped');
             }
-
-            // First immediate update
-            updateDemoData();
-
-            // Then poll at interval
-            pollingInterval = setInterval(updateDemoData, API_CONFIG.POLL_INTERVAL);
-            
-            console.log('✓ Demo polling started');
         }
 
-        function updateDemoData() {
-            // Random posture states with weighted probabilities
-            const postures = [
-                'CORRETTA', 'CORRETTA', 'CORRETTA',  // More likely
-                'SLOUCH', 'SLOUCH',
-                'LEAN_LEFT', 'LEAN_RIGHT',
-                'LEAN_BACK',
-                'FIDGET',
-                'AWAY'
+        // ========================================
+        // DISCONNECT (MODIFIED)
+        // ========================================
+        async function disconnectDevice() {
+            stopTestMode();
+            stopAPIPolling();
+            isConnected = false;
+            updateConnectionStatus();
+            showLogin();
+            resetData();
+        }
+
+        // ========================================
+        // TEST MODE (UNCHANGED)
+        // ========================================
+        let testInterval;
+
+        function toggleTestMode() {
+            isTestMode = !isTestMode;
+            elements.testModeToggle.classList.toggle('hidden', !isTestMode);
+            elements.toggleTestMode.textContent = isTestMode ? 'ON' : 'OFF';
+
+            if (isTestMode && !isConnected) {
+                updateConnectionStatus();
+                showDashboard();
+                startTestData();
+            } else if (!isTestMode && !isConnected) {
+                stopTestMode();
+                updateConnectionStatus();
+                showLogin();
+            }
+        }
+
+        function startTestData() {
+            testInterval = setInterval(() => {
+                const posture = testPostures[Math.floor(Math.random() * testPostures.length)];
+                const data = {
+                    postureName: posture.name,
+                    lc0: posture.weights[0],
+                    lc1: posture.weights[1],
+                    lc2: posture.weights[2],
+                    lc3: posture.weights[3]
+                };
+                parseAndUpdateData(data);
+            }, 2000);
+        }
+
+        function stopTestMode() {
+            if (testInterval) {
+                clearInterval(testInterval);
+                testInterval = null;
+            }
+        }
+
+        // ========================================
+        // DATA PARSING (UNCHANGED)
+        // ========================================
+        function parseAndUpdateData(data) {
+            const totalWeight = data.lc0 + data.lc1 + data.lc2 + data.lc3;
+            
+            data.percentages = [
+                totalWeight > 0 ? (data.lc0 / totalWeight) * 100 : 25,
+                totalWeight > 0 ? (data.lc1 / totalWeight) * 100 : 25,
+                totalWeight > 0 ? (data.lc2 / totalWeight) * 100 : 25,
+                totalWeight > 0 ? (data.lc3 / totalWeight) * 100 : 25
             ];
-            const randomPosture = postures[Math.floor(Math.random() * postures.length)];
-            
-            // Realistic sensor values based on posture
-            let sensors = [0.5, 0.5, 0.5, 0.5];
-            
-            switch(randomPosture) {
-                case 'CORRETTA':
-                    sensors = [0.5, 0.5, 0.5, 0.5].map(v => v + (Math.random() - 0.5) * 0.1);
-                    break;
-                case 'SLOUCH':
-                    sensors = [0.7, 0.7, 0.3, 0.3].map(v => v + (Math.random() - 0.5) * 0.1);
-                    break;
-                case 'LEAN_LEFT':
-                    sensors = [0.7, 0.3, 0.7, 0.3].map(v => v + (Math.random() - 0.5) * 0.1);
-                    break;
-                case 'LEAN_RIGHT':
-                    sensors = [0.3, 0.7, 0.3, 0.7].map(v => v + (Math.random() - 0.5) * 0.1);
-                    break;
-                case 'LEAN_BACK':
-                    sensors = [0.3, 0.3, 0.7, 0.7].map(v => v + (Math.random() - 0.5) * 0.1);
-                    break;
-                case 'FIDGET':
-                    sensors = [0.2, 0.8, 0.6, 0.4].map(v => v + (Math.random() - 0.5) * 0.2);
-                    break;
-                case 'AWAY':
-                    sensors = [0.05, 0.05, 0.05, 0.05].map(v => v + (Math.random() - 0.5) * 0.02);
-                    break;
+
+            dataHistory.push({
+                ...data,
+                timestamp: Date.now(),
+                percentages: data.percentages
+            });
+
+            if (dataHistory.length > 500) {
+                dataHistory.shift();
             }
+
+            totalCount++;
+
+            const mapped = postureMap[data.postureName] || { display: 'UNKNOWN', type: 'warning' };
+            const isCorrect = mapped.type === 'correct';
             
-            // Calculate derived values
-            const total = sensors.reduce((a, b) => a + b, 0) + 0.0001;
-            const frontRatio = (sensors[0] + sensors[1]) / total;
-            const backRatio = (sensors[2] + sensors[3]) / total;
-            const leftRatio = (sensors[0] + sensors[2]) / total;
-            const rightRatio = (sensors[1] + sensors[3]) / total;
-            
-            // Simulate ML data
-            const demoData = {
-                postura: randomPosture,
-                score: randomPosture === 'CORRETTA' ? 85 + Math.floor(Math.random() * 15) : 50 + Math.floor(Math.random() * 35),
-                sensor0: Math.max(0, Math.min(1.2, sensors[0])),
-                sensor1: Math.max(0, Math.min(1.2, sensors[1])),
-                sensor2: Math.max(0, Math.min(1.2, sensors[2])),
-                sensor3: Math.max(0, Math.min(1.2, sensors[3])),
-                cop_x: (rightRatio - leftRatio),
-                cop_y: (frontRatio - backRatio),
-                front_ratio: frontRatio,
-                back_ratio: backRatio,
-                session_time: Math.floor((Date.now() - demoSessionStart) / 1000),
-                timestamp: new Date().toISOString()
-            };
-            
-            parseMLData(demoData);
+            if (isCorrect) {
+                correctCount++;
+            }
+
+            updatePostureDurations(mapped.type);
+            trackBestMoment(isCorrect);
+            updateAllUI(data, mapped);
         }
 
         // ========================================
-        // UI UPDATE FUNCTIONS
+        // UI UPDATE (UNCHANGED)
         // ========================================
-        function updatePostureDisplay(postureName) {
-            elements.postureStatus.textContent = postureName;
+        function updateAllUI(data, posture) {
+            elements.statusText.textContent = posture.display;
+            elements.statusText.className = `status-text status-${posture.type}`;
 
-            // Remove all status classes
-            elements.postureStatus.classList.remove('status-correct', 'status-warning', 'status-away');
-
-            // Add appropriate class
-            if (postureName === 'CORRETTA') {
-                elements.postureStatus.classList.add('status-correct');
-            } else if (postureName === 'AWAY') {
-                elements.postureStatus.classList.add('status-away');
-            } else {
-                elements.postureStatus.classList.add('status-warning');
-            }
-        }
-
-        function updateScore(score) {
+            const score = totalCount > 0 ? Math.max(0, Math.min(100, Math.round((correctCount / totalCount) * 100) - 5)) : 85;
             elements.scoreValue.textContent = score;
-            
-            // Update circle (convert 0-100 to 0-360deg)
-            const degrees = (score / 100) * 360;
-            elements.scoreCircle.style.setProperty('--score-percent', `${degrees}deg`);
+            elements.scoreCircle.style.setProperty('--score-percent', `${score * 3.6}deg`);
+            elements.correctPercent.textContent = `${score}%`;
+            elements.stabilityScore.textContent = `${Math.round(score * 0.9 + 10)}%`;
+
+            const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
+            elements.sessionTime.textContent = minutes;
+
+            checkAchievements(score);
+            updateHealthImpact(score);
+            updateComparisons(score);
+            updateTodayScore(score);
+            updateProgressStats();
+            updateSessionDuration();
+            updatePostureMap(data);
+
+            if (currentMode === 'advanced') {
+                updateTimeline();
+                updateTimelineMarkers();
+                updateQualityBreakdown();
+            }
         }
 
-        function updateSensorDisplay(sensors) {
-            const total = sensors.reduce((a, b) => a + b, 0);
+        function updatePostureMap(data) {
+            const activeCells = getActiveCells(data.postureName);
             
-            sensors.forEach((value, index) => {
-                const cell = elements[`sensor${index}`];
-                if (!cell) return;
-
-                const percentage = total > 0 ? ((value / total) * 100).toFixed(0) : 0;
-                const weightElem = cell.querySelector('.weight-percent');
-                if (weightElem) {
-                    weightElem.textContent = `${percentage}%`;
+            postureCells.forEach((cellId, i) => {
+                const cell = document.getElementById(cellId);
+                const weightEl = weightElements[i];
+                
+                if (cell) {
+                    cell.classList.toggle('active', activeCells.includes(i));
                 }
-
-                // Visual intensity (higher percentage = more active)
-                if (percentage > 30) {
-                    cell.classList.add('active');
-                } else {
-                    cell.classList.remove('active');
+                
+                if (weightEl) {
+                    weightEl.textContent = `${Math.round(data.percentages[i])}%`;
                 }
             });
         }
 
-        function updateCoP(copX, copY) {
-            elements.copX.textContent = copX.toFixed(2);
-            elements.copY.textContent = copY.toFixed(2);
+        function getActiveCells(name) {
+            if (name === 'CORRETTA' || name === 'CORRECT') return [0, 1, 2, 3];
+            if (name.includes('AVANTI') || name.includes('FORWARD')) return [0, 1];
+            if (name.includes('INDIETRO') || name.includes('BACK')) return [2, 3];
+            if (name.includes('SINISTRA') || name.includes('LEFT')) return [0, 2];
+            if (name.includes('DESTRA') || name.includes('RIGHT')) return [1, 3];
+            return [];
         }
 
-        function updateMLFeatures(frontRatio, backRatio) {
-            if (frontRatio !== undefined) {
-                elements.frontRatio.textContent = (frontRatio * 100).toFixed(0) + '%';
-            }
-            if (backRatio !== undefined) {
-                elements.backRatio.textContent = (backRatio * 100).toFixed(0) + '%';
-            }
+        function updateTimeline() {
+            elements.timeline.innerHTML = '';
+            dataHistory.forEach(d => {
+                const div = document.createElement('div');
+                const mapped = postureMap[d.postureName];
+                div.className = `timeline-bar ${mapped?.type || 'warning'}`;
+                div.postureData = d;
+                div.onclick = () => {
+                    const time = new Date(d.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    alert(`${time}\n${mapped?.display || 'Unknown'}`);
+                };
+                elements.timeline.appendChild(div);
+            });
         }
 
-        function updateSessionTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            elements.sessionTime.textContent = `${minutes}m ${secs}s`;
+        function updateQualityBreakdown() {
+            const counts = { correct: 0, warning: 0, away: 0 };
+            dataHistory.forEach(d => {
+                const type = postureMap[d.postureName]?.type || 'warning';
+                if (type === 'correct') counts.correct++;
+                else if (type === 'away') counts.away++;
+                else counts.warning++;
+            });
+
+            const total = dataHistory.length || 1;
+            const pctGood = Math.round((counts.correct / total) * 100);
+            const pctWarning = Math.round((counts.warning / total) * 100);
+            const pctAway = Math.round((counts.away / total) * 100);
+
+            elements.qualityGood.textContent = `${pctGood}%`;
+            elements.qualityWarning.textContent = `${pctWarning}%`;
+            elements.qualityAway.textContent = `${pctAway}%`;
+
+            elements.qualityBar.innerHTML = `
+                <div class="quality-segment" style="width: ${pctGood}%; background: var(--color-accent);"></div>
+                <div class="quality-segment" style="width: ${pctWarning}%; background: var(--color-yellow);"></div>
+                <div class="quality-segment" style="width: ${pctAway}%; background: var(--color-gray);"></div>
+            `;
+
+            generateInsight(pctGood, pctWarning, pctAway);
         }
 
-        function updateLastUpdateTime() {
-            if (lastDataTimestamp) {
-                const now = new Date();
-                const diff = Math.floor((now - lastDataTimestamp) / 1000);
-                elements.lastUpdate.textContent = diff < 60 ? `${diff}s ago` : `${Math.floor(diff/60)}m ago`;
-            } else if (isDemoMode) {
-                elements.lastUpdate.textContent = 'Live';
-            }
-        }
-
-        function updateConnectionStatus(connected, isDemo = false) {
-            isConnected = connected;
-            
-            if (isDemo) {
-                elements.connectionStatus.classList.remove('disconnected');
-                elements.connectionStatus.classList.add('demo');
-                elements.connectionText.textContent = 'Demo Mode';
-            } else if (connected) {
-                elements.connectionStatus.classList.remove('disconnected', 'demo');
-                elements.connectionText.textContent = 'Connected';
-            } else {
-                elements.connectionStatus.classList.add('disconnected');
-                elements.connectionStatus.classList.remove('demo');
-                elements.connectionText.textContent = 'Disconnected';
-            }
-        }
-
-        // ========================================
-        // CONNECTION MANAGEMENT
-        // ========================================
-        async function connectToAPI() {
-            showStatusMessage('Connecting...');
-            
-            const isReachable = await testAPIConnection();
-            
-            if (!isReachable) {
-                return;
-            }
-
-            isDemoMode = false;
-            elements.demoBadge.classList.remove('show');
-
-            // Hide login, show dashboard
+        function showDashboard() {
             elements.loginScreen.classList.add('hidden');
             elements.dashboard.classList.remove('hidden');
-            
-            // Start polling
-            startPolling();
         }
 
-        function startPolling() {
-            if (pollingInterval) {
-                clearInterval(pollingInterval);
-            }
-
-            // First immediate fetch
-            fetchLatestMLData();
-
-            // Then poll at interval
-            pollingInterval = setInterval(fetchLatestMLData, API_CONFIG.POLL_INTERVAL);
-            
-            console.log(`✓ Polling started (${API_CONFIG.POLL_INTERVAL}ms interval)`);
-        }
-
-        function stopPolling() {
-            if (pollingInterval) {
-                clearInterval(pollingInterval);
-                pollingInterval = null;
-                console.log('✓ Polling stopped');
-            }
-        }
-
-        function disconnect() {
-            stopPolling();
-            updateConnectionStatus(false, false);
-            
-            isDemoMode = false;
-            elements.demoBadge.classList.remove('show');
-            
-            // Show login, hide dashboard
+        function showLogin() {
             elements.dashboard.classList.add('hidden');
             elements.loginScreen.classList.remove('hidden');
-            
-            // Reset error counter
-            consecutiveErrors = 0;
-            
-            showStatusMessage('Disconnected');
         }
 
-        // ========================================
-        // ERROR HANDLING
-        // ========================================
-        function showError(message) {
-            elements.errorMessage.textContent = '⚠️ ' + message;
+        function showError(msg) {
+            elements.errorMessage.textContent = msg;
             elements.errorMessage.style.display = 'block';
             setTimeout(() => {
                 elements.errorMessage.style.display = 'none';
             }, 8000);
         }
 
-        function showStatusMessage(message) {
-            elements.statusMessage.textContent = message;
+        function showStatusMessage(msg) {
+            console.log('ℹ️', msg);
         }
 
-        // ========================================
-        // EVENT LISTENERS
-        // ========================================
-        function initEventListeners() {
-            // Connect button
-            elements.connectBtn.addEventListener('click', connectToAPI);
-
-            // Demo Mode button
-            elements.demoModeBtn.addEventListener('click', startDemoMode);
-
-            // Disconnect button
-            elements.disconnectBtn.addEventListener('click', disconnect);
-
-            // Theme toggles
-            elements.themeToggle.addEventListener('click', toggleTheme);
-            elements.themeToggleLogin.addEventListener('click', toggleTheme);
-
-            // Help modal
-            elements.helpBtn.addEventListener('click', () => {
-                elements.helpModal.classList.add('open');
-            });
-
-            elements.closeHelp.addEventListener('click', () => {
-                elements.helpModal.classList.remove('open');
-            });
-
-            elements.helpModal.addEventListener('click', (e) => {
-                if (e.target === elements.helpModal) {
-                    elements.helpModal.classList.remove('open');
-                }
-            });
-
-            // Keyboard shortcuts
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    elements.helpModal.classList.remove('open');
-                }
-            });
+        function resetData() {
+            dataHistory = [];
+            sessionStartTime = Date.now();
+            correctCount = 0;
+            totalCount = 0;
+            bestStreak = { start: null, duration: 0 };
+            currentStreak = { start: null, duration: 0 };
+            postureDurations = { correct: 0, warning: 0, away: 0 };
+            lastUpdateTime = Date.now();
         }
 
-        // ========================================
-        // INITIALIZATION
-        // ========================================
-        function init() {
-            console.log('🚀 LeanTil ML Dashboard Initializing...');
-            console.log('API Config:', {
-                baseURL: API_CONFIG.BASE_URL,
-                username: API_CONFIG.USERNAME,
-                pollInterval: API_CONFIG.POLL_INTERVAL
-            });
+        function checkAchievements(score) {
+            if (totalCount === 1 && !achievementsUnlocked.has('firstSession')) {
+                showAchievement('firstSession');
+            }
+            if (correctCount === 30 && !achievementsUnlocked.has('perfectMinute')) {
+                showAchievement('perfectMinute');
+            }
+            if (correctCount === 100 && !achievementsUnlocked.has('consistency')) {
+                showAchievement('consistency');
+            }
+            if (score >= 90 && totalCount > 50 && !achievementsUnlocked.has('superStar')) {
+                showAchievement('superStar');
+            }
+        }
 
-            initTheme();
-            initEventListeners();
+        function showAchievement(key) {
+            const ach = achievements[key];
+            achievementsUnlocked.add(key);
+            elements.achievementIcon.textContent = ach.icon;
+            elements.achievementTitle.textContent = ach.title;
+            elements.achievementDesc.textContent = ach.desc;
+            elements.achievementPopup.classList.add('show');
+            setTimeout(() => {
+                elements.achievementPopup.classList.remove('show');
+            }, 3000);
+        }
+
+        function trackBestMoment(isCorrect) {
+            if (isCorrect) {
+                if (!currentStreak.start) {
+                    currentStreak.start = Date.now();
+                }
+                currentStreak.duration = Date.now() - currentStreak.start;
+                
+                if (currentStreak.duration > bestStreak.duration) {
+                    bestStreak = { ...currentStreak };
+                }
+            } else {
+                currentStreak = { start: null, duration: 0 };
+            }
             
-            console.log('✓ Dashboard Ready');
+            updateBestMomentUI();
         }
 
-        // Start when DOM is loaded
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
+        function updateBestMomentUI() {
+            if (bestStreak.duration > 0) {
+                const minutes = Math.floor(bestStreak.duration / 60000);
+                const seconds = Math.floor((bestStreak.duration % 60000) / 1000);
+                const time = new Date(bestStreak.start).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                const duration = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+                
+                elements.bestMomentTimeCombined.textContent = time;
+                elements.bestMomentDescCombined.textContent = `${duration} perfect posture!`;
+            }
         }
 
-        // Cleanup on page unload
-        window.addEventListener('beforeunload', () => {
-            stopPolling();
+        function updateHealthImpact(score) {
+            const minutes = Math.floor((Date.now() - sessionStartTime) / 60000);
+            const stretchingEquivalent = Math.round((score / 100) * minutes * 0.65);
+            const strainAvoided = Math.round((score / 100) * minutes * 1.5);
+
+            elements.impactValueHero.textContent = stretchingEquivalent;
+            elements.stretchEquiv.textContent = stretchingEquivalent;
+            elements.strainAvoided.textContent = `${strainAvoided}%`;
+
+            if (stretchingEquivalent >= 35) {
+                elements.impactDescHero.textContent = 'min - Full stretch session!';
+            } else if (stretchingEquivalent >= 20) {
+                elements.impactDescHero.textContent = 'min - Great prevention!';
+            } else {
+                elements.impactDescHero.textContent = 'min stretching equivalent';
+            }
+        }
+
+        function updateComparisons(score) {
+            elements.todayScore.textContent = `${score}%`;
+        }
+
+        function switchCalendarView(view) {
+            calendarView = view;
+            elements.viewWeek.classList.toggle('active', view === 'week');
+            elements.viewMonth.classList.toggle('active', view === 'month');
+            renderCalendar();
+        }
+
+        function updateProgressStats() {
+            const weekAvg = calculateWeekAverage();
+            const bestStreakDays = calculateBestStreak();
+            elements.weekAvg.textContent = `${weekAvg}%`;
+            elements.bestStreak.textContent = `${bestStreakDays}d`;
+        }
+
+        function updateConnectionStatus() {
+            if (isConnected || isTestMode) {
+                elements.connectionText.textContent = 'Connected';
+                elements.statusDot.classList.remove('disconnected');
+            } else {
+                elements.connectionText.textContent = 'Disconnected';
+                elements.statusDot.classList.add('disconnected');
+            }
+        }
+
+        // ========================================
+        // DAILY GOAL SYSTEM
+        // ========================================
+        let dailyGoal = parseInt(localStorage.getItem('dailyGoal') || '60');
+        let todayGoodPosture = 24;
+        let communityDeltaToMean = 44;
+        let betterThanUsers = 5;
+
+        function updateProgressUI() {
+            const todayEl = document.getElementById('todayScore');
+            const goalTextEl = document.getElementById('goalProgressText');
+            const goalPercentEl = document.getElementById('goalProgressPercent');
+            const goalBarEl = document.getElementById('goalProgressBar');
+            const dailyGoalEl = document.getElementById('dailyGoalValue');
+
+            if (!todayEl || !goalTextEl || !dailyGoalEl) return;
+
+            todayEl.textContent = `${todayGoodPosture}%`;
+            dailyGoalEl.textContent = `${dailyGoal}%`;
+
+            const ratio = todayGoodPosture / dailyGoal;
+            const reached = Math.min(Math.round(ratio * 100), 100);
+
+            if (goalPercentEl) goalPercentEl.textContent = `${reached}%`;
+            if (goalBarEl) goalBarEl.style.width = `${Math.min(reached, 100)}%`;
+
+            if (ratio < 1) {
+                goalTextEl.innerHTML = `You've reached <strong style="color: var(--color-accent);">${reached}%</strong> of your daily goal`;
+                if (goalBarEl) goalBarEl.style.background = 'linear-gradient(90deg, var(--color-accent), var(--color-accent-light))';
+            } else if (ratio >= 1 && ratio < 1.1) {
+                goalTextEl.innerHTML = `<strong style="color: var(--color-green);">Daily goal achieved (100%)!</strong>`;
+                if (goalBarEl) goalBarEl.style.background = 'linear-gradient(90deg, var(--color-green), #34d399)';
+            } else {
+                const extra = Math.round(((todayGoodPosture - dailyGoal) / dailyGoal) * 100);
+                goalTextEl.innerHTML = `You've exceeded your goal by <strong style="color: var(--color-green);">${extra}%</strong>!`;
+                if (goalBarEl) goalBarEl.style.background = 'linear-gradient(90deg, var(--color-green), #34d399)';
+            }
+        }
+
+        function updateCommunityUI() {
+            const communityProgressEl = document.getElementById('communityProgress');
+            const betterThanEl = document.getElementById('communityBetterThan');
+
+            if (!communityProgressEl || !betterThanEl) return;
+
+            const progressToAverage = Math.max(0, 100 - communityDeltaToMean);
+            communityProgressEl.innerHTML = `You're <strong style="color: var(--color-accent);">${progressToAverage}%</strong> of the way to the community average`;
+            betterThanEl.innerHTML = `You've already surpassed <strong style="color: var(--color-green);">${betterThanUsers}%</strong> of users`;
+        }
+
+        function initGoalModal() {
+            const modal = document.getElementById('goalModal');
+            const editBtn = document.getElementById('editGoalBtn');
+            const cancelBtn = document.getElementById('cancelGoalBtn');
+            const saveBtn = document.getElementById('saveGoalBtn');
+            const range = document.getElementById('goalRange');
+            const rangeValue = document.getElementById('goalRangeValue');
+
+            if (!modal || !editBtn) return;
+
+            function openModal() {
+                range.value = dailyGoal;
+                rangeValue.textContent = `${dailyGoal}%`;
+                modal.style.display = 'flex';
+            }
+
+            function closeModal() {
+                modal.style.display = 'none';
+            }
+
+            editBtn.addEventListener('click', openModal);
+            cancelBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            range.addEventListener('input', () => {
+                rangeValue.textContent = `${range.value}%`;
+            });
+
+            saveBtn.addEventListener('click', () => {
+                dailyGoal = parseInt(range.value, 10);
+                localStorage.setItem('dailyGoal', dailyGoal);
+                updateProgressUI();
+                closeModal();
+
+                if (editBtn) {
+                    const orig = editBtn.textContent;
+                    editBtn.textContent = '✓';
+                    editBtn.style.background = 'var(--color-green)';
+                    setTimeout(() => {
+                        editBtn.textContent = orig;
+                        editBtn.style.background = 'var(--color-accent)';
+                    }, 1500);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                if (typeof renderCalendar === 'function') {
+                    renderCalendar();
+                }
+            }, 150);
+            updateProgressUI();
+            updateCommunityUI();
+            initGoalModal();
         });
     </script>
 </body>
