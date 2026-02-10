@@ -203,7 +203,7 @@
             background: var(--color-accent-light);
         }
 
-        /* Mode Toggle */
+        /* Mode Toggle Simple/Advanced */
         .mode-toggle-container {
             display: inline-flex;
             align-items: center;
@@ -962,7 +962,7 @@
             position: fixed;
             top: 1rem;
             right: 1rem;
-            background: var(--color-accent);
+            background: var(--color-yellow);
             color: #000;
             padding: 0.5rem 1rem;
             border-radius: 1rem;
@@ -1309,6 +1309,7 @@
                     <span id="statusDot" class="status-dot"></span>
                     <span id="connectionText">Connected</span>
                 </div>
+                <!-- MODE TOGGLE Simple/Advanced -->
                 <div class="mode-toggle-container" id="modeToggleContainer">
                     <span class="mode-toggle-label" id="modeLabel">Simple</span>
                     <div class="mode-toggle-switch" id="modeToggleSwitch">
@@ -1606,7 +1607,7 @@
             BASE_URL: 'http://api-leantil.duckdns.org:50000',  // ⚠️ MODIFICA SE NECESSARIO
             TOKEN: 'LeanTil',
             USERNAME: 'Caterina',  // ⚠️ CAMBIA CON IL TUO USERNAME
-            POLL_INTERVAL: 2000    // 2 secondi
+            POLL_INTERVAL: 2000
         };
 
         // ========================================
@@ -2018,7 +2019,7 @@
         }
 
         // ========================================
-        // API CONNECTION (NEW - REPLACES WEB SERIAL)
+        // API CONNECTION (NEW)
         // ========================================
         async function connectToAPI() {
             try {
@@ -2095,7 +2096,7 @@
                 // Convert API format to dashboard format
                 const data = {
                     postureName: apiData.postura,
-                    lc0: (apiData.sensor0 || 0) * 1000,  // Convert normalized to grams
+                    lc0: (apiData.sensor0 || 0) * 1000,
                     lc1: (apiData.sensor1 || 0) * 1000,
                     lc2: (apiData.sensor2 || 0) * 1000,
                     lc3: (apiData.sensor3 || 0) * 1000
@@ -2122,7 +2123,7 @@
         }
 
         // ========================================
-        // DISCONNECT (MODIFIED)
+        // DISCONNECT
         // ========================================
         async function disconnectDevice() {
             stopTestMode();
@@ -2134,7 +2135,7 @@
         }
 
         // ========================================
-        // TEST MODE (UNCHANGED)
+        // TEST MODE (DEMO MODE)
         // ========================================
         let testInterval;
 
@@ -2176,7 +2177,7 @@
         }
 
         // ========================================
-        // DATA PARSING (UNCHANGED)
+        // DATA PARSING
         // ========================================
         function parseAndUpdateData(data) {
             const totalWeight = data.lc0 + data.lc1 + data.lc2 + data.lc3;
@@ -2213,7 +2214,7 @@
         }
 
         // ========================================
-        // UI UPDATE (UNCHANGED)
+        // UI UPDATE
         // ========================================
         function updateAllUI(data, posture) {
             elements.statusText.textContent = posture.display;
