@@ -227,6 +227,10 @@
             animation: none;
         }
 
+        .status-dot.demo {
+            background: var(--color-yellow);
+        }
+
         /* Grid Layout */
         .grid-2 {
             display: grid;
@@ -311,6 +315,26 @@
         .posture-cell .weight-percent {
             font-size: 1.5rem;
             font-weight: 500;
+        }
+
+        /* Demo Badge */
+        .demo-badge {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--color-yellow);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+        }
+
+        .demo-badge.show {
+            display: block;
         }
 
         /* Modal */
@@ -431,6 +455,11 @@
     </style>
 </head>
 <body>
+    <!-- Demo Mode Badge -->
+    <div id="demoBadge" class="demo-badge">
+        🧪 DEMO MODE
+    </div>
+
     <!-- Help Modal -->
     <div id="helpModalBackdrop" class="modal-backdrop">
         <div class="modal">
@@ -458,6 +487,11 @@
                 <div class="modal-section-title">Center of Pressure (CoP)</div>
                 <p>X/Y coordinates showing balance point. Values range from -1.0 to +1.0.</p>
             </div>
+
+            <div class="modal-section">
+                <div class="modal-section-title">Demo Mode</div>
+                <p>Test the dashboard with simulated data. Perfect for exploring features without connecting to a device.</p>
+            </div>
         </div>
     </div>
 
@@ -476,6 +510,7 @@
             </p>
             <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                 <button id="connectBtn" class="btn btn-primary">🔗 Connect to API</button>
+                <button id="demoModeBtn" class="btn">🧪 Demo Mode</button>
             </div>
             <p id="errorMessage" style="color: var(--color-red); margin-top: 1.5rem; display: none; font-size: 1rem;"></p>
             <p id="statusMessage" style="color: var(--color-text-muted); margin-top: 1rem; font-size: 0.875rem;"></p>
@@ -596,8 +631,10 @@
         // ========================================
         let pollingInterval = null;
         let isConnected = false;
+        let isDemoMode = false;
         let lastDataTimestamp = null;
         let consecutiveErrors = 0;
+        let demoSessionStart = null;
         const MAX_ERRORS = 5;
 
         // ========================================
@@ -610,6 +647,7 @@
             
             // Login
             connectBtn: document.getElementById('connectBtn'),
+            demoModeBtn: document.getElementById('demoModeBtn'),
             themeToggleLogin: document.getElementById('themeToggleLogin'),
             errorMessage: document.getElementById('errorMessage'),
             statusMessage: document.getElementById('statusMessage'),
@@ -620,6 +658,7 @@
             helpBtn: document.getElementById('helpBtn'),
             closeHelp: document.getElementById('closeHelp'),
             helpModal: document.getElementById('helpModalBackdrop'),
+            demoBadge: document.getElementById('demoBadge'),
             
             // Status
             postureStatus: document.getElementById('postureStatus'),
@@ -672,6 +711,7 @@
         // ========================================
         async function testAPIConnection() {
             try {
+                console.log('🔍 Testing API at:', API_CONFIG.BASE_URL);
                 showStatusMessage('Testing API connection...');
                 
                 const response = await fetch(`${API_CONFIG.BASE_URL}/`, {
@@ -679,22 +719,34 @@
                     signal: AbortSignal.timeout(5000)
                 });
 
+                console.log('📡 Response status:', response.status);
+
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}`);
                 }
 
                 const data = await response.json();
+                console.log('✅ API Response:', data);
                 
                 if (data.service === 'LeanTil API') {
                     showStatusMessage('API Connected ✓');
+                    console.log('✅ API Service verified');
                     return true;
                 } else {
                     throw new Error('Invalid API response');
                 }
                 
             } catch (error) {
-                console.error('API Connection Error:', error);
-                showError(`Cannot connect to API: ${error.message}`);
+                console.error('❌ API Connection Error:', error);
+                console.error('Error type:', error.name);
+                console.error('Error message:', error.message);
+                
+                // Check if it's a CORS/Mixed Content error
+                if (error.message.includes('Failed to fetch')) {
+                    showError('Cannot connect to API. Check if:\n1. API is running on Raspberry\n2. You\'re using HTTPS for both sites\n3. Try Demo Mode instead');
+                } else {
+                    showError(`Cannot connect to API: ${error.message}`);
+                }
                 return false;
             }
         }
@@ -728,7 +780,7 @@
                 consecutiveErrors = 0;
 
                 // Update connection status
-                updateConnectionStatus(true);
+                updateConnectionStatus(true, false);
 
                 // Parse and update dashboard
                 parseMLData(data);
@@ -738,7 +790,7 @@
                 consecutiveErrors++;
 
                 if (consecutiveErrors >= MAX_ERRORS) {
-                    updateConnectionStatus(false);
+                    updateConnectionStatus(false, false);
                     showError('Connection lost - check device and API');
                 }
             }
@@ -779,6 +831,109 @@
 
             // Last update time
             updateLastUpdateTime();
+        }
+
+        // ========================================
+        // DEMO MODE FUNCTIONS
+        // ========================================
+        function startDemoMode() {
+            console.log('🧪 Demo Mode Started');
+            showStatusMessage('Demo Mode Active');
+            
+            isDemoMode = true;
+            demoSessionStart = Date.now();
+            
+            // Show demo badge
+            elements.demoBadge.classList.add('show');
+            
+            // Hide login, show dashboard
+            elements.loginScreen.classList.add('hidden');
+            elements.dashboard.classList.remove('hidden');
+            
+            // Update connection status to demo
+            updateConnectionStatus(true, true);
+            
+            // Start demo data simulation
+            startDemoPolling();
+        }
+
+        function startDemoPolling() {
+            if (pollingInterval) {
+                clearInterval(pollingInterval);
+            }
+
+            // First immediate update
+            updateDemoData();
+
+            // Then poll at interval
+            pollingInterval = setInterval(updateDemoData, API_CONFIG.POLL_INTERVAL);
+            
+            console.log('✓ Demo polling started');
+        }
+
+        function updateDemoData() {
+            // Random posture states with weighted probabilities
+            const postures = [
+                'CORRETTA', 'CORRETTA', 'CORRETTA',  // More likely
+                'SLOUCH', 'SLOUCH',
+                'LEAN_LEFT', 'LEAN_RIGHT',
+                'LEAN_BACK',
+                'FIDGET',
+                'AWAY'
+            ];
+            const randomPosture = postures[Math.floor(Math.random() * postures.length)];
+            
+            // Realistic sensor values based on posture
+            let sensors = [0.5, 0.5, 0.5, 0.5];
+            
+            switch(randomPosture) {
+                case 'CORRETTA':
+                    sensors = [0.5, 0.5, 0.5, 0.5].map(v => v + (Math.random() - 0.5) * 0.1);
+                    break;
+                case 'SLOUCH':
+                    sensors = [0.7, 0.7, 0.3, 0.3].map(v => v + (Math.random() - 0.5) * 0.1);
+                    break;
+                case 'LEAN_LEFT':
+                    sensors = [0.7, 0.3, 0.7, 0.3].map(v => v + (Math.random() - 0.5) * 0.1);
+                    break;
+                case 'LEAN_RIGHT':
+                    sensors = [0.3, 0.7, 0.3, 0.7].map(v => v + (Math.random() - 0.5) * 0.1);
+                    break;
+                case 'LEAN_BACK':
+                    sensors = [0.3, 0.3, 0.7, 0.7].map(v => v + (Math.random() - 0.5) * 0.1);
+                    break;
+                case 'FIDGET':
+                    sensors = [0.2, 0.8, 0.6, 0.4].map(v => v + (Math.random() - 0.5) * 0.2);
+                    break;
+                case 'AWAY':
+                    sensors = [0.05, 0.05, 0.05, 0.05].map(v => v + (Math.random() - 0.5) * 0.02);
+                    break;
+            }
+            
+            // Calculate derived values
+            const total = sensors.reduce((a, b) => a + b, 0) + 0.0001;
+            const frontRatio = (sensors[0] + sensors[1]) / total;
+            const backRatio = (sensors[2] + sensors[3]) / total;
+            const leftRatio = (sensors[0] + sensors[2]) / total;
+            const rightRatio = (sensors[1] + sensors[3]) / total;
+            
+            // Simulate ML data
+            const demoData = {
+                postura: randomPosture,
+                score: randomPosture === 'CORRETTA' ? 85 + Math.floor(Math.random() * 15) : 50 + Math.floor(Math.random() * 35),
+                sensor0: Math.max(0, Math.min(1.2, sensors[0])),
+                sensor1: Math.max(0, Math.min(1.2, sensors[1])),
+                sensor2: Math.max(0, Math.min(1.2, sensors[2])),
+                sensor3: Math.max(0, Math.min(1.2, sensors[3])),
+                cop_x: (rightRatio - leftRatio),
+                cop_y: (frontRatio - backRatio),
+                front_ratio: frontRatio,
+                back_ratio: backRatio,
+                session_time: Math.floor((Date.now() - demoSessionStart) / 1000),
+                timestamp: new Date().toISOString()
+            };
+            
+            parseMLData(demoData);
         }
 
         // ========================================
@@ -855,17 +1010,24 @@
                 const now = new Date();
                 const diff = Math.floor((now - lastDataTimestamp) / 1000);
                 elements.lastUpdate.textContent = diff < 60 ? `${diff}s ago` : `${Math.floor(diff/60)}m ago`;
+            } else if (isDemoMode) {
+                elements.lastUpdate.textContent = 'Live';
             }
         }
 
-        function updateConnectionStatus(connected) {
+        function updateConnectionStatus(connected, isDemo = false) {
             isConnected = connected;
             
-            if (connected) {
+            if (isDemo) {
                 elements.connectionStatus.classList.remove('disconnected');
+                elements.connectionStatus.classList.add('demo');
+                elements.connectionText.textContent = 'Demo Mode';
+            } else if (connected) {
+                elements.connectionStatus.classList.remove('disconnected', 'demo');
                 elements.connectionText.textContent = 'Connected';
             } else {
                 elements.connectionStatus.classList.add('disconnected');
+                elements.connectionStatus.classList.remove('demo');
                 elements.connectionText.textContent = 'Disconnected';
             }
         }
@@ -881,6 +1043,9 @@
             if (!isReachable) {
                 return;
             }
+
+            isDemoMode = false;
+            elements.demoBadge.classList.remove('show');
 
             // Hide login, show dashboard
             elements.loginScreen.classList.add('hidden');
@@ -914,7 +1079,10 @@
 
         function disconnect() {
             stopPolling();
-            updateConnectionStatus(false);
+            updateConnectionStatus(false, false);
+            
+            isDemoMode = false;
+            elements.demoBadge.classList.remove('show');
             
             // Show login, hide dashboard
             elements.dashboard.classList.add('hidden');
@@ -934,7 +1102,7 @@
             elements.errorMessage.style.display = 'block';
             setTimeout(() => {
                 elements.errorMessage.style.display = 'none';
-            }, 5000);
+            }, 8000);
         }
 
         function showStatusMessage(message) {
@@ -947,6 +1115,9 @@
         function initEventListeners() {
             // Connect button
             elements.connectBtn.addEventListener('click', connectToAPI);
+
+            // Demo Mode button
+            elements.demoModeBtn.addEventListener('click', startDemoMode);
 
             // Disconnect button
             elements.disconnectBtn.addEventListener('click', disconnect);
