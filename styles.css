@@ -1055,3 +1055,169 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)) !important;
   }
 }
+
+/* HEADER PERFETTO - Logo SX + Toggle DX */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 2rem;
+  position: sticky;
+  top: 0;
+  background: var(--color-card);
+  z-index: 100;
+  backdrop-filter: blur(20px);
+}
+
+.logo-img {
+  height: 48px;
+  width: auto;
+  max-width: 180px;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* EXERCISE SETTINGS - Stile uniforme */
+.exercise-settings {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.exercise-settings h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--color-accent);
+}
+
+.exercise-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.exercise-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.exercise-label {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.exercise-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.exercise-checkbox:hover {
+  border-color: var(--color-accent);
+  background: rgba(141, 96, 245, 0.05);
+}
+
+.exercise-checkbox input:checked + span {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* LAYOUT GRID MODERNO */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* CARDS ELEVATED */
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+  border-color: var(--color-accent);
+}
+
+/* STATUS DISPLAY HERO */
+.status-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(141,96,245,0.1) 0%, rgba(141,96,245,0.03) 100%);
+  border: 1px solid rgba(141,96,245,0.2);
+  border-radius: 2rem;
+}
+
+.status-main {
+  flex: 1;
+}
+
+.status-text {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.status-label {
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+}
+
