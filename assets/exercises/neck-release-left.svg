@@ -1,0 +1,10 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#8d60f5" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 40 140 L 160 140 M 40 140 L 40 180 L 160 180 L 160 140"/>
+    <circle cx="100" cy="125" r="12"/> <!-- Testa inclinata sx -->
+    <path d="M 90 125 Q 110 135 130 125"/> <!-- Collo allungato -->
+    <path d="M 100 125 L 120 130 L 115 120" stroke="#10b981"/> <!-- Freccia stretch -->
+    <path d="M 50 140 Q 100 130 150 140"/> <!-- Spalle, sx abbassata -->
+  </g>
+  <text x="100" y="190" text-anchor="middle" font-size="18" fill="#8d60f5" font-weight="600">Neck Release SX</text>
+</svg>
