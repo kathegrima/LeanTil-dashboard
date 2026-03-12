@@ -1,28 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .person { fill: #8d60f5; }
+    .accent { fill: #a27bf7; }
+    .arrow { fill: none; stroke: #10b981; stroke-width: 3; }
+  </style>
+  
   <!-- Head -->
-  <circle cx="100" cy="60" r="25" fill="#8d60f5" opacity="0.2"/>
-  <circle cx="100" cy="60" r="20" fill="#8d60f5"/>
+  ircle cx="100" cy="50" r="20" class="person"/>
   
   <!-- Neck (tilted) -->
-  <path d="M 95 80 Q 90 95 85 110" stroke="#8d60f5" stroke-width="8" stroke-linecap="round"/>
+  <path d="M 100 70 Q 95 80, 90 90" class="person"/>
   
-  <!-- Shoulders -->
-  <ellipse cx="75" cy="120" rx="15" ry="8" fill="#a27bf7"/>
-  <ellipse cx="125" cy="120" rx="15" ry="8" fill="#a27bf7"/>
-  
-  <!-- Torso -->
-  <rect x="70" y="115" width="60" height="50" rx="8" fill="#8d60f5" opacity="0.3"/>
+  <!-- Body -->
+  <rect x="70" y="90" width="40" height="50" rx="8" class="person"/>
   
   <!-- Arms -->
-  <path d="M 55 125 L 45 145" stroke="#a27bf7" stroke-width="6" stroke-linecap="round"/>
-  <path d="M 145 125 L 155 145" stroke="#a27bf7" stroke-width="6" stroke-linecap="round"/>
+  <rect x="50" y="95" width="15" height="40" rx="6" class="accent"/>
+  <rect x="115" y="95" width="15" height="40" rx="6" class="accent"/>
   
-  <!-- Arrow indicating tilt -->
-  <path d="M 120 50 Q 130 50 135 60" stroke="#fbbf24" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  <!-- Hand on head -->
+  <ellipse cx="120" cy="55" rx="8" ry="12" class="accent"/>
   
-  <defs>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#fbbf24"/>
-    </marker>
-  </defs>
+  <!-- Arrow showing direction -->
+  <path d="M 130 60 Q 135 55, 140 50" class="arrow"/>
+  <path d="M 138 54 L 140 50 L 136 48" class="arrow"/>
+  
+  <!-- Chair -->
+  <rect x="55" y="140" width="70" height="8" rx="4" fill="#e0e0e0"/>
 </svg>
