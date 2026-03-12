@@ -421,6 +421,21 @@ function toggleTestMode() {
 function startTestData() {
   stopTestMode();
   testInterval = setInterval(() => {
+    // Array completo delle posture per demo realistica
+    const testPostures = [
+      { name: "CORRETTA", weights: [1200, 1250, 1180, 1220] },
+      { name: "INCLINATOINDIETRO", weights: [800, 850, 1450, 1480] },
+      { name: "INCLINATOAVANTI", weights: [1400, 1420, 950, 980] },
+      { name: "INCLINATODESTRA", weights: [1100, 1350, 1150, 1400] },
+      { name: "INCLINATOSINISTRA", weights: [1350, 1100, 1400, 1150] },
+      { name: "SLOUCH", weights: [1250, 1300, 1300, 1350] },
+      { name: "LEANLEFT", weights: [1300, 1100, 1350, 1150] },
+      { name: "LEANRIGHT", weights: [1100, 1350, 1150, 1400] },
+      { name: "LEANBACK", weights: [900, 900, 1500, 1500] },
+      { name: "FIDGET", weights: [1200, 1300, 1200, 1300] },
+      { name: "ASSENTE", weights: [0, 0, 0, 0] }
+    ];
+    
     const posture = testPostures[Math.floor(Math.random() * testPostures.length)];
     const data = {
       postureName: posture.name,
@@ -430,8 +445,9 @@ function startTestData() {
       lc3: posture.weights[3]
     };
     parseAndUpdateData(data);
-  }, 2000);
+  }, 2000); // Ogni 2 secondi per demo realistica
 }
+
 
 function stopTestMode() {
   if (testInterval) {
