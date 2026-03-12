@@ -4,7 +4,7 @@ export const EXERCISES = {
 
   "chin-tuck": {
     id: "chin-tuck",
-    name: "Chin tuck",
+    name: "Chin Tuck",
     areas: ["neck"],
     duration: 30,
     image: "./assets/exercises/turtle-chin-tuck.jpg",
@@ -20,169 +20,152 @@ export const EXERCISES = {
 
   "neck-retraction": {
     id: "neck-retraction",
-    name: "Neck retraction",
+    name: "Neck Retraction",
     areas: ["neck"],
     duration: 25,
     image: "./assets/exercises/turtle.jpg",
     description: "Ritrai il collo come una tartaruga per decomprimere le vertebre cervicali.",
     steps: [
       "Siediti con la schiena neutra e gli occhi in avanti.",
-      "Senza abbassare il mento, porta la testa indietro orizzontalmente.",
-      "Senti lo stiramento alla base del collo.",
-      "Mantieni 2–3 secondi e torna alla posizione di partenza."
+      "Senza abbassare il mento, porta la testa indietro.",
+      "Immagina di voler toccare il muro dietro di te con la nuca.",
+      "Mantieni 5 secondi, poi rilascia.",
+      "Ripeti lentamente."
     ]
   },
 
   "neck-release-left": {
     id: "neck-release-left",
-    name: "Neck release sinistra",
+    name: "Neck Release (Left)",
     areas: ["neck"],
-    duration: 25,
+    duration: 20,
     image: "./assets/exercises/side-neck-stretch.jpg",
-    description: "Allunga il lato destro del collo inclinando la testa a sinistra.",
+    description: "Allunga delicatamente il collo verso sinistra per rilasciare tensioni.",
     steps: [
-      "Siediti con la schiena neutra.",
-      "Lascia scendere la spalla destra, tienila giù.",
-      "Inclina lentamente l'orecchio sinistro verso la spalla sinistra.",
-      "Mantieni senza ruotare il mento, respirando lentamente.",
-      "Ripeti sull'altro lato."
+      "Siediti dritto e rilassa le spalle.",
+      "Inclina la testa verso la spalla sinistra.",
+      "Senti l'allungamento sul lato destro del collo.",
+      "Mantieni 15-20 secondi senza forzare.",
+      "Torna al centro lentamente."
     ]
   },
 
   "neck-release-right": {
     id: "neck-release-right",
-    name: "Neck release destra",
+    name: "Neck Release (Right)",
     areas: ["neck"],
-    duration: 25,
+    duration: 20,
     image: "./assets/exercises/side-neck-stretch.jpg",
-    description: "Allunga il lato sinistro del collo inclinando la testa a destra.",
+    description: "Allunga delicatamente il collo verso destra per rilasciare tensioni.",
     steps: [
-      "Siediti con la schiena neutra.",
-      "Lascia scendere la spalla sinistra, tienila giù.",
-      "Inclina lentamente l'orecchio destro verso la spalla destra.",
-      "Mantieni senza ruotare il mento, respirando lentamente.",
-      "Ripeti sull'altro lato."
+      "Siediti dritto e rilassa le spalle.",
+      "Inclina la testa verso la spalla destra.",
+      "Senti l'allungamento sul lato sinistro del collo.",
+      "Mantieni 15-20 secondi senza forzare.",
+      "Torna al centro lentamente."
     ]
   },
 
   "seated-twist": {
     id: "seated-twist",
-    name: "Seated spinal twist",
-    areas: ["back", "neck"],
-    duration: 35,
+    name: "Seated Spinal Twist",
+    areas: ["back"],
+    duration: 30,
     image: "./assets/exercises/twist.jpg",
-    description: "Rotazione del busto per mobilizzare la colonna e scaricare le tensioni.",
+    description: "Ruota dolcemente il busto per mobilizzare la colonna vertebrale.",
     steps: [
-      "Siediti dritto con i piedi ben appoggiati a terra.",
-      "Metti la mano destra sul ginocchio sinistro.",
-      "Ruota lentamente il busto e la testa verso sinistra.",
-      "Mantieni 3–4 respiri profondi.",
-      "Torna al centro e ripeti sull'altro lato."
+      "Siediti dritto con i piedi a terra.",
+      "Ruota il busto verso destra, porta la mano sinistra fuori dalla coscia destra.",
+      "Mantieni 10-15 secondi respirando profondamente.",
+      "Torna al centro e ripeti dall'altro lato.",
+      "Alterna per tutta la durata."
     ]
   },
 
   "forward-bend": {
     id: "forward-bend",
-    name: "Forward bend",
-    areas: ["back", "neck"],
+    name: "Seated Forward Bend",
+    areas: ["back"],
     duration: 30,
     image: "./assets/exercises/forward_bend.jpg",
-    description: "Piegamento in avanti per allungare la schiena e decomprimere il collo.",
+    description: "Piegati in avanti dalla sedia per allungare la schiena e rilassare la tensione.",
     steps: [
-      "Siediti sul bordo della sedia, piedi a terra larghezza fianchi.",
-      "Espira e piegati lentamente in avanti, lasciando cadere le braccia.",
-      "Lascia che la testa penda pesante verso il basso.",
-      "Mantieni 4–5 respiri.",
-      "Risali lentamente vertebra per vertebra."
+      "Siediti sul bordo della sedia con i piedi ben piantati.",
+      "Lascia cadere lentamente il busto tra le ginocchia.",
+      "Lascia pendere le braccia verso il pavimento.",
+      "Respira profondamente e senti l'allungamento della schiena.",
+      "Rimani 20-30 secondi, poi risali lentamente."
     ]
   },
 
   "hip-opener": {
     id: "hip-opener",
-    name: "Hip opener da sedia",
+    name: "Seated Hip Opener",
     areas: ["back"],
     duration: 30,
     image: "./assets/exercises/hip-opener.jpg",
-    description: "Apertura dell'anca da seduto per ridurre la tensione lombare.",
+    description: "Apri i fianchi e rilassa la zona lombare da seduto.",
     steps: [
-      "Siediti dritto con i piedi appoggiati a terra.",
-      "Porta la caviglia destra sopra il ginocchio sinistro a formare un '4'.",
-      "Tieni la schiena dritta e inclinati leggermente in avanti.",
-      "Senti lo stiramento nel gluteo e nell'anca destra.",
-      "Mantieni 4–5 respiri e cambia lato."
+      "Siediti dritto sulla sedia.",
+      "Incrocia la caviglia destra sul ginocchio sinistro.",
+      "Mantieni la schiena dritta e spingi delicatamente il ginocchio destro verso il basso.",
+      "Senti l'apertura nel fianco destro per 15 secondi.",
+      "Cambia lato e ripeti."
     ]
   }
 
 };
 
-// Costruisce la routine in base a postura e preferenze
+// ============ ROUTINE BUILDER ============
+
 export function buildRoutine(postureName, prefs) {
-  const allowNeck = !!prefs.focusNeck;
-  const allowShoulders = !!prefs.focusShoulders; // attualmente usato come fallback
-  const allowBack = !!prefs.focusBack;
+  const areas = [];
+  if (prefs.focusNeck) areas.push("neck");
+  if (prefs.focusShoulders) areas.push("shoulders");
+  if (prefs.focusBack) areas.push("back");
 
-  const pick = (ids) =>
-    ids
-      .map((id) => EXERCISES[id])
-      .filter(Boolean)
-      .filter((ex) => {
-        if (ex.areas.includes("neck") && allowNeck) return true;
-        if (ex.areas.includes("back") && allowBack) return true;
-        // shoulders non ha esercizi dedicati ora, ma non blocca
-        return false;
-      });
-
-  const n = (postureName || "").toUpperCase();
-
-  // SLOUCH → collo in avanti, chin tuck + neck retraction
-  if (n === "SLOUCH" || n.includes("SLOUCH")) {
+  if (areas.length === 0) {
     return {
-      reason: "Sei rimasto in SLOUCH da troppo tempo.",
-      exercises: pick(["chin-tuck", "neck-retraction", "forward-bend"])
+      reason: "No focus areas selected.",
+      exercises: []
     };
   }
 
-  // Inclinato a sinistra → allunga il lato destro
-  if (n === "LEANLEFT" || n.includes("SINISTRA") || n.includes("LEFT")) {
-    return {
-      reason: "Sei inclinato a sinistra da alcuni minuti.",
-      exercises: pick(["neck-release-right", "chin-tuck", "seated-twist"])
-    };
+  let reason = "General seated routine.";
+  let pool = Object.values(EXERCISES);
+
+  // Filtra per posture persistenti
+  if (["SLOUCH", "LEANLEFT", "LEANRIGHT", "LEANBACK", "FIDGET"].includes(postureName)) {
+    reason = `Detected persistent ${postureName.toLowerCase()} posture.`;
+    
+    if (postureName === "SLOUCH" || postureName === "LEANBACK") {
+      pool = pool.filter((ex) => ex.areas.includes("back") || ex.areas.includes("neck"));
+    } else if (postureName === "LEANLEFT" || postureName === "LEANRIGHT") {
+      pool = pool.filter((ex) => ex.areas.includes("back"));
+    } else if (postureName === "FIDGET") {
+      pool = pool.filter((ex) => ex.areas.includes("neck"));
+    }
   }
 
-  // Inclinato a destra → allunga il lato sinistro
-  if (n === "LEANRIGHT" || n.includes("DESTRA") || n.includes("RIGHT")) {
-    return {
-      reason: "Sei inclinato a destra da alcuni minuti.",
-      exercises: pick(["neck-release-left", "chin-tuck", "seated-twist"])
-    };
+  // Filtra per aree selezionate
+  pool = pool.filter((ex) => ex.areas.some((a) => areas.includes(a)));
+
+  // Seleziona 3-5 esercizi casuali
+  const count = Math.floor(Math.random() * 3) + 3;
+  const selected = [];
+  const shuffled = pool.sort(() => Math.random() - 0.5);
+  
+  for (let i = 0; i < Math.min(count, shuffled.length); i++) {
+    selected.push(shuffled[i]);
   }
 
-  // Appoggiato indietro → schiena e collo
-  if (n === "LEANBACK" || n.includes("INDIETRO") || n.includes("BACK")) {
-    return {
-      reason: "Sei rimasto appoggiato indietro a lungo.",
-      exercises: pick(["forward-bend", "neck-retraction", "hip-opener"])
-    };
-  }
-
-  // FIDGET → micro-pausa veloce
-  if (n === "FIDGET") {
-    return {
-      reason: "Stai cambiando spesso posizione: micro-pausa.",
-      exercises: pick(["chin-tuck", "neck-release-left"])
-    };
-  }
-
-  // Default: seduto da troppo tempo (timer trigger)
   return {
-    reason: "Sei seduto da un po': pausa attiva breve.",
-    exercises: pick(["chin-tuck", "seated-twist", "hip-opener"])
+    reason,
+    exercises: selected
   };
 }
 
-// Durata totale della routine in secondi
-export function totalRoutineSeconds(exercises) {
-  if (!Array.isArray(exercises)) return 0;
-  return exercises.reduce((sum, ex) => sum + (ex.duration || 0), 0);
+export function totalRoutineSeconds(routine) {
+  if (!routine || !routine.exercises) return 0;
+  return routine.exercises.reduce((sum, ex) => sum + ex.duration, 0);
 }
