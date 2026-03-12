@@ -154,6 +154,34 @@
 
         <div class="grid-2">
             <div class="card">
+                <h3>💪 Suggested Exercises</h3>
+                <div id="exercisesList" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
+                    <div class="exercise-card" style="padding: 1rem; background: rgba(141, 96, 245, 0.1); border: 1px solid var(--color-accent); border-radius: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong style="color: var(--color-accent); font-size: 1rem;">Shoulder Rolls</strong>
+                            <span style="font-size: 0.75rem; color: var(--color-text-muted);">2 min</span>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin: 0;">Roll shoulders backward 10 times, then forward 10 times</p>
+                    </div>
+                    <div class="exercise-card" style="padding: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--color-green); border-radius: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong style="color: var(--color-green); font-size: 1rem;">Seated Spine Twist</strong>
+                            <span style="font-size: 0.75rem; color: var(--color-text-muted);">3 min</span>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin: 0;">Sit up straight, twist torso left and right, hold 15 seconds each side</p>
+                    </div>
+                    <div class="exercise-card" style="padding: 1rem; background: rgba(251, 191, 36, 0.1); border: 1px solid var(--color-yellow); border-radius: 0.75rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong style="color: var(--color-yellow); font-size: 1rem;">Neck Stretches</strong>
+                            <span style="font-size: 0.75rem; color: var(--color-text-muted);">2 min</span>
+                        </div>
+                        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin: 0;">Tilt head to each side, hold 10 seconds, repeat 5 times</p>
+                    </div>
+                </div>
+                <div style="color: var(--color-text-muted); font-size: 0.875rem; margin-top: 1rem; text-align: center; font-style: italic;">🎯 Take a break every 30-45 minutes</div>
+            </div>
+
+            <div class="card">
                 <h3>🗺️ Weight Distribution</h3>
                 <div class="posture-grid">
                     <div class="posture-cell" id="cell-0">
@@ -217,6 +245,53 @@
         let currentTheme = 'dark';
         let consecutiveErrors = 0;
         const MAX_ERRORS = 5;
+
+        // EXERCISE RECOMMENDATIONS
+        const exercises = [
+            {
+                name: 'Shoulder Rolls',
+                duration: '2 min',
+                description: 'Roll shoulders backward 10 times, then forward 10 times',
+                color: 'var(--color-accent)',
+                bgColor: 'rgba(141, 96, 245, 0.1)',
+                trigger: ['INCLINATO_AVANTI', 'SLOUCH']
+            },
+            {
+                name: 'Seated Spine Twist',
+                duration: '3 min',
+                description: 'Sit up straight, twist torso left and right, hold 15 seconds each side',
+                color: 'var(--color-green)',
+                bgColor: 'rgba(16, 185, 129, 0.1)',
+                trigger: ['INCLINATO_INDIETRO', 'INCLINATO_SINISTRA', 'INCLINATO_DESTRA']
+            },
+            {
+                name: 'Neck Stretches',
+                duration: '2 min',
+                description: 'Tilt head to each side, hold 10 seconds, repeat 5 times',
+                color: 'var(--color-yellow)',
+                bgColor: 'rgba(251, 191, 36, 0.1)',
+                trigger: ['INCLINATO_AVANTI', 'SLOUCH']
+            },
+            {
+                name: 'Cat-Cow Stretch',
+                duration: '3 min',
+                description: 'Arch back up and down slowly, 10 repetitions',
+                color: 'var(--color-accent)',
+                bgColor: 'rgba(141, 96, 245, 0.1)',
+                trigger: ['INCLINATO_INDIETRO']
+            },
+            {
+                name: 'Side Bends',
+                duration: '2 min',
+                description: 'Raise one arm overhead, bend sideways, hold 15 seconds each side',
+                color: 'var(--color-green)',
+                bgColor: 'rgba(16, 185, 129, 0.1)',
+                trigger: ['INCLINATO_SINISTRA', 'INCLINATO_DESTRA']
+            }
+        ];
+
+        let recommendedExercises = [];
+        let postureHistory = [];
 
         // POSTURE MAPPING
         const postureMap = {
@@ -444,6 +519,49 @@
             resetData();
         }
 
+        // EXERCISE RECOMMENDATION ENGINE
+        function updateExerciseRecommendations(postureName) {
+            postureHistory.push(postureName);
+            if (postureHistory.length > 20) postureHistory.shift();
+
+            const badPostures = postureHistory.filter(p => p !== 'CORRETTA' && p !== 'CORRECT' && p !== 'ASSENTE');
+            
+            if (badPostures.length >= 10) {
+                const relevantExercises = exercises.filter(ex => 
+                    ex.trigger.some(t => badPostures.includes(t))
+                );
+                
+                recommendedExercises = relevantExercises.slice(0, 3);
+                renderExercises();
+            }
+        }
+
+        function renderExercises() {
+            const container = document.getElementById('exercisesList');
+            if (!container) return;
+
+            if (recommendedExercises.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--color-text-muted);">
+                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">✅</div>
+                        <p style="font-size: 1rem;">Great posture! Keep it up!</p>
+                        <p style="font-size: 0.875rem; margin-top: 0.5rem;">Exercises will appear if you need them</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = recommendedExercises.map(ex => `
+                <div class="exercise-card" style="padding: 1rem; background: ${ex.bgColor}; border: 1px solid ${ex.color}; border-radius: 0.75rem; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: ${ex.color}; font-size: 1rem;">${ex.name}</strong>
+                        <span style="font-size: 0.75rem; color: var(--color-text-muted);">${ex.duration}</span>
+                    </div>
+                    <p style="font-size: 0.875rem; color: var(--color-text-muted); margin: 0;">${ex.description}</p>
+                </div>
+            `).join('');
+        }
+
         // DATA PARSING
         function parseAndUpdateData(data) {
             const totalWeight = data.lc0 + data.lc1 + data.lc2 + data.lc3;
@@ -464,6 +582,7 @@
             const isCorrect = mapped.type === 'correct';
             if (isCorrect) correctCount++;
 
+            updateExerciseRecommendations(data.postureName);
             updateAllUI(data, mapped);
         }
 
