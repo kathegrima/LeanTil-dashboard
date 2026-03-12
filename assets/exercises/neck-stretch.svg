@@ -1,30 +1,45 @@
-<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    .person { fill: #8d60f5; }
-    .accent { fill: #a27bf7; }
-    .arrow { fill: none; stroke: #10b981; stroke-width: 3; }
-  </style>
-  
-  <!-- Head -->
-  ircle cx="100" cy="50" r="20" class="person"/>
-  
-  <!-- Neck (tilted) -->
-  <path d="M 100 70 Q 95 80, 90 90" class="person"/>
-  
-  <!-- Body -->
-  <rect x="70" y="90" width="40" height="50" rx="8" class="person"/>
-  
-  <!-- Arms -->
-  <rect x="50" y="95" width="15" height="40" rx="6" class="accent"/>
-  <rect x="115" y="95" width="15" height="40" rx="6" class="accent"/>
-  
-  <!-- Hand on head -->
-  <ellipse cx="120" cy="55" rx="8" ry="12" class="accent"/>
-  
-  <!-- Arrow showing direction -->
-  <path d="M 130 60 Q 135 55, 140 50" class="arrow"/>
-  <path d="M 138 54 L 140 50 L 136 48" class="arrow"/>
+<svg viewBox="0 0 280 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="skin" cx="50%" cy="50%">
+      <stop offset="0%" stop-color="#ffdab9"/>
+      <stop offset="100%" stop-color="#f4b084"/>
+    </radialGradient>
+    earGradient id="shirt" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#8d60f5"/>
+      <stop offset="100%" stop-color="#6b46c1"/>
+    </linearGradient>
+  </defs>
   
   <!-- Chair -->
-  <rect x="55" y="140" width="70" height="8" rx="4" fill="#e0e0e0"/>
+  <rect x="60" y="250" width="160" height="25" rx="10" fill="#e5e5e5"/>
+  <rect x="75" y="230" width="130" height="25" rx="8" fill="#f0f0f0"/>
+  
+  <!-- Legs -->
+  <rect x="85" y="275" width="20" height="35" rx="10" fill="#3b3b3b"/>
+  <rect x="175" y="275" width="20" height="35" rx="10" fill="#3b3b3b"/>
+  
+  <!-- Body -->
+  <path d="M 130 200 Q 120 190, 110 185 Q 100 180, 90 180 L 85 230" fill="url(#shirt)"/>
+  <path d="M 150 200 Q 160 190, 170 185 Q 180 180, 190 180 L 195 230" fill="url(#shirt)"/>
+  
+  <!-- Arms -->
+  <path d="M 90 180 Q 75 175, 70 190 Q 65 210, 75 225 L 85 230" fill="#c4b5fd"/>
+  <path d="M 190 180 Q 205 175, 210 190 Q 215 210, 205 225 L 195 230" fill="#c4b5fd"/>
+  
+  <!-- Head -->
+  <ellipse cx="110" cy="140" rx="25" ry="30" fill="url(#skin)"/>
+  
+  <!-- Hair -->
+  <path d="M 95 115 Q 105 105, 115 110 Q 125 115, 130 125 Q 125 130, 110 125 Q 95 130, 90 120 Z" fill="#2d3748"/>
+  
+  <!-- Neck stretch - head tilted right -->
+  <path d="M 135 170 Q 145 165, 155 170 Q 160 175, 155 180" stroke="#f4b084" stroke-width="6" fill="none"/>
+  
+  <!-- Hand pulling head -->
+  <ellipse cx="155" cy="160" rx="12" ry="8" fill="#c4b5fd" transform="rotate(-15 155 160)"/>
+  ircle cx="155" cy="158" r="4" fill="#a78bfa"/>
+  
+  <!-- Stretch arrow -->
+  <path d="M 170 150 Q 185 140, 195 155" stroke="#10b981" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <polygon points="192,152 198,155 192,158" fill="#10b981"/>
 </svg>
