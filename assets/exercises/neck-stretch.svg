@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Head -->
+  <circle cx="100" cy="60" r="25" fill="#8d60f5" opacity="0.2"/>
+  <circle cx="100" cy="60" r="20" fill="#8d60f5"/>
+  
+  <!-- Neck (tilted) -->
+  <path d="M 95 80 Q 90 95 85 110" stroke="#8d60f5" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Shoulders -->
+  <ellipse cx="75" cy="120" rx="15" ry="8" fill="#a27bf7"/>
+  <ellipse cx="125" cy="120" rx="15" ry="8" fill="#a27bf7"/>
+  
+  <!-- Torso -->
+  <rect x="70" y="115" width="60" height="50" rx="8" fill="#8d60f5" opacity="0.3"/>
+  
+  <!-- Arms -->
+  <path d="M 55 125 L 45 145" stroke="#a27bf7" stroke-width="6" stroke-linecap="round"/>
+  <path d="M 145 125 L 155 145" stroke="#a27bf7" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- Arrow indicating tilt -->
+  <path d="M 120 50 Q 130 50 135 60" stroke="#fbbf24" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+  
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fbbf24"/>
+    </marker>
+  </defs>
+</svg>
