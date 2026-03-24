@@ -1061,8 +1061,8 @@ function stopPoll(){if(pollId){clearInterval(pollId);pollId=null;}}
 
 
 async function fetchData() {
-  const PNAMES = ['CORRETTA','SLOUCH','LEANLEFT','LEANRIGHT','LEANBACK','FIDGET','AWAY','AWAY'];
-  try {
+    const PNAMES = ['CORRETTA','SLOUCH','LEAN_LEFT','LEAN_RIGHT','LEAN_BACK','FIDGET','AWAY','AWAY'];  
+    try {
     const r = await fetch(
       API.BASE + '/ultimo?utente=' + encodeURIComponent(API.USER),
       { headers: { 'Authorization': API.TOKEN }, signal: AbortSignal.timeout(5000) }
