@@ -1028,14 +1028,14 @@ async function doConnect(){
     try{localStorage.setItem('lt_api_user',u);localStorage.setItem('lt_api_token',p);}catch(e){}
     err.style.display='none';btn.textContent='Connecting…';btn.disabled=true;
     try{
-        const r=await fetch(`${API.BASE}${API.USERS_EP}`,{headers:{'Authorization':API.TOKEN},signal:AbortSignal.timeout(6000)});
+        const r=await (`${API.BASE}${API.USERS_EP}`,{headers:{'Authorization':API.TOKEN},signal:AbortSignal.timeout(6000)});
         if(!r.ok)throw new Error(`HTTP ${r.status}`);
         isConn=true;closeApiModal();goLive('Connected');
-    }catch(e){err.textContent=e.message.includes('Failed to fetch')?'Could not reach the server. Check your connection.':`Connection failed: ${e.message}`;err.style.display='block';}
+    }catch(e){err.textContent=e.message.includes('Failed to ')?'Could not reach the server. Check your connection.':`Connection failed: ${e.message}`;err.style.display='block';}
     finally{btn.textContent='Connect';btn.disabled=false;}
 }
 
-function startPoll(){stopPoll();fetchData();pollId=setInterval(fetchData,API.POLL);}
+function startPoll(){stopPoll();Data();pollId=setInterval(Data,API.POLL);}
 function stopPoll(){if(pollId){clearInterval(pollId);pollId=null;}}
 /* OLD
 async function fetchData(){
@@ -1051,7 +1051,7 @@ async function fetchData(){
 async function fetchData() {
   try {
     const r = await fetch(
-      API.BASE + '/' + API.DATAEP + '?utente=' + encodeURIComponent(API.USER),
+      API.BASE + '/ultimo?utente=' + encodeURIComponent(API.USER),
       {
         headers: { 'Authorization': API.TOKEN },
         signal: AbortSignal.timeout(5000)
@@ -1064,7 +1064,7 @@ async function fetchData() {
     errCount = 0;
     update({
       postureName: d.postura,
-      lc0: 25, lc1: 25, lc2: 25, lc3: 25   // pesi piatti (il firmware non li manda)
+      lc0: 25, lc1: 25, lc2: 25, lc3: 25
     });
     tickSitting(d.postura);
   } catch(e) {
@@ -1072,6 +1072,9 @@ async function fetchData() {
     if (errCount > 5) showErr('Connection lost');
   }
 }
+
+
+    
 /* ---- TEST MODE ---- */
 function startTest(){isTest=true;monthHist=buildHist(true);renderCal();document.getElementById('testBadge').classList.remove('hidden');goLive('Demo Mode');testId=setInterval(()=>{const p=TP[Math.floor(Math.random()*TP.length)];update({postureName:p.n,lc0:p.w[0],lc1:p.w[1],lc2:p.w[2],lc3:p.w[3]});},2000);}
 function stopTest(){isTest=false;if(testId){clearInterval(testId);testId=null;}document.getElementById('testBadge').classList.add('hidden');}
