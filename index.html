@@ -1036,7 +1036,7 @@ async function doConnect() {
   btn.textContent = 'Connecting…';
   btn.disabled = true;
   try {
-    const r = await fetch(API.BASE + '/' + API.USERSEP, {
+      const r = await fetch(API.BASE + '/utenti', {
       headers: { 'Authorization': API.TOKEN },
       signal: AbortSignal.timeout(6000)
     });
