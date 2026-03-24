@@ -1070,6 +1070,7 @@ function stopPoll(){if(pollId){clearInterval(pollId);pollId=null;}}
 //} */
 
 async function fetchData() {
+  const PNAMES = ['CORRETTA','SLOUCH','LEANLEFT','LEANRIGHT','LEANBACK','FIDGET','AWAY','AWAY'];
   try {
     const r = await fetch(
       API.BASE + '/ultimo?utente=' + encodeURIComponent(API.USER),
@@ -1077,10 +1078,21 @@ async function fetchData() {
     );
     if (!r.ok) throw new Error('HTTP ' + r.status);
     const d = await r.json();
-    if (!d || !d.postura) throw new Error('No data');
+    if (!d || d.valore1 === undefined) throw new Error('No data');
+
+    const idx = Math.max(0, Math.min(7, Math.round(parseFloat(d.valore1))));
+    const postureName = PNAMES[idx];
+
+    const copx = parseFloat(d.valore3) || 0;
+    const copy = parseFloat(d.valore4) || 0;
+    const lc0 = Math.max(0, 25 * (1 - copx + copy));
+    const lc1 = Math.max(0, 25 * (1 + copx + copy));
+    const lc2 = Math.max(0, 25 * (1 - copx - copy));
+    const lc3 = Math.max(0, 25 * (1 + copx - copy));
+
     errCount = 0;
-    update({ postureName: d.postura, lc0: 25, lc1: 25, lc2: 25, lc3: 25 });
-    tickSitting(d.postura);
+    update({ postureName, lc0, lc1, lc2, lc3 });
+    tickSitting(postureName);
   } catch(e) {
     errCount++;
     if (errCount > 5) showErr('Connection lost');
