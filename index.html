@@ -1059,7 +1059,7 @@ async function doConnect() {
 function startPoll(){stopPoll();Data();pollId=setInterval(Data,API.POLL);}
 function stopPoll(){if(pollId){clearInterval(pollId);pollId=null;}}
 // OLD
-//async function fetchData(){
+//async function (){
   //  try{
     //    const r=await fetch(`${API.BASE}${API.DATA_EP}?utente=${encodeURIComponent(API.USER)}`,{headers:{'Authorization':API.TOKEN,'Content-Type':'application/json'},signal:AbortSignal.timeout(5000)});
       //  if(!r.ok)throw new Error(`HTTP ${r.status}`);const d=await r.json();
@@ -1082,7 +1082,6 @@ async function fetchData() {
 
     const idx = Math.max(0, Math.min(7, Math.round(parseFloat(d.valore1))));
     const postureName = PNAMES[idx];
-
     const copx = parseFloat(d.valore3) || 0;
     const copy = parseFloat(d.valore4) || 0;
     const lc0 = Math.max(0, 25 * (1 - copx + copy));
