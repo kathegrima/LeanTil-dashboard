@@ -1057,28 +1057,23 @@ function stopPoll(){if(pollId){clearInterval(pollId);pollId=null;}}
   //  }catch(e){errCount++;if(errCount>=5)showErr('Connection lost — check your device');}
 //} */
 
-async function fetchData() {        // ← apre funzione
-  try {                             // ← apre try
-    const r = await fetch(API.BASE + '/' + API.USERSEP, {
-          headers: { 'Authorization': API.TOKEN },
-          signal: AbortSignal.timeout(6000)
-    });   // ← chiude fetch(
-    
-      if (!r.ok) throw new Error('HTTP ' + r.status);
+async function fetchData() {
+  try {
+    const r = await fetch(
+      API.BASE + '/ultimo?utente=' + encodeURIComponent(API.USER),
+      { headers: { 'Authorization': API.TOKEN }, signal: AbortSignal.timeout(5000) }
+    );
+    if (!r.ok) throw new Error('HTTP ' + r.status);
     const d = await r.json();
     if (!d || !d.postura) throw new Error('No data');
-
     errCount = 0;
-    update({
-      postureName: d.postura,
-      lc0: 25, lc1: 25, lc2: 25, lc3: 25
-    });
+    update({ postureName: d.postura, lc0: 25, lc1: 25, lc2: 25, lc3: 25 });
     tickSitting(d.postura);
-  } catch(e) {                      // ← chiude try, apre catch
+  } catch(e) {
     errCount++;
     if (errCount > 5) showErr('Connection lost');
   }
-}                                   // ← chiude funzione
+}
 
 
 
