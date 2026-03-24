@@ -1056,12 +1056,12 @@ async function doConnect() {
 }
 
 
-function startPoll(){stopPoll();Data();pollId=setInterval(Data,API.POLL);}
+function startPoll(){stopPoll();fetchData();pollId=setInterval(fetchData,API.POLL);}
 function stopPoll(){if(pollId){clearInterval(pollId);pollId=null;}}
 
 
 async function fetchData() {
-    const PNAMES = ['CORRETTA','SLOUCH','LEAN_LEFT','LEAN_RIGHT','LEAN_BACK','FIDGET','AWAY','AWAY'];  
+    const PNAMES = ['CORRETTA','SLOUCH','LEAN_LEFT','LEAN_RIGHT','LEAN_BACK','FIDGET','AWAY','UNCERTAIN'];  
     try {
     const r = await fetch(
       API.BASE + '/ultimo?utente=' + encodeURIComponent(API.USER),
