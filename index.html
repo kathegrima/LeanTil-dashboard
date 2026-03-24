@@ -1048,8 +1048,8 @@ async function fetchData(){
     }catch(e){errCount++;if(errCount>=5)showErr('Connection lost — check your device');}
 } */
 
-async function fetchData() {
-  try {
+async function fetchData() {        // ← apre funzione
+  try {                             // ← apre try
     const r = await fetch(
       API.BASE + '/ultimo?utente=' + encodeURIComponent(API.USER),
       {
@@ -1067,11 +1067,12 @@ async function fetchData() {
       lc0: 25, lc1: 25, lc2: 25, lc3: 25
     });
     tickSitting(d.postura);
-  } catch(e) {
+  } catch(e) {                      // ← chiude try, apre catch
     errCount++;
     if (errCount > 5) showErr('Connection lost');
   }
-}
+}                                   // ← chiude funzione
+
 
 
     
