@@ -1037,7 +1037,7 @@ async function doConnect(){
 
 function startPoll(){stopPoll();fetchData();pollId=setInterval(fetchData,API.POLL);}
 function stopPoll(){if(pollId){clearInterval(pollId);pollId=null;}}
-
+/* OLD
 async function fetchData(){
     try{
         const r=await fetch(`${API.BASE}${API.DATA_EP}?utente=${encodeURIComponent(API.USER)}`,{headers:{'Authorization':API.TOKEN,'Content-Type':'application/json'},signal:AbortSignal.timeout(5000)});
@@ -1046,6 +1046,42 @@ async function fetchData(){
         update({postureName:d.postura,lc0:(d.sensor0||0)/1000,lc1:(d.sensor1||0)/1000,lc2:(d.sensor2||0)/1000,lc3:(d.sensor3||0)/1000});
         tickSitting(d.postura);
     }catch(e){errCount++;if(errCount>=5)showErr('Connection lost — check your device');}
+} */
+
+async function fetchData() {
+  try {
+    const r = await fetch(API.BASE + API.DATAEP + '?utente=' + encodeURIComponent(API.USER), {
+      headers: { 'Authorization': API.TOKEN, 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(5000)
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    if (!d) throw new Error('No data');
+
+    // ---- ADATTAMENTO CAMPI FIRMWARE → DASHBOARD ----
+    // firmware manda: v1 (indice postura), v2 (confidenza), v3 (copx), v4 (copy)
+    // dashboard si aspetta: postura (stringa), sensor0-3
+    const POSTURE_NAMES = [
+      'CORRETTA','SLOUCH','LEANLEFT','LEANRIGHT',
+      'LEANBACK','FIDGET','AWAY','UNCERTAIN'
+    ];
+    const postureName = d.postura                        // se il backend già mappa → ok
+                     || POSTURE_NAMES[Math.round(d.v1)] // altrimenti mappa v1 → stringa
+                     || 'AWAY';
+
+    errCount = 0;
+    update({
+      postureName: postureName,
+      lc0: d.sensor0 != null ? d.sensor0 * 1000 : 25,
+      lc1: d.sensor1 != null ? d.sensor1 * 1000 : 25,
+      lc2: d.sensor2 != null ? d.sensor2 * 1000 : 25,
+      lc3: d.sensor3 != null ? d.sensor3 * 1000 : 25,
+    });
+    tickSitting(postureName);
+  } catch(e) {
+    errCount++;
+    if (errCount > 5) showErr('Connection lost – check your device');
+  }
 }
 
 /* ---- TEST MODE ---- */
