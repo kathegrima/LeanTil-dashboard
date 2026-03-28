@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LeanTil — Posture Monitor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg:          #0c0c0f;
+            --bg-2:        #13131a;
+            --bg-3:        #1c1c27;
+            --border:      rgba(255,255,255,0.07);
+            --border-md:   rgba(255,255,255,0.13);
+            --text:        #f0f0f5;
+            --text-2:      #8888a0;
+            --text-3:      #55556a;
+            --accent:      #7c5af0;
+            --accent-soft: rgba(124,90,240,0.14);
+            --accent-glow: rgba(124,90,240,0.32);
+            --green:       #22c98a;
+            --green-soft:  rgba(34,201,138,0.12);
+            --green-glow:  rgba(34,201,138,0.28);
+            --amber:       #f5a623;
+            --amber-soft:  rgba(245,166,35,0.12);
+            --r-sm:  0.625rem;
+            --r:     1rem;
+            --r-lg:  1.5rem;
+            --r-xl:  2rem;
+            --font:  'DM Sans', system-ui, sans-serif;
+            --mono:  'DM Mono', monospace;
+            --shadow: 0 1px 3px rgba(0,0,0,0.5), 0 8px 28px rgba(0,0,0,0.35);
+        }
+        [data-theme="light"] {
+            --bg:          #f2f2f7;
+            --bg-2:        #ffffff;
+            --bg-3:        #e8e8f0;
+            --border:      rgba(0,0,0,0.07);
+            --border-md:   rgba(0,0,0,0.13);
+            --text:        #16161f;
+            --text-2:      #606078;
+            --text-3:      #9999b0;
+            --accent-soft: rgba(124,90,240,0.08);
+            --accent-glow: rgba(124,90,240,0.18);
+            --green-soft:  rgba(34,201,138,0.08);
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 8px 28px rgba(0,0,0,0.09);
+        }
+
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            font-family: var(--font);
+            font-size: 15px;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* subtle dot grid */
+        body::before {
+            content:'';
+            position:fixed; inset:0;
+            background-image: radial-gradient(circle, var(--border-md) 1px, transparent 1px);
+            background-size: 28px 28px;
+            pointer-events:none; z-index:0;
+        }
+
+        .page {
+            position:relative; z-index:1;
+            max-width: 1340px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* ---- CARD ---- */
+        .card {
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: border-color 0.3s;
+        }
+
+        .card-lbl {
+            font-size: 0.625rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--text-3);
+            margin-bottom: 1rem;
+        }
+
+        /* ---- HEADER ---- */
+        .header {
+            display:flex; align-items:center; justify-content:space-between;
+            gap:1rem; margin-bottom:1.75rem; flex-wrap:wrap;
+        }
+
+        .logo-img { height:34px; width:auto; display:block; }
+
+        .header-right {
+            display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;
+        }
+
+        .chip {
+            display:inline-flex; align-items:center; gap:0.375rem;
+            padding:0.375rem 0.875rem;
+            background:var(--bg-3); border:1px solid var(--border);
+            border-radius:999px; font-size:0.6875rem; color:var(--text-2);
+            user-select:none; white-space:nowrap;
+            transition: border-color 0.3s, color 0.3s;
+        }
+        .chip.live { border-color:var(--accent); color:var(--text); }
+        .chip-dot  { width:6px; height:6px; border-radius:50%; background:var(--text-3); flex-shrink:0; transition:background 0.3s; }
+        .chip.live .chip-dot { background:var(--accent); animation:pdot 2s infinite; }
+        @keyframes pdot { 0%,100%{box-shadow:0 0 0 0 var(--accent-glow);} 50%{box-shadow:0 0 0 5px transparent;} }
+
+        .icon-btn {
+            width:32px; height:32px; border-radius:50%;
+            border:1px solid var(--border); background:var(--bg-3);
+            color:var(--text-2); display:flex; align-items:center; justify-content:center;
+            cursor:pointer; font-size:0.9375rem; transition:all 0.2s; flex-shrink:0;
+        }
+        .icon-btn:hover { border-color:var(--border-md); color:var(--text); transform:scale(1.06); }
+
+        .mode-pill {
+            display:inline-flex; align-items:center; gap:0.5rem;
+            padding:0.375rem 0.75rem;
+            background:var(--bg-3); border:1px solid var(--border);
+            border-radius:999px; cursor:pointer; user-select:none;
+            transition:border-color 0.2s;
+        }
+        .mode-pill:hover { border-color:var(--border-md); }
+        .mode-pill-lbl { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-3); font-weight:600; }
+
+        .tog-track {
+            position:relative; width:34px; height:18px;
+            background:var(--bg); border-radius:999px;
+            border:1px solid var(--border-md); transition:background 0.3s;
+        }
+        .tog-track.on { background:var(--accent); border-color:var(--accent); }
+        .tog-thumb {
+            position:absolute; top:2px; left:2px;
+            width:12px; height:12px; border-radius:50%; background:#fff;
+            transition:transform 0.3s cubic-bezier(.4,0,.2,1);
+        }
+        .tog-track.on .tog-thumb { transform:translateX(16px); }
+
+        .btn {
+            padding:0.5rem 1.125rem;
+            border:1px solid var(--border-md); background:var(--bg-3);
+            color:var(--text); border-radius:var(--r-sm);
+            cursor:pointer; font-size:0.8125rem; font-family:var(--font);
+            font-weight:500; transition:all 0.2s;
+        }
+        .btn:hover { background:var(--border-md); transform:translateY(-1px); }
+        .btn-primary { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 2px 12px var(--accent-glow); }
+        .btn-primary:hover { background:#8f6af3; border-color:#8f6af3; box-shadow:0 4px 20px var(--accent-glow); }
+        .btn-green { background:var(--green); border-color:var(--green); color:#fff; box-shadow:0 2px 12px var(--green-glow); }
+        .btn-green:hover { background:#28dfa0; box-shadow:0 4px 20px var(--green-glow); }
+
+        /* ---- LAYOUTS ---- */
+        .row-2 { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+        .row-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
+        .mb    { margin-bottom:1.25rem; }
+        .hidden { display:none !important; }
+
+        /* =============================================
+           1. HERO
+        ============================================= */
+        .hero-card {
+            display:flex; align-items:center; justify-content:space-between;
+            gap:2rem; padding:1.875rem 2.25rem; flex-wrap:wrap;
+        }
+
+        .hero-now { flex:1; min-width:180px; }
+        .hero-sub  { font-size:0.625rem; text-transform:uppercase; letter-spacing:0.16em; color:var(--text-3); font-weight:600; margin-bottom:0.5rem; }
+        .hero-status {
+            font-size:clamp(2.25rem,5.5vw,4rem); font-weight:200;
+            letter-spacing:0.04em; line-height:1.05;
+            transition:color 0.4s;
+        }
+        .s-correct { color:var(--accent); }
+        .s-warning  { color:var(--amber); }
+        .s-away     { color:var(--text-3); }
+
+        /* SVG score ring */
+        .score-wrap { display:flex; flex-direction:column; align-items:center; gap:0.5rem; flex-shrink:0; }
+        .sr-bg   { fill:none; stroke:var(--bg-3); stroke-width:7; }
+        .sr-fill {
+            fill:none; stroke:var(--accent); stroke-width:7; stroke-linecap:round;
+            transform-origin:center; transform:rotate(-90deg);
+            transition:stroke-dashoffset 0.9s cubic-bezier(.4,0,.2,1);
+        }
+        .sr-num  { font-family:var(--mono); font-size:1.625rem; font-weight:400; fill:var(--text); text-anchor:middle; dominant-baseline:central; }
+        .sr-sub  { font-family:var(--font); font-size:0.45rem; font-weight:600; fill:var(--text-3); text-anchor:middle; dominant-baseline:central; text-transform:uppercase; letter-spacing:0.12em; }
+        .score-lbl { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-3); font-weight:600; }
+
+        /* =============================================
+           2. BREAK + HEALTH ROW
+        ============================================= */
+        .bh-row { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-bottom:1.25rem; }
+
+        /* BREAK CARD */
+        .break-card {
+            position:relative; overflow:hidden;
+            padding:1.75rem; display:flex; flex-direction:column;
+            justify-content:space-between; min-height:230px;
+            transition:border-color 0.4s, box-shadow 0.4s;
+        }
+        .break-card::before {
+            content:''; position:absolute;
+            width:220px; height:220px; border-radius:50%;
+            background:radial-gradient(circle, var(--accent-soft) 0%, transparent 68%);
+            right:-55px; top:-55px; pointer-events:none; transition:background 0.4s;
+        }
+        .break-card.state-soon { border-color:rgba(245,166,35,0.38); box-shadow:var(--shadow),0 0 32px rgba(245,166,35,0.1); }
+        .break-card.state-soon::before { background:radial-gradient(circle, var(--amber-soft) 0%, transparent 68%); }
+        .break-card.state-now  { border-color:rgba(34,201,138,0.42); animation:bpulse 2s ease-in-out infinite; }
+        .break-card.state-now::before  { background:radial-gradient(circle, var(--green-soft) 0%, transparent 68%); }
+        @keyframes bpulse {
+            0%,100% { box-shadow:var(--shadow),0 0 40px rgba(34,201,138,0.18); }
+            50%      { box-shadow:var(--shadow),0 0 60px rgba(34,201,138,0.36); }
+        }
+
+        .break-top { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; }
+        .break-info { flex:1; }
+        .break-next-lbl { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-3); font-weight:600; margin-bottom:0.3rem; }
+        .break-next-name { font-size:1rem; font-weight:400; color:var(--text); margin-bottom:0.2rem; }
+        .break-next-desc { font-size:0.7rem; color:var(--text-2); line-height:1.45; max-width:190px; }
+
+        /* break countdown ring */
+        .br-bg   { fill:none; stroke:var(--bg-3); stroke-width:4.5; }
+        .br-fill {
+            fill:none; stroke:var(--accent); stroke-width:4.5; stroke-linecap:round;
+            transform-origin:center; transform:rotate(-90deg);
+            transition:stroke-dashoffset 1s linear, stroke 0.4s;
+        }
+        .state-soon .br-fill { stroke:var(--amber); }
+        .state-now  .br-fill { stroke:var(--green); }
+        .br-time { font-family:var(--mono); font-size:0.8125rem; font-weight:500; fill:var(--text); text-anchor:middle; dominant-baseline:central; }
+        .br-sub  { font-family:var(--font); font-size:0.28rem; font-weight:600; fill:var(--text-3); text-anchor:middle; dominant-baseline:central; text-transform:uppercase; letter-spacing:0.1em; }
+
+        .break-bottom { display:flex; align-items:center; gap:0.625rem; }
+        .break-pill {
+            display:inline-flex; align-items:center; gap:0.3rem;
+            padding:0.28rem 0.7rem; border-radius:999px;
+            font-size:0.625rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em;
+            background:var(--accent-soft); color:var(--accent); border:1px solid rgba(124,90,240,0.22);
+            transition:all 0.4s;
+        }
+        .state-soon .break-pill { background:var(--amber-soft); color:var(--amber); border-color:rgba(245,166,35,0.28); }
+        .state-now  .break-pill { background:var(--green-soft);  color:var(--green); border-color:rgba(34,201,138,0.28); }
+
+        .break-cta {
+            margin-left:auto; padding:0.4rem 1rem;
+            border-radius:var(--r-sm); font-size:0.7rem; font-weight:700;
+            font-family:var(--font); cursor:pointer; border:none;
+            background:var(--accent); color:#fff;
+            box-shadow:0 2px 10px var(--accent-glow);
+            transition:all 0.2s;
+        }
+        .break-cta:hover { transform:translateY(-1px); box-shadow:0 4px 18px var(--accent-glow); }
+        .state-soon .break-cta { background:var(--amber); box-shadow:0 2px 10px rgba(245,166,35,0.32); }
+        .state-now  .break-cta { background:var(--green);  box-shadow:0 2px 10px var(--green-glow); }
+
+        /* HEALTH CARD */
+        .health-card {
+            position:relative; overflow:hidden;
+            padding:1.75rem; min-height:230px;
+            display:flex; flex-direction:column; justify-content:space-between;
+        }
+        .health-card::before {
+            content:''; position:absolute;
+            width:260px; height:260px; border-radius:50%;
+            background:radial-gradient(circle, var(--green-soft) 0%, transparent 65%);
+            right:-80px; bottom:-80px; pointer-events:none;
+        }
+        .health-top { position:relative; z-index:1; }
+        .health-big {
+            font-size:clamp(2.5rem,4.5vw,3.75rem); font-family:var(--mono);
+            font-weight:300; color:var(--green); line-height:1; margin-bottom:0.25rem;
+            transition:all 0.6s;
+        }
+        .health-sub { font-size:0.75rem; color:var(--text-2); }
+        .health-stats { display:grid; grid-template-columns:1fr 1fr; gap:0.625rem; position:relative; z-index:1; }
+        .hstat {
+            background:var(--bg-3); border-radius:var(--r-sm);
+            padding:0.75rem 0.875rem; border:1px solid var(--border);
+        }
+        .hstat-val { font-size:1.2rem; font-family:var(--mono); color:var(--green); margin-bottom:0.15rem; }
+        .hstat-lbl { font-size:0.575rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-3); font-weight:600; }
+        .health-ref { font-size:0.575rem; color:var(--text-3); font-style:italic; margin-top:0.75rem; position:relative; z-index:1; }
+
+        /* =============================================
+           3. WEIGHT + SESSION
+        ============================================= */
+        .weight-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin:0.5rem 0 0.875rem; }
+        .wcell {
+            background:var(--bg-3); border:1.5px solid var(--border);
+            border-radius:var(--r); padding:0.875rem; text-align:center;
+            transition:all 0.5s cubic-bezier(.4,0,.2,1);
+        }
+        .wcell.active { background:var(--accent-soft); border-color:var(--accent); box-shadow:0 0 18px var(--accent-glow); }
+        .wcell-pos { font-size:0.5625rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-3); font-weight:600; margin-bottom:0.25rem; }
+        .wcell-pct { font-family:var(--mono); font-size:1.625rem; font-weight:400; color:var(--text-2); transition:color 0.4s; }
+        .wcell.active .wcell-pct { color:var(--accent); }
+        .weight-hint { font-size:0.625rem; color:var(--text-3); font-style:italic; }
+
+        .metric-strip { display:grid; grid-template-columns:repeat(3,1fr); }
+        .mitem { padding:1.125rem 0.75rem; text-align:center; border-right:1px solid var(--border); }
+        .mitem:last-child { border-right:none; }
+        .mval { font-family:var(--mono); font-size:1.875rem; font-weight:300; color:var(--accent); line-height:1; margin-bottom:0.35rem; }
+        .mlbl { font-size:0.5625rem; text-transform:uppercase; letter-spacing:0.12em; color:var(--text-3); font-weight:600; }
+
+        /* =============================================
+           4. CALENDAR
+        ============================================= */
+        .cal-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+        .view-sw { display:flex; background:var(--bg-3); border:1px solid var(--border); border-radius:var(--r-sm); overflow:hidden; }
+        .vbtn { padding:0.3rem 0.875rem; font-size:0.6rem; font-weight:700; font-family:var(--font); text-transform:uppercase; letter-spacing:0.1em; cursor:pointer; border:none; background:transparent; color:var(--text-3); transition:all 0.2s; }
+        .vbtn.active { background:var(--accent); color:#fff; }
+        .cal-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(36px,1fr)); gap:0.45rem; }
+        .cal-day { display:flex; flex-direction:column; align-items:center; gap:0.2rem; cursor:pointer; transition:transform 0.15s; }
+        .cal-day:hover { transform:translateY(-2px); }
+        .cal-day-lbl { font-size:0.5rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-3); font-weight:600; }
+        .cal-dot { width:32px; height:32px; border-radius:50%; border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:0.6625rem; font-weight:600; transition:all 0.2s; color:var(--text-3); }
+        .cal-dot.excellent { background:var(--green);  border-color:var(--green);  color:#fff; }
+        .cal-dot.good      { background:var(--accent); border-color:var(--accent); color:#fff; }
+        .cal-dot.medium    { background:var(--amber);  border-color:var(--amber);  color:#000; }
+        .cal-dot.poor      { background:var(--bg-3);   border-color:var(--border); }
+        .cal-dot.today     { box-shadow:0 0 0 3px var(--accent-glow); }
+        .cal-legend { display:flex; gap:1.125rem; flex-wrap:wrap; margin-top:0.875rem; }
+        .cl-item { display:flex; align-items:center; gap:0.3rem; font-size:0.6375rem; color:var(--text-3); }
+        .cl-dot  { width:7px; height:7px; border-radius:50%; }
+
+        /* =============================================
+           ADVANCED
+        ============================================= */
+        .adv-divider { display:flex; align-items:center; gap:1rem; margin:2rem 0 1.25rem; }
+        .adv-line    { flex:1; height:1px; background:var(--border); }
+        .adv-label   { font-size:0.575rem; text-transform:uppercase; letter-spacing:0.14em; color:var(--text-3); font-weight:600; white-space:nowrap; }
+
+        /* timeline */
+        .tl-marks { display:flex; justify-content:space-between; font-size:0.6rem; color:var(--text-3); padding:0 2px 0.4rem; font-family:var(--mono); }
+        .tl-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(15px,1fr)); gap:3px; max-height:260px; overflow-y:auto; padding:0.25rem 0; }
+        .tl-bar { aspect-ratio:1; border-radius:3px; cursor:pointer; transition:transform 0.15s, opacity 0.15s; }
+        .tl-bar:hover { transform:scale(1.2); opacity:0.8; }
+        .tl-bar.correct { background:var(--accent); }
+        .tl-bar.warning { background:var(--amber); }
+        .tl-bar.away    { background:var(--bg-3); }
+        .tl-footer { margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid var(--border); font-size:0.7rem; color:var(--text-3); display:flex; gap:1.5rem; flex-wrap:wrap; }
+        .tl-footer span { color:var(--accent); font-family:var(--mono); font-weight:500; }
+
+        /* quality */
+        .q-track { height:9px; border-radius:999px; overflow:hidden; background:var(--bg-3); display:flex; margin:0.75rem 0 1.125rem; }
+        .q-seg { transition:width 0.5s cubic-bezier(.4,0,.2,1); }
+        .q-legend { display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem; }
+        .ql { background:var(--bg-3); border-radius:var(--r-sm); padding:0.7rem; text-align:center; border:1px solid var(--border); }
+        .ql-pct { font-family:var(--mono); font-size:1.25rem; font-weight:400; margin-bottom:0.2rem; }
+        .ql-dot { width:7px; height:7px; border-radius:50%; margin:0 auto 0.2rem; }
+        .ql-lbl { font-size:0.5625rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-3); font-weight:600; }
+        .ql-dur { font-size:0.5625rem; color:var(--text-3); margin-top:0.15rem; font-family:var(--mono); }
+        .insight-box { margin-top:0.75rem; padding:0.7rem 0.875rem; background:var(--accent-soft); border:1px solid rgba(124,90,240,0.18); border-radius:var(--r-sm); font-size:0.7875rem; color:var(--text); }
+
+        /* progress */
+        .prog-today { font-family:var(--mono); font-size:2.75rem; font-weight:300; color:var(--accent); line-height:1; margin-bottom:0.2rem; }
+        .goal-track { height:7px; background:var(--bg-3); border-radius:999px; overflow:hidden; margin:0.7rem 0 0.45rem; }
+        .goal-fill  { height:100%; border-radius:999px; background:linear-gradient(90deg,var(--accent),#a07af5); transition:width 0.5s cubic-bezier(.4,0,.2,1); }
+        .prog-sub-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem; margin-top:1.125rem; }
+        .psub { background:var(--bg-3); border-radius:var(--r-sm); padding:0.8rem; text-align:center; border:1px solid var(--border); }
+        .psub-val { font-family:var(--mono); font-size:1.2rem; font-weight:400; color:var(--accent); margin-bottom:0.15rem; }
+        .psub-lbl { font-size:0.5625rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-3); font-weight:600; }
+
+        /* community */
+        .comm-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0; }
+        .comm-item { padding:0.125rem 1.25rem; border-right:1px solid var(--border); }
+        .comm-item:first-child { padding-left:0; }
+        .comm-item:last-child  { border-right:none; }
+        .comm-lbl { font-size:0.5625rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-3); font-weight:600; margin-bottom:0.35rem; }
+        .comm-val { font-size:0.875rem; color:var(--text-2); line-height:1.5; }
+        .comm-val strong { color:var(--accent); font-weight:600; }
+        .comm-val.g   strong { color:var(--green); }
+        .comm-best-t  { font-family:var(--mono); font-size:1.625rem; font-weight:300; color:var(--accent); margin:0.25rem 0 0.1rem; }
+
+        /* =============================================
+           MODALS
+        ============================================= */
+        .backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.72); backdrop-filter:blur(5px); display:none; align-items:center; justify-content:center; z-index:1200; }
+        .backdrop.open { display:flex; }
+
+        .modal {
+            background:var(--bg-2); border:1px solid var(--border-md); border-radius:var(--r-xl);
+            padding:2rem; max-width:540px; width:92%; max-height:85vh; overflow-y:auto;
+            box-shadow:0 20px 60px rgba(0,0,0,0.65);
+            animation:min 0.3s cubic-bezier(.34,1.56,.64,1);
+        }
+        @keyframes min { from{transform:translateY(18px) scale(0.97);opacity:0;} to{transform:none;opacity:1;} }
+
+        .modal-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.375rem; }
+        .modal-title { font-size:1.1875rem; font-weight:300; letter-spacing:0.02em; }
+        .modal-x { background:none; border:none; color:var(--text-3); font-size:1.5rem; cursor:pointer; line-height:1; padding:0.2rem; transition:color 0.2s; }
+        .modal-x:hover { color:var(--text); }
+        .modal-sec { margin-bottom:1.125rem; }
+        .modal-sec-title { font-size:0.8rem; font-weight:700; color:var(--accent); margin-bottom:0.3rem; }
+        .modal-sec p { font-size:0.875rem; color:var(--text-2); line-height:1.6; }
+
+        .form-group { margin-bottom:1rem; }
+        .form-lbl { display:block; font-size:0.625rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-3); font-weight:600; margin-bottom:0.35rem; }
+        .form-inp { width:100%; padding:0.7rem 0.9375rem; background:var(--bg); border:1px solid var(--border-md); border-radius:var(--r-sm); color:var(--text); font-size:0.875rem; font-family:var(--font); outline:none; transition:border-color 0.2s, box-shadow 0.2s; }
+        .form-inp:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+        .form-actions { display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1.375rem; }
+        .form-err { font-size:0.8rem; color:#f05050; margin-top:0.75rem; text-align:center; display:none; }
+
+        /* exercise */
+        .ex-modal { max-width:420px; text-align:center; }
+        .ex-badge { display:inline-flex; align-items:center; gap:0.35rem; background:var(--accent-soft); border:1px solid rgba(124,90,240,0.22); border-radius:999px; padding:0.28rem 0.8rem; font-size:0.625rem; color:var(--accent); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:1rem; }
+        .ex-img  { border-radius:var(--r); overflow:hidden; border:1px solid var(--border); background:var(--bg); margin-bottom:1rem; }
+        .ex-img img { width:100%; height:190px; object-fit:cover; display:block; }
+        .ex-title { font-size:1.2rem; font-weight:300; margin-bottom:0.3rem; }
+        .ex-desc  { font-size:0.7875rem; color:var(--text-2); line-height:1.5; margin-bottom:1.125rem; }
+        .ex-nav   { display:flex; align-items:center; justify-content:center; gap:0.875rem; margin-bottom:1rem; }
+        .ex-dots  { display:flex; gap:0.35rem; }
+        .ex-dot   { width:6px; height:6px; border-radius:50%; background:var(--border-md); transition:background 0.2s, transform 0.2s; }
+        .ex-dot.active { background:var(--accent); transform:scale(1.5); }
+        .ex-skip  { font-size:0.7rem; color:var(--text-3); background:none; border:none; cursor:pointer; text-decoration:underline; font-family:var(--font); transition:color 0.2s; }
+        .ex-skip:hover { color:var(--text-2); }
+
+        /* achievement toast */
+        .ach-pop {
+            position:fixed; bottom:1.75rem; right:1.75rem;
+            background:var(--bg-2); border:1px solid var(--accent);
+            border-radius:var(--r-lg); padding:1.125rem 1.375rem;
+            display:flex; align-items:center; gap:0.875rem;
+            box-shadow:0 8px 32px var(--accent-glow); z-index:2000;
+            transform:translateX(calc(100% + 2.5rem));
+            transition:transform 0.5s cubic-bezier(.34,1.56,.64,1);
+            max-width:300px;
+        }
+        .ach-pop.show { transform:translateX(0); }
+        .ach-ico { font-size:1.875rem; flex-shrink:0; }
+        .ach-title { font-size:0.875rem; font-weight:600; margin-bottom:0.1rem; }
+        .ach-desc  { font-size:0.7rem; color:var(--text-2); }
+
+        /* tooltip */
+        .tl-tip { position:fixed; background:var(--bg-2); border:1px solid var(--border-md); border-radius:var(--r-sm); padding:0.45rem 0.8rem; font-size:0.7rem; pointer-events:none; z-index:1500; display:none; box-shadow:var(--shadow); }
+        .tl-tip.show { display:block; }
+        .tl-tip-t { color:var(--accent); font-family:var(--mono); font-weight:500; margin-bottom:0.15rem; }
+        .tl-tip-s { color:var(--text-2); }
+
+        /* test badge */
+        .test-badge { position:fixed; top:0.875rem; right:0.875rem; background:var(--amber); color:#000; padding:0.3rem 0.8rem; border-radius:999px; font-size:0.625rem; font-weight:700; z-index:1000; display:flex; align-items:center; gap:0.4rem; text-transform:uppercase; letter-spacing:0.08em; }
+
+        /* login */
+        .login-screen { min-height:100vh; display:flex; align-items:center; justify-content:center; position:relative; z-index:1; }
+        .login-inner  { text-align:center; max-width:380px; padding:2rem; }
+        .login-logo   { height:44px; margin-bottom:2rem; }
+        .login-title  { font-size:1.75rem; font-weight:200; letter-spacing:0.04em; margin-bottom:0.5rem; }
+        .login-sub    { font-size:0.875rem; color:var(--text-2); margin-bottom:2.25rem; }
+        .login-btns   { display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap; }
+        .login-err    { color:#f05050; font-size:0.8125rem; margin-top:1.125rem; display:none; }
+
+        /* =============================================
+           RESPONSIVE
+        ============================================= */
+        @media (max-width:860px) {
+            .bh-row  { grid-template-columns:1fr; }
+            .row-2   { grid-template-columns:1fr; }
+            .hero-card { padding:1.375rem 1.5rem; }
+            .comm-grid { grid-template-columns:1fr; }
+            .comm-item { padding:0.875rem 0; border-right:none; border-bottom:1px solid var(--border); }
+            .comm-item:last-child { border-bottom:none; }
+        }
+        @media (max-width:600px) {
+            .page { padding:0.875rem; }
+            .hero-status { font-size:2rem; }
+            .metric-strip { grid-template-columns:repeat(3,1fr); }
+            .mval { font-size:1.375rem; }
+            .cal-grid { grid-template-columns:repeat(7,minmax(0,1fr)); gap:0.25rem; }
+            .cal-dot { width:26px; height:26px; font-size:0.6rem; }
+            .prog-sub-grid { grid-template-columns:1fr 1fr; }
+            .header-right { gap:0.35rem; }
+        }
+        @media (max-width:380px) {
+            .mitem { border-right:none; border-bottom:1px solid var(--border); }
+            .mitem:last-child { border-bottom:none; }
+            .metric-strip { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Test badge -->
+<div id="testBadge" class="test-badge hidden">🧪 Demo Mode <button id="exitDemo" style="background:none;border:none;color:inherit;cursor:pointer;font-size:inherit;font-weight:700;padding:0;font-family:inherit;">✕</button></div>
+
+<!-- Achievement toast -->
+<div id="achPop" class="ach-pop">
+    <div class="ach-ico" id="achIco"></div>
+    <div><div class="ach-title" id="achTitle"></div><div class="ach-desc" id="achDesc"></div></div>
+</div>
+
+<!-- Timeline tooltip -->
+<div id="tlTip" class="tl-tip"><div class="tl-tip-t" id="tlTipT"></div><div class="tl-tip-s" id="tlTipS"></div></div>
+
+<!-- ===== HELP MODAL ===== -->
+<div id="helpBd" class="backdrop">
+    <div class="modal">
+        <div class="modal-hd"><div class="modal-title">Understanding Your Dashboard</div><button class="modal-x" id="closeHelp">&times;</button></div>
+        <div class="modal-sec"><div class="modal-sec-title">Overall Score</div><p>Your wellness score 0–100, based on how consistently you maintain good posture during the session.</p></div>
+        <div class="modal-sec"><div class="modal-sec-title">Break & Exercises</div><p>The countdown tracks your active sitting time. Every 30 minutes a stretch routine is suggested. The card shows the next exercise so you know what's coming.</p></div>
+        <div class="modal-sec"><div class="modal-sec-title">Health Impact</div><p>Estimates the stretching equivalent and back-strain reduction earned by your good posture. Based on NIH ergonomic research (2023).</p></div>
+        <div class="modal-sec"><div class="modal-sec-title">Weight Distribution</div><p>Live sensor map of your body weight distribution. Highlighted cells = more pressure in that zone.</p></div>
+        <div class="modal-sec"><div class="modal-sec-title">Posture History</div><p>Green = excellent (90+) · Purple = good (70–89) · Yellow = medium (50–69) · Gray = no data.</p></div>
+    </div>
+</div>
+
+<!-- ===== API MODAL ===== -->
+<div id="apiBd" class="backdrop">
+    <div class="modal" style="max-width:400px;">
+        <div class="modal-hd"><div class="modal-title">Sign In</div><button class="modal-x" id="closeApi">&times;</button></div>
+        <div class="form-group"><label class="form-lbl" for="inUser">Username</label><input class="form-inp" id="inUser" type="text" placeholder="Your username" autocomplete="off"></div>
+        <div class="form-group"><label class="form-lbl" for="inPass">Password</label><input class="form-inp" id="inPass" type="password" placeholder="Your password" autocomplete="off"></div>
+        <div class="form-actions"><button class="btn" id="cancelApi">Cancel</button><button class="btn btn-primary" id="confirmApi">Connect</button></div>
+        <p class="form-err" id="apiErr"></p>
+    </div>
+</div>
+
+<!-- ===== EXERCISE MODAL ===== -->
+<div id="exBd" class="backdrop">
+    <div class="modal ex-modal">
+        <div class="ex-badge">🧘 Break Time — Chair Stretches</div>
+        <div class="ex-img"><img id="exImg" src="" alt=""></div>
+        <div class="ex-title" id="exTitle"></div>
+        <div class="ex-desc"  id="exDesc"></div>
+        <div class="ex-nav">
+            <button class="btn" id="exPrev" style="padding:0.4rem 0.9rem;">←</button>
+            <div class="ex-dots" id="exDots"></div>
+            <button class="btn" id="exNext" style="padding:0.4rem 0.9rem;">→</button>
+        </div>
+        <button class="btn btn-green" id="exDone" style="width:100%;margin-bottom:0.5rem;">✅ Done — Reset timer</button>
+        <button class="ex-skip" id="exSkip">Skip for now (snooze 5 min)</button>
+    </div>
+</div>
+
+<!-- ===== GOAL MODAL ===== -->
+<div id="goalBd" class="backdrop">
+    <div class="modal" style="max-width:440px;">
+        <div class="modal-hd"><div class="modal-title">🎯 Set Daily Goal</div><button class="modal-x" id="closeGoal">&times;</button></div>
+        <p style="font-size:0.875rem;color:var(--text-2);margin-bottom:1.25rem;">Target % of session time in good posture.</p>
+        <label style="font-size:0.875rem;color:var(--text);display:block;margin-bottom:0.625rem;">Target: <strong id="goalRV" style="color:var(--accent);">60%</strong></label>
+        <input id="goalR" type="range" min="30" max="90" value="60" step="5" style="width:100%;accent-color:var(--accent);cursor:pointer;">
+        <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-3);margin-top:0.4rem;"><span>30%</span><span>60%</span><span>90%</span></div>
+        <div class="form-actions"><button class="btn" id="cancelGoal">Cancel</button><button class="btn btn-primary" id="saveGoal">Save</button></div>
+    </div>
+</div>
+
+<!-- ===== LOGIN ===== -->
+<div id="loginScreen" class="login-screen">
+    <div style="position:absolute;top:1.25rem;right:1.25rem;">
+        <button class="icon-btn" id="themeLogin">☀️</button>
+    </div>
+    <div class="login-inner">
+        <img id="logoLogin" src="leantil-logo2.png" alt="LeanTil" class="logo-img login-logo">
+        <div class="login-title">Posture Monitoring</div>
+        <div class="login-sub">Track. Improve. Feel better.</div>
+        <div class="login-btns">
+            <button class="btn btn-primary" id="connectBtn">🔗 Connect</button>
+            <button class="btn" id="demoBtn">🧪 Demo Mode</button>
+        </div>
+        <div class="login-err" id="loginErr"></div>
+    </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="dashboard" class="page hidden">
+
+    <!-- HEADER -->
+    <header class="header">
+        <img id="logoDash" src="leantil-logo2.png" alt="LeanTil" class="logo-img">
+        <div class="header-right">
+            <div class="chip" id="connChip"><div class="chip-dot"></div><span id="connLbl">Disconnected</span></div>
+            <div class="mode-pill" id="modePill">
+                <span class="mode-pill-lbl" id="modeLbl">Simple</span>
+                <div class="tog-track" id="togTrack"><div class="tog-thumb"></div></div>
+            </div>
+            <button class="icon-btn" id="themeBtn">☀️</button>
+            <button class="btn" id="discBtn">Disconnect</button>
+            <button class="icon-btn" id="helpBtn" style="font-size:0.8125rem;font-weight:700;">?</button>
+        </div>
+    </header>
+
+    <!-- 1. HERO STATUS + SCORE -->
+    <div class="card hero-card mb">
+        <div class="hero-now">
+            <div class="hero-sub">Right Now</div>
+            <div class="hero-status s-away" id="heroSt">—</div>
+        </div>
+        <div class="score-wrap">
+            <svg width="112" height="112" viewBox="0 0 112 112">
+                <circle class="sr-bg"   cx="56" cy="56" r="46"/>
+                <circle class="sr-fill" id="srFill" cx="56" cy="56" r="46" stroke-dasharray="289.03" stroke-dashoffset="289.03"/>
+                <text class="sr-num" id="srNum" x="56" y="52">—</text>
+                <text class="sr-sub"  x="56" y="67">Score</text>
+            </svg>
+            <div class="score-lbl">Overall Wellness</div>
+        </div>
+    </div>
+
+    <!-- 2. BREAK + HEALTH -->
+    <div class="bh-row">
+
+        <!-- BREAK CARD -->
+        <div class="card break-card" id="breakCard">
+            <div class="break-top">
+                <div class="break-info">
+                    <div class="break-next-lbl">Next Exercise</div>
+                    <div class="break-next-name" id="bnName">Hip Opener</div>
+                    <div class="break-next-desc" id="bnDesc">Cross one ankle over the opposite knee. Hold 20–30 sec per side.</div>
+                </div>
+                <div>
+                    <svg width="84" height="84" viewBox="0 0 84 84">
+                        <circle class="br-bg"   cx="42" cy="42" r="35"/>
+                        <circle class="br-fill" id="brFill" cx="42" cy="42" r="35" stroke-dasharray="219.91" stroke-dashoffset="0"/>
+                        <text class="br-time" id="brTime" x="42" y="38">30:00</text>
+                        <text class="br-sub"  x="42" y="51">until break</text>
+                    </svg>
+                </div>
+            </div>
+            <div class="break-bottom">
+                <div class="break-pill" id="bPill">🪑 Sitting</div>
+                <button class="break-cta" id="bCta">Take Break Now</button>
+            </div>
+        </div>
+
+        <!-- HEALTH CARD -->
+        <div class="card health-card">
+            <div class="health-top">
+                <div class="card-lbl">💚 Health Impact</div>
+                <div class="health-big" id="hBig">0</div>
+                <div class="health-sub" id="hSub">min stretching equivalent</div>
+            </div>
+            <div>
+                <div class="health-stats">
+                    <div class="hstat"><div class="hstat-val" id="hStretch">0</div><div class="hstat-lbl">Stretching min</div></div>
+                    <div class="hstat"><div class="hstat-val" id="hStrain">0%</div><div class="hstat-lbl">Strain Avoided</div></div>
+                </div>
+                <div class="health-ref">Based on NIH ergonomic research (2023)</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 3. WEIGHT + SESSION -->
+    <div class="row-2 mb">
+        <div class="card">
+            <div class="card-lbl">⚖️ Weight Distribution</div>
+            <div class="weight-grid">
+                <div class="wcell" id="wc0"><div class="wcell-pos">Front L</div><div class="wcell-pct" id="wp0">—</div></div>
+                <div class="wcell" id="wc1"><div class="wcell-pos">Front R</div><div class="wcell-pct" id="wp1">—</div></div>
+                <div class="wcell" id="wc2"><div class="wcell-pos">Back L</div><div class="wcell-pct" id="wp2">—</div></div>
+                <div class="wcell" id="wc3"><div class="wcell-pos">Back R</div><div class="wcell-pct" id="wp3">—</div></div>
+            </div>
+            <div class="weight-hint">Highlighted cells = more pressure in that zone</div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;justify-content:space-between;">
+            <div class="card-lbl">📊 Session Summary</div>
+            <div class="metric-strip">
+                <div class="mitem"><div class="mval" id="mMin">0</div><div class="mlbl">Minutes</div></div>
+                <div class="mitem"><div class="mval" id="mGood">—</div><div class="mlbl">Good Posture</div></div>
+                <div class="mitem"><div class="mval" id="mStab">—</div><div class="mlbl">Stability</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. CALENDAR -->
+    <div class="card mb">
+        <div class="cal-hd">
+            <div class="card-lbl" style="margin-bottom:0;">📅 Posture History</div>
+            <div class="view-sw">
+                <button class="vbtn active" id="vWeek">Week</button>
+                <button class="vbtn" id="vMonth">Month</button>
+            </div>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-legend">
+            <div class="cl-item"><div class="cl-dot" style="background:var(--green);"></div>Excellent 90+</div>
+            <div class="cl-item"><div class="cl-dot" style="background:var(--accent);"></div>Good 70–89</div>
+            <div class="cl-item"><div class="cl-dot" style="background:var(--amber);"></div>Medium 50–69</div>
+            <div class="cl-item"><div class="cl-dot" style="background:var(--bg-3);border:1px solid var(--border-md);border-radius:50%;"></div>No data</div>
+        </div>
+    </div>
+
+    <!-- ===== ADVANCED ===== -->
+    <div id="advSec" class="hidden">
+        <div class="adv-divider"><div class="adv-line"></div><div class="adv-label">⭐ Advanced Insights</div><div class="adv-line"></div></div>
+
+        <!-- Timeline -->
+        <div class="card mb">
+            <div class="card-lbl">📈 Posture Timeline</div>
+            <div class="tl-marks" id="tlMarks"></div>
+            <div class="tl-grid" id="tlGrid"></div>
+            <div class="tl-footer">Session: <span id="tlDur">0h 0m</span> &nbsp;·&nbsp; Started: <span id="tlStart">--:--</span></div>
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:0.75rem;font-size:0.625rem;color:var(--text-3);">
+                <span><span style="color:var(--accent);">■</span> Balanced</span>
+                <span><span style="color:var(--amber);">■</span> Leaning</span>
+                <span style="font-style:italic;">Click any bar for detail</span>
+            </div>
+        </div>
+
+        <!-- Quality + Progress -->
+        <div class="row-2 mb">
+            <div class="card">
+                <div class="card-lbl">📊 Session Quality</div>
+                <div class="q-track">
+                    <div class="q-seg" id="qsG" style="background:var(--accent);width:0%;"></div>
+                    <div class="q-seg" id="qsW" style="background:var(--amber);width:0%;"></div>
+                    <div class="q-seg" id="qsA" style="background:var(--bg-3);flex:1;"></div>
+                </div>
+                <div class="q-legend">
+                    <div class="ql"><div class="ql-pct" id="qpG" style="color:var(--accent);">—</div><div class="ql-dot" style="background:var(--accent);"></div><div class="ql-lbl">Balanced</div><div class="ql-dur" id="qdG">0m 0s</div></div>
+                    <div class="ql"><div class="ql-pct" id="qpW" style="color:var(--amber);">—</div><div class="ql-dot" style="background:var(--amber);"></div><div class="ql-lbl">Leaning</div><div class="ql-dur" id="qdW">0m 0s</div></div>
+                    <div class="ql"><div class="ql-pct" id="qpA" style="color:var(--text-3);">—</div><div class="ql-dot" style="background:var(--bg-3);border:1px solid var(--border-md);"></div><div class="ql-lbl">Away</div><div class="ql-dur" id="qdA">0m 0s</div></div>
+                </div>
+                <div class="insight-box"><span id="insIco">💡</span> <span id="insTxt">Waiting for data…</span></div>
+            </div>
+            <div class="card">
+                <div class="card-lbl">📈 Your Progress</div>
+                <div style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);font-weight:600;margin-bottom:0.2rem;">Good Posture Today</div>
+                <div class="prog-today" id="progToday">—</div>
+                <div class="goal-track"><div class="goal-fill" id="goalFill" style="width:0%;"></div></div>
+                <div style="font-size:0.8rem;color:var(--text-2);" id="goalTxt">Waiting for session data…</div>
+                <div class="prog-sub-grid">
+                    <div class="psub"><div class="psub-val" id="pgDaily">60%</div><div class="psub-lbl">Daily Goal<br><button id="editGoalBtn" style="margin-top:0.3rem;padding:0.22rem 0.5rem;background:var(--accent);color:#fff;border:none;border-radius:3px;cursor:pointer;font-size:0.55rem;font-weight:700;font-family:var(--font);">Edit</button></div></div>
+                    <div class="psub"><div class="psub-val" id="pgWeek">—</div><div class="psub-lbl">Week Avg</div></div>
+                    <div class="psub"><div class="psub-val" id="pgStreak">—</div><div class="psub-lbl">Best Streak</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community -->
+        <div class="card mb">
+            <div class="card-lbl">🌟 Community Highlights</div>
+            <div class="comm-grid">
+                <div class="comm-item"><div class="comm-lbl">Journey to Average</div><div class="comm-val" id="commProg">Start your session to compare</div></div>
+                <div class="comm-item"><div class="comm-lbl">Your Ranking</div><div class="comm-val g" id="commRank">Data after first reading</div></div>
+                <div class="comm-item"><div class="comm-lbl">Best Moment</div><div class="comm-best-t" id="commBestT">—</div><div class="comm-val" id="commBestD" style="font-size:0.8rem;">No streak yet</div></div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /dashboard -->
+
+<script>
+/* ---- CONFIG ---- */
+const API = { BASE:'https://api-leantil.duckdns.org', TOKEN:'', USER:'', USERS_EP:'/utenti', DATA_EP:'/ultimo', POLL:2000 }; /* DATA_EP:'/ultimo_ml */
+
+/* ---- STATE ---- */
+let isTest=false, isConn=false, pollId=null, testId=null, mode='basic', theme='dark', calView='week';
+let hist=[], sessStart=Date.now(), correct=0, total=0;
+let pDur={c:0,w:0,a:0}, lastTick=Date.now();
+let bestStr={start:null,dur:0}, curStr={start:null,dur:0};
+let achUnlocked=new Set(), errCount=0;
+let monthHist=buildHist(false), dailyGoal=parseInt(localStorage.getItem('dailyGoal')||'60');
+
+/* ---- POSTURE ---- */
+const PM = {
+    'CORRETTA':{d:'BALANCED',t:'correct'},'CORRECT':{d:'BALANCED',t:'correct'},
+    'INCLINATO_AVANTI':{d:'LEANING FORWARD',t:'warning'},'INCLINATO_INDIETRO':{d:'LEANING BACK',t:'warning'},
+    'INCLINATO_SINISTRA':{d:'LEANING LEFT',t:'warning'},'INCLINATO_DESTRA':{d:'LEANING RIGHT',t:'warning'},
+    'SLOUCH':{d:'SLOUCH',t:'warning'},'LEAN_LEFT':{d:'LEANING LEFT',t:'warning'},
+    'LEAN_RIGHT':{d:'LEANING RIGHT',t:'warning'},'LEAN_BACK':{d:'LEANING BACK',t:'warning'},
+    'LEAN_FORWARD':{d:'LEANING FORWARD',t:'warning'},'FIDGET':{d:'FIDGET',t:'warning'},
+    'ASSENTE':{d:'AWAY',t:'away'},'AWAY':{d:'AWAY',t:'away'},
+};
+const TP=[
+    {n:'CORRETTA',w:[1200,1250,1180,1220]},{n:'INCLINATO_INDIETRO',w:[800,850,1450,1480]},
+    {n:'INCLINATO_AVANTI',w:[1400,1420,950,980]},{n:'INCLINATO_DESTRA',w:[1100,1350,1150,1400]},
+    {n:'INCLINATO_SINISTRA',w:[1350,1100,1400,1150]},{n:'ASSENTE',w:[0,0,0,0]},
+];
+const ACH={
+    firstSession:{ico:'🎉',title:'First Session',desc:'Welcome to LeanTil!'},
+    perfectMinute:{ico:'⏱️',title:'Perfect Minute',desc:'60 seconds of great posture!'},
+    consistency:{ico:'🔥',title:'Consistency Champion',desc:'100 good posture readings!'},
+    superStar:{ico:'⭐',title:'Posture SuperStar',desc:'Sustained 90+ score!'},
+};
+const EX=[
+    {title:'Hip Opener',desc:'Cross one ankle over the opposite knee. Sit tall, gently press the raised knee down. Hold 20–30 sec per side.',img:'hip-opener.jpg'},
+    {title:'Chest & Back Opener',desc:'Interlace fingers behind your head. Arch gently over the chair back, open your chest, look upward. Hold 20 sec.',img:'turtle.jpg'},
+    {title:'Side Neck Stretch',desc:'Place one hand on your head and tilt your neck toward that side. Keep shoulders low and relaxed. 20 sec per side.',img:'side-neck-stretch.jpg'},
+    {title:'Chin Tuck',desc:'Sit tall. Pull your chin straight back (not down) to make a double chin. Hold 5 sec, repeat 10 times.',img:'turtle-chin-tuck.jpg'},
+    {title:'Forward Bend',desc:'Stand behind your chair, hold the back rest, hinge forward from the hips, let your torso hang. Hold 20–30 sec.',img:'forward_bend.jpg'},
+    {title:'Seated Spinal Twist',desc:'Sit tall, place one hand on the opposite knee and gently rotate your torso. Look over the shoulder. 20 sec per side.',img:'twist.jpg'},
+];
+
+/* ---- BREAK TIMER ---- */
+const BREAK_TOT=30*60, BREAK_SNZ=5*60, CIRC_B=2*Math.PI*35;
+let bSecs=BREAK_TOT, bInt=null, bSitting=false, exIdx=0;
+const AWAY_KEYS=['ASSENTE','AWAY','OFF_CHAIR','NO_PERSON','NESSUNO'];
+
+function startBreak(){stopBreak();bSecs=BREAK_TOT;drawBreak();bInt=setInterval(()=>{if(!bSitting)return;bSecs=Math.max(0,bSecs-1);drawBreak();if(bSecs===0)openEx();},1000);}
+function stopBreak(){if(bInt){clearInterval(bInt);bInt=null;}}
+function tickSitting(n){bSitting=n?!AWAY_KEYS.includes(n.toUpperCase()):false;}
+
+function drawBreak(){
+    const card=document.getElementById('breakCard');
+    const fill=document.getElementById('brFill');
+    const time=document.getElementById('brTime');
+    const pill=document.getElementById('bPill');
+    const m=String(Math.floor(bSecs/60)).padStart(2,'0');
+    const s=String(Math.floor(bSecs%60)).padStart(2,'0');
+    time.textContent=`${m}:${s}`;
+    const pct=bSecs/BREAK_TOT;
+    fill.setAttribute('stroke-dashoffset',(CIRC_B*(1-pct)).toFixed(2));
+    card.classList.remove('state-soon','state-now');
+    if(bSecs===0){card.classList.add('state-now');pill.textContent='🧘 Break!';}
+    else if(bSecs<=300){card.classList.add('state-soon');pill.textContent='⚠️ Soon';}
+    else{pill.textContent=bSitting?'🪑 Sitting':'🚶 Away';}
+    const nx=EX[exIdx%EX.length];
+    document.getElementById('bnName').textContent=nx.title;
+    document.getElementById('bnDesc').textContent=nx.desc;
+}
+
+/* ---- EXERCISE MODAL ---- */
+function openEx(){stopBreak();exIdx=0;buildDots();renderEx();document.getElementById('exBd').classList.add('open');}
+function closeEx(done){document.getElementById('exBd').classList.remove('open');bSecs=done?BREAK_TOT:BREAK_SNZ;startBreak();}
+function buildDots(){const c=document.getElementById('exDots');c.innerHTML='';EX.forEach((_,i)=>{const d=document.createElement('div');d.className='ex-dot'+(i===0?' active':'');c.appendChild(d);});}
+function renderEx(){
+    const ex=EX[exIdx];
+    const i=document.getElementById('exImg');if(i){i.src=ex.img;i.alt=ex.title;}
+    document.getElementById('exTitle').textContent=ex.title;
+    document.getElementById('exDesc').textContent=ex.desc;
+    document.querySelectorAll('.ex-dot').forEach((d,i)=>d.classList.toggle('active',i===exIdx));
+    document.getElementById('exPrev').disabled=exIdx===0;
+    document.getElementById('exNext').disabled=exIdx===EX.length-1;
+}
+
+/* ---- HISTORY ---- */
+function buildHist(demo){
+    const h=[],today=new Date();
+    for(let i=29;i>=0;i--){
+        const d=new Date(today);d.setDate(d.getDate()-i);
+        let score=null;
+        if(demo&&i>0){score=Math.floor(Math.random()*40)+60;if(Math.random()>0.75)score=null;}
+        h.push({date:d,score,isToday:i===0});
+    }return h;
+}
+function renderCal(){
+    const g=document.getElementById('calGrid');if(!g)return;g.innerHTML='';
+    const DN=['S','M','T','W','T','F','S'];
+    const data=calView==='week'?monthHist.slice(-7):monthHist;
+    data.forEach(day=>{
+        const el=document.createElement('div');el.className='cal-day';
+        const lb=document.createElement('div');lb.className='cal-day-lbl';
+        lb.textContent=calView==='week'?DN[day.date.getDay()]:day.date.getDate();
+        const dot=document.createElement('div');dot.className='cal-dot';
+        if(day.isToday)dot.classList.add('today');dot.textContent=day.date.getDate();
+        if(day.score===null)dot.classList.add('poor');
+        else if(day.score>=90)dot.classList.add('excellent');
+        else if(day.score>=70)dot.classList.add('good');
+        else if(day.score>=50)dot.classList.add('medium');
+        else dot.classList.add('poor');
+        el.onclick=()=>{const ds=day.date.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});alert(`${ds}\n${day.score!==null?'Score: '+day.score+'%':'No data'}`);}
+        el.appendChild(lb);el.appendChild(dot);g.appendChild(el);
+    });
+}
+function wkAvg(){const s=monthHist.slice(-7).filter(d=>d.score!==null).map(d=>d.score);return s.length?Math.round(s.reduce((a,b)=>a+b,0)/s.length):null;}
+function bestStreakD(){let m=0,c=0;monthHist.forEach(d=>{if(d.score&&d.score>=70){c++;m=Math.max(m,c);}else c=0;});return m;}
+function updateTodayHist(sc){const i=monthHist.findIndex(d=>d.isToday);if(i!==-1){monthHist[i].score=sc;renderCal();}}
+
+/* ---- SCORE RING ---- */
+const CIRC_S=2*Math.PI*46;
+function drawScore(sc){
+    const fill=document.getElementById('srFill');
+    const num=document.getElementById('srNum');
+    fill.setAttribute('stroke-dashoffset',(CIRC_S*(1-sc/100)).toFixed(2));
+    num.textContent=sc;
+}
+
+/* ---- DURATIONS ---- */
+function fmtD(ms){const s=Math.floor(ms/1000);return`${Math.floor(s/60)}m ${s%60}s`;}
+function tickDur(t){const now=Date.now(),e=now-lastTick;if(t==='correct')pDur.c+=e;else if(t==='warning')pDur.w+=e;else pDur.a+=e;lastTick=now;['qdG','qdW','qdA'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=fmtD([pDur.c,pDur.w,pDur.a][i]);});}
+
+/* ---- PARSE + UPDATE ---- */
+function update(raw){
+    const tot=raw.lc0+raw.lc1+raw.lc2+raw.lc3;
+    const pcts=[0,1,2,3].map(i=>tot>0?(raw[`lc${i}`]/tot)*100:25);
+    const entry={...raw,ts:Date.now(),pcts};
+    hist.push(entry);if(hist.length>500)hist.shift();
+    total++;const mp=PM[raw.postureName]||{d:'UNKNOWN',t:'warning'};
+    const isC=mp.t==='correct';if(isC)correct++;
+    tickDur(mp.t);trackBest(isC);refreshUI(entry,mp);tickSitting(raw.postureName);
+}
+
+function score(){return total>0?Math.max(0,Math.min(100,Math.round((correct/total)*100)-5)):0;}
+
+function refreshUI(e,mp){
+    const sc=score();
+    // status
+    const hs=document.getElementById('heroSt');hs.textContent=mp.d;hs.className=`hero-status s-${mp.t}`;
+    // score ring
+    if(total>0)drawScore(sc);
+    // session
+    s('mMin',Math.floor((Date.now()-sessStart)/60000));
+    s('mGood',total>0?`${sc}%`:'—');
+    s('mStab',total>0?`${Math.round(sc*0.9+10)}%`:'—');
+    // weights
+    const act=activeCells(e.postureName);
+    [0,1,2,3].forEach(i=>{document.getElementById(`wc${i}`).classList.toggle('active',act.includes(i));const wp=document.getElementById(`wp${i}`);if(wp)wp.textContent=`${Math.round(e.pcts[i])}%`;});
+    // health
+    const mins=Math.floor((Date.now()-sessStart)/60000);
+    const stretch=Math.round((sc/100)*mins*0.65);
+    const strain=Math.round((sc/100)*mins*1.5);
+    s('hBig',stretch);s('hStretch',stretch);s('hStrain',`${strain}%`);
+    s('hSub',stretch>=35?'min — full stretch session!':stretch>=20?'min — great prevention!':'min stretching equivalent');
+    // history + achievements
+    updateTodayHist(sc);checkAch(sc);
+    // advanced
+    if(mode==='advanced'){renderTL();renderQ();renderProg(sc);renderComm(sc);renderTLMarks();updateTLFoot();}
+}
+
+function s(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
+function sh(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
+
+function activeCells(n){
+    if(!n)return[];
+    if(n==='CORRETTA'||n==='CORRECT')return[0,1,2,3];
+    if(n.includes('AVANTI')||n.includes('FORWARD'))return[0,1];
+    if(n.includes('INDIETRO')||n.includes('BACK'))return[2,3];
+    if(n.includes('SINISTRA')||n.includes('LEFT'))return[0,2];
+    if(n.includes('DESTRA')||n.includes('RIGHT'))return[1,3];
+    return[];
+}
+
+/* ---- ADVANCED ---- */
+function renderTL(){
+    const g=document.getElementById('tlGrid');if(!g)return;g.innerHTML='';
+    hist.forEach(d=>{const b=document.createElement('div');b.className=`tl-bar ${PM[d.postureName]?.t||'warning'}`;b.postureData=d;b.onclick=()=>{const t=new Date(d.ts).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});alert(`${t}\n${PM[d.postureName]?.d||'Unknown'}`)};g.appendChild(b);});
+}
+function renderTLMarks(){
+    const el=document.getElementById('tlMarks');if(!el)return;
+    const dur=Date.now()-sessStart,step=Math.max(dur/4,1800000),m=[];
+    for(let i=0;i<4;i++){const t=new Date(sessStart+i*step);m.push(t.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false}));}
+    el.innerHTML=m.map(x=>`<span>${x}</span>`).join('');
+}
+function updateTLFoot(){
+    const dur=Date.now()-sessStart,h=Math.floor(dur/3600000),mi=Math.floor((dur%3600000)/60000);
+    s('tlDur',`${h}h ${mi}m`);s('tlStart',new Date(sessStart).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false}));
+}
+function renderQ(){
+    const cnt={c:0,w:0,a:0};hist.forEach(d=>{const t=PM[d.postureName]?.t||'warning';cnt[t==='correct'?'c':t==='away'?'a':'w']++;});
+    const tot=hist.length||1,pG=Math.round((cnt.c/tot)*100),pW=Math.round((cnt.w/tot)*100),pA=Math.round((cnt.a/tot)*100);
+    const g=document.getElementById('qsG'),w=document.getElementById('qsW');
+    if(g)g.style.width=`${pG}%`;if(w)w.style.width=`${pW}%`;
+    s('qpG',`${pG}%`);s('qpW',`${pW}%`);s('qpA',`${pA}%`);
+    const ins=[{c:pG>=80,ico:'🎉',t:'Excellent posture! Keep it up!'},{c:pG>=60,ico:'👍',t:'Good session — minor adjustments needed'},{c:pW>=40,ico:'💡',t:'Try adjusting your chair height'},{c:pA>=30,ico:'⏸️',t:'Taking breaks? Return to good posture'},{c:pG<50,ico:'🔄',t:'Focus on sitting centered and upright'},{c:true,ico:'💪',t:'Keep working on your posture!'}];
+    const i=ins.find(x=>x.c);s('insIco',i.ico);s('insTxt',i.t);
+}
+function renderProg(sc){
+    s('progToday',total>0?`${sc}%`:'—');
+    const wa=wkAvg(),bs=bestStreakD();
+    s('pgWeek',wa!==null?`${wa}%`:'—');s('pgStreak',bs>0?`${bs}d`:'—');s('pgDaily',`${dailyGoal}%`);
+    const gf=document.getElementById('goalFill'),gt=document.getElementById('goalTxt');
+    if(!gf||!gt)return;
+    if(total===0){gf.style.width='0%';gt.innerHTML='Waiting for session data…';return;}
+    const ratio=sc/dailyGoal,reached=Math.min(Math.round(ratio*100),100);
+    gf.style.width=`${Math.min(reached,100)}%`;
+    if(ratio<1){gt.innerHTML=`You've reached <strong style="color:var(--accent);">${reached}%</strong> of your daily goal`;gf.style.background='linear-gradient(90deg,var(--accent),#a07af5)';}
+    else{gt.innerHTML=`<strong style="color:var(--green);">Daily goal achieved!</strong>`;gf.style.background='linear-gradient(90deg,var(--green),#28dfa0)';}
+}
+function renderComm(sc){
+    const avg=68,prog=sc>=avg?100:Math.round((sc/avg)*100),better=Math.min(95,Math.round((sc/100)*40));
+    sh('commProg',`You're <strong>${prog}%</strong> of the way to the community average`);
+    sh('commRank',`You've surpassed <strong>${better}%</strong> of users`);
+}
+
+/* ---- BEST MOMENT ---- */
+function trackBest(isC){
+    if(isC){if(!curStr.start)curStr.start=Date.now();curStr.dur=Date.now()-curStr.start;if(curStr.dur>bestStr.dur)bestStr={...curStr};}
+    else curStr={start:null,dur:0};
+    if(bestStr.dur>0){const m=Math.floor(bestStr.dur/60000),sec=Math.floor((bestStr.dur%60000)/1000),t=new Date(bestStr.start).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});s('commBestT',t);s('commBestD',`${m>0?m+'m ':''}${sec}s perfect posture!`);}
+}
+
+/* ---- ACHIEVEMENTS ---- */
+function checkAch(sc){
+    if(total===1&&!achUnlocked.has('firstSession'))trigAch('firstSession');
+    if(correct===30&&!achUnlocked.has('perfectMinute'))trigAch('perfectMinute');
+    if(correct===100&&!achUnlocked.has('consistency'))trigAch('consistency');
+    if(sc>=90&&total>50&&!achUnlocked.has('superStar'))trigAch('superStar');
+}
+function trigAch(k){const a=ACH[k];achUnlocked.add(k);s('achIco',a.ico);s('achTitle',a.title);s('achDesc',a.desc);const p=document.getElementById('achPop');p.classList.add('show');setTimeout(()=>p.classList.remove('show'),3500);}
+
+/* ---- THEME ---- */
+function toggleTheme(){
+    theme=theme==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',theme);
+    const ico=theme==='dark'?'☀️':'🌙',ls=theme==='dark'?'leantil-logo2.png':'leantil-logo.png';
+    ['themeBtn','themeLogin'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=ico;});
+    ['logoLogin','logoDash'].forEach(id=>{const el=document.getElementById(id);if(el)el.src=ls;});
+    localStorage.setItem('theme',theme);
+}
+function loadTheme(){if(localStorage.getItem('theme')==='light')toggleTheme();}
+
+/* ---- MODE ---- */
+function toggleMode(){
+    mode=mode==='basic'?'advanced':'basic';
+    const on=mode==='advanced';
+    document.getElementById('togTrack').classList.toggle('on',on);
+    document.getElementById('modeLbl').textContent=on?'Advanced':'Simple';
+    document.getElementById('advSec').classList.toggle('hidden',!on);
+    if(on&&hist.length>0){const sc=score();renderTL();renderQ();renderTLMarks();updateTLFoot();renderProg(sc);renderComm(sc);}
+}
+
+/* ---- API ---- */
+function openApiModal(){document.getElementById('inUser').value=API.USER||'';document.getElementById('inPass').value='';document.getElementById('apiErr').style.display='none';document.getElementById('apiBd').classList.add('open');}
+function closeApiModal(){document.getElementById('apiBd').classList.remove('open');}
+
+async function doConnect() {
+  const u = document.getElementById('inUser').value.trim();
+  const p = document.getElementById('inPass').value.trim();
+  const err = document.getElementById('apiErr');
+  const btn = document.getElementById('confirmApi');
+  if (!u || !p) {
+    err.textContent = 'Enter both username and password.';
+    err.style.display = 'block';
+    return;
+  }
+  API.USER = u;
+  API.TOKEN = p;
+  err.style.display = 'none';
+  btn.textContent = 'Connecting…';
+  btn.disabled = true;
+  try {
+      const r = await fetch(API.BASE + '/utenti', {
+      headers: { 'Authorization': API.TOKEN },
+      signal: AbortSignal.timeout(6000)
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    isConn = true;
+    closeApiModal();
+    goLive('Connected');
+  } catch(e) {
+    err.textContent = e.message.includes('Failed to fetch')
+      ? 'Could not reach the server.'
+      : 'Connection failed: ' + e.message;
+    err.style.display = 'block';
+  } finally {
+    btn.textContent = 'Connect';
+    btn.disabled = false;
+  }
+}
+
+
+function startPoll(){stopPoll();fetchData();pollId=setInterval(fetchData,API.POLL);}
+function stopPoll(){if(pollId){clearInterval(pollId);pollId=null;}}
+
+
+async function fetchData() {
+    const PNAMES = ['CORRETTA','SLOUCH','LEAN_LEFT','LEAN_RIGHT','LEAN_BACK','FIDGET','AWAY','UNCERTAIN'];  
+    try {
+    const r = await fetch(
+      API.BASE + '/ultimo?utente=' + encodeURIComponent(API.USER),
+      { headers: { 'Authorization': API.TOKEN }, signal: AbortSignal.timeout(5000) }
+    );
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    if (!d || d.valore1 === undefined) throw new Error('No data');
+
+    const idx = Math.max(0, Math.min(7, Math.round(parseFloat(d.valore1))));
+    const postureName = PNAMES[idx];
+    const copx = parseFloat(d.valore3) || 0;
+    const copy = parseFloat(d.valore4) || 0;
+    const lc0 = Math.max(0, 25 * (1 - copx + copy));
+    const lc1 = Math.max(0, 25 * (1 + copx + copy));
+    const lc2 = Math.max(0, 25 * (1 - copx - copy));
+    const lc3 = Math.max(0, 25 * (1 + copx - copy));
+
+    errCount = 0;
+    update({ postureName, lc0, lc1, lc2, lc3 });
+    tickSitting(postureName);
+  } catch(e) {
+    errCount++;
+    if (errCount > 5) showErr('Connection lost');
+  }
+}
+
+
+
+
+    
+/* ---- TEST MODE ---- */
+function startTest(){isTest=true;monthHist=buildHist(true);renderCal();document.getElementById('testBadge').classList.remove('hidden');goLive('Demo Mode');testId=setInterval(()=>{const p=TP[Math.floor(Math.random()*TP.length)];update({postureName:p.n,lc0:p.w[0],lc1:p.w[1],lc2:p.w[2],lc3:p.w[3]});},2000);}
+function stopTest(){isTest=false;if(testId){clearInterval(testId);testId=null;}document.getElementById('testBadge').classList.add('hidden');}
+
+/* ---- NAV ---- */
+function goLive(label){
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    const chip=document.getElementById('connChip');chip.classList.add('live');s('connLbl',label);
+    startBreak();renderCal();drawBreak();
+    if(isConn)startPoll();
+}
+
+function disconnect(){
+    stopPoll();stopTest();stopBreak();
+    isConn=false;isTest=false;
+    resetState();
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    const chip=document.getElementById('connChip');chip.classList.remove('live');s('connLbl','Disconnected');
+}
+
+function resetState(){
+    hist=[];sessStart=Date.now();correct=0;total=0;pDur={c:0,w:0,a:0};lastTick=Date.now();
+    bestStr={start:null,dur:0};curStr={start:null,dur:0};achUnlocked=new Set();errCount=0;
+    monthHist=buildHist(false);
+}
+
+function showErr(msg){const el=document.getElementById('loginErr');if(!el)return;el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',8000);}
+
+/* ---- INIT ---- */
+document.addEventListener('DOMContentLoaded',()=>{
+    try{const u=localStorage.getItem('lt_api_user'),t=localStorage.getItem('lt_api_token');if(u)API.USER=u;if(t)API.TOKEN=t;}catch(e){}
+    loadTheme();renderCal();drawBreak();
+
+    // login
+    document.getElementById('connectBtn').onclick=openApiModal;
+    document.getElementById('demoBtn').onclick=startTest;
+    document.getElementById('themeLogin').onclick=toggleTheme;
+
+    // dashboard header
+    document.getElementById('themeBtn').onclick=toggleTheme;
+    document.getElementById('discBtn').onclick=disconnect;
+    document.getElementById('modePill').onclick=toggleMode;
+    document.getElementById('helpBtn').onclick=()=>document.getElementById('helpBd').classList.add('open');
+    document.getElementById('closeHelp').onclick=()=>document.getElementById('helpBd').classList.remove('open');
+    document.getElementById('helpBd').onclick=e=>{if(e.target===document.getElementById('helpBd'))document.getElementById('helpBd').classList.remove('open');};
+
+    // api modal
+    document.getElementById('confirmApi').onclick=doConnect;
+    document.getElementById('cancelApi').onclick=closeApiModal;
+    document.getElementById('closeApi').onclick=closeApiModal;
+    document.getElementById('apiBd').onclick=e=>{if(e.target===document.getElementById('apiBd'))closeApiModal();};
+
+    // exercise
+    document.getElementById('exPrev').onclick=()=>{if(exIdx>0){exIdx--;renderEx();}};
+    document.getElementById('exNext').onclick=()=>{if(exIdx<EX.length-1){exIdx++;renderEx();}};
+    document.getElementById('exDone').onclick=()=>closeEx(true);
+    document.getElementById('exSkip').onclick=()=>closeEx(false);
+    document.getElementById('bCta').onclick=openEx;
+    document.getElementById('exBd').onclick=e=>{if(e.target===document.getElementById('exBd'))closeEx(false);};
+
+    // exit demo
+    document.getElementById('exitDemo').onclick=()=>{stopTest();stopPoll();isConn=false;resetState();disconnect();};
+
+    // calendar
+    document.getElementById('vWeek').onclick=()=>{calView='week';document.getElementById('vWeek').classList.add('active');document.getElementById('vMonth').classList.remove('active');renderCal();};
+    document.getElementById('vMonth').onclick=()=>{calView='month';document.getElementById('vMonth').classList.add('active');document.getElementById('vWeek').classList.remove('active');renderCal();};
+
+    // goal
+    document.getElementById('editGoalBtn').onclick=openGoalModal;
+    document.getElementById('closeGoal').onclick=()=>document.getElementById('goalBd').classList.remove('open');
+    document.getElementById('cancelGoal').onclick=()=>document.getElementById('goalBd').classList.remove('open');
+    document.getElementById('goalBd').onclick=e=>{if(e.target===document.getElementById('goalBd'))document.getElementById('goalBd').classList.remove('open');};
+    document.getElementById('goalR').oninput=()=>s('goalRV',`${document.getElementById('goalR').value}%`);
+    document.getElementById('saveGoal').onclick=()=>{
+        dailyGoal=parseInt(document.getElementById('goalR').value,10);
+        localStorage.setItem('dailyGoal',dailyGoal);s('pgDaily',`${dailyGoal}%`);
+        renderProg(score());document.getElementById('goalBd').classList.remove('open');
+    };
+
+    // tooltip
+    document.addEventListener('mousemove',e=>{
+        const b=e.target.closest('.tl-bar'),tip=document.getElementById('tlTip');
+        if(b&&b.postureData){const d=b.postureData;s('tlTipT',new Date(d.ts).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}));s('tlTipS',PM[d.postureName]?.d||'Unknown');tip.style.left=`${e.clientX+13}px`;tip.style.top=`${e.clientY+13}px`;tip.classList.add('show');}
+        else tip.classList.remove('show');
+    });
+});
+
+function openGoalModal(){document.getElementById('goalR').value=dailyGoal;s('goalRV',`${dailyGoal}%`);document.getElementById('goalBd').classList.add('open');}
+</script>
+</body>
+</html>
