@@ -92,7 +92,6 @@
 
         /* LAYOUTS */
         .row-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
-
         @keyframes mIn{from{transform:translateY(18px) scale(0.97);opacity:0;}to{transform:none;opacity:1;}}
 
         /* =============================================
@@ -130,34 +129,63 @@
         .kpi-delta.dn{color:var(--red);}
 
         /* =============================================
-           BREAK CARD
+           BREAK CARD — redesigned, action-focused
         ============================================= */
-        .break-card{position:relative;overflow:hidden;padding:1.75rem;display:flex;flex-direction:column;justify-content:space-between;min-height:220px;transition:border-color 0.4s,box-shadow 0.4s;}
-        .break-card::before{content:'';position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,var(--accent-soft) 0%,transparent 68%);right:-55px;top:-55px;pointer-events:none;transition:background 0.4s;}
-        .break-card.state-soon{border-color:rgba(245,166,35,0.38);box-shadow:var(--shadow),0 0 32px rgba(245,166,35,0.1);}
-        .break-card.state-soon::before{background:radial-gradient(circle,var(--amber-soft) 0%,transparent 68%);}
-        .break-card.state-now{border-color:rgba(34,201,138,0.42);animation:bpulse 2s ease-in-out infinite;}
-        .break-card.state-now::before{background:radial-gradient(circle,var(--green-soft) 0%,transparent 68%);}
-        @keyframes bpulse{0%,100%{box-shadow:var(--shadow),0 0 40px rgba(34,201,138,0.18);}50%{box-shadow:var(--shadow),0 0 60px rgba(34,201,138,0.36);}}
-        .break-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;}
-        .break-info{flex:1;}
-        .break-next-lbl{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);font-weight:600;margin-bottom:0.3rem;}
-        .break-next-name{font-size:1rem;font-weight:400;color:var(--text);margin-bottom:0.2rem;}
-        .break-next-desc{font-size:0.7rem;color:var(--text-2);line-height:1.45;max-width:190px;}
-        .br-bg{fill:none;stroke:var(--bg-3);stroke-width:4.5;}
-        .br-fill{fill:none;stroke:var(--accent);stroke-width:4.5;stroke-linecap:round;transform-origin:center;transform:rotate(-90deg);transition:stroke-dashoffset 1s linear,stroke 0.4s;}
+        .break-card{
+            position:relative;overflow:hidden;
+            padding:2rem 1.75rem 1.75rem;
+            display:flex;flex-direction:column;
+            align-items:center;justify-content:space-between;
+            min-height:300px;
+            text-align:center;
+            transition:border-color 0.4s,box-shadow 0.4s;
+        }
+        .break-card::before{
+            content:'';position:absolute;
+            width:300px;height:300px;border-radius:50%;
+            background:radial-gradient(circle,var(--accent-soft) 0%,transparent 65%);
+            left:50%;top:50%;transform:translate(-50%,-50%);
+            pointer-events:none;transition:background 0.4s;
+        }
+        .break-card.state-soon{border-color:rgba(245,166,35,0.42);box-shadow:var(--shadow),0 0 40px rgba(245,166,35,0.12);}
+        .break-card.state-soon::before{background:radial-gradient(circle,var(--amber-soft) 0%,transparent 65%);}
+        .break-card.state-now{border-color:rgba(34,201,138,0.5);animation:bpulse 2s ease-in-out infinite;}
+        .break-card.state-now::before{background:radial-gradient(circle,var(--green-soft) 0%,transparent 65%);}
+        @keyframes bpulse{0%,100%{box-shadow:var(--shadow),0 0 40px rgba(34,201,138,0.18);}50%{box-shadow:var(--shadow),0 0 70px rgba(34,201,138,0.38);}}
+
+        /* ring SVG */
+        .break-ring-wrap{position:relative;z-index:1;margin-bottom:1.25rem;}
+        .br-bg{fill:none;stroke:var(--bg-3);stroke-width:5;}
+        .br-fill{fill:none;stroke:var(--accent);stroke-width:5;stroke-linecap:round;transform-origin:center;transform:rotate(-90deg);transition:stroke-dashoffset 1s linear,stroke 0.4s;}
         .state-soon .br-fill{stroke:var(--amber);}
         .state-now .br-fill{stroke:var(--green);}
-        .br-time{font-family:var(--mono);font-size:0.8125rem;font-weight:500;fill:var(--text);text-anchor:middle;dominant-baseline:central;}
-        .br-sub{font-family:var(--font);font-size:0.28rem;font-weight:600;fill:var(--text-3);text-anchor:middle;dominant-baseline:central;text-transform:uppercase;letter-spacing:0.1em;}
-        .break-bottom{display:flex;align-items:center;gap:0.625rem;}
+        .br-time{font-family:var(--mono);font-size:1.25rem;font-weight:400;fill:var(--text);text-anchor:middle;dominant-baseline:central;}
+        .br-sub{font-family:var(--font);font-size:0.34rem;font-weight:600;fill:var(--text-3);text-anchor:middle;dominant-baseline:central;text-transform:uppercase;letter-spacing:0.12em;}
+
+        /* status + next exercise label */
+        .break-status-row{display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:0.625rem;position:relative;z-index:1;}
         .break-pill{display:inline-flex;align-items:center;gap:0.3rem;padding:0.28rem 0.7rem;border-radius:999px;font-size:0.625rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;background:var(--accent-soft);color:var(--accent);border:1px solid rgba(124,90,240,0.22);transition:all 0.4s;}
         .state-soon .break-pill{background:var(--amber-soft);color:var(--amber);border-color:rgba(245,166,35,0.28);}
         .state-now .break-pill{background:var(--green-soft);color:var(--green);border-color:rgba(34,201,138,0.28);}
-        .break-cta{margin-left:auto;padding:0.4rem 1rem;border-radius:var(--r-sm);font-size:0.7rem;font-weight:700;font-family:var(--font);cursor:pointer;border:none;background:var(--accent);color:#fff;box-shadow:0 2px 10px var(--accent-glow);transition:all 0.2s;}
-        .break-cta:hover{transform:translateY(-1px);box-shadow:0 4px 18px var(--accent-glow);}
-        .state-soon .break-cta{background:var(--amber);box-shadow:0 2px 10px rgba(245,166,35,0.32);}
-        .state-now .break-cta{background:var(--green);box-shadow:0 2px 10px var(--green-glow);}
+
+        .break-next{font-size:0.75rem;color:var(--text-3);position:relative;z-index:1;margin-bottom:1.25rem;}
+        .break-next strong{color:var(--text-2);}
+
+        /* BIG CTA */
+        .break-cta-big{
+            position:relative;z-index:1;
+            width:100%;padding:0.875rem 1.5rem;
+            border-radius:var(--r);font-size:0.9375rem;font-weight:700;
+            font-family:var(--font);cursor:pointer;border:none;
+            background:var(--accent);color:#fff;
+            box-shadow:0 4px 20px var(--accent-glow);
+            transition:all 0.2s;letter-spacing:0.02em;
+        }
+        .break-cta-big:hover{transform:translateY(-2px);box-shadow:0 8px 32px var(--accent-glow);}
+        .state-soon .break-cta-big{background:var(--amber);box-shadow:0 4px 20px rgba(245,166,35,0.4);color:#000;}
+        .state-soon .break-cta-big:hover{box-shadow:0 8px 32px rgba(245,166,35,0.5);}
+        .state-now .break-cta-big{background:var(--green);box-shadow:0 4px 20px var(--green-glow);}
+        .state-now .break-cta-big:hover{box-shadow:0 8px 32px var(--green-glow);}
 
         /* =============================================
            SEAT PRESSURE MAP
@@ -196,6 +224,51 @@
         .cal-legend{display:flex;gap:1.125rem;flex-wrap:wrap;margin-top:0.875rem;}
         .cl-item{display:flex;align-items:center;gap:0.3rem;font-size:0.6375rem;color:var(--text-3);}
         .cl-dot{width:7px;height:7px;border-radius:50%;}
+
+        /* =============================================
+           DAY DETAIL MODAL
+        ============================================= */
+        .day-modal{max-width:520px;}
+        .day-modal-date{font-size:0.75rem;color:var(--text-3);text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-bottom:1.5rem;}
+
+        /* score + breakdown side by side */
+        .day-top{display:flex;gap:1.5rem;align-items:center;margin-bottom:1.5rem;}
+        .day-score-wrap{display:flex;flex-direction:column;align-items:center;gap:0.4rem;flex-shrink:0;}
+        .day-score-lbl{font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);font-weight:600;}
+        .dsr-bg{fill:none;stroke:var(--bg-3);stroke-width:7;}
+        .dsr-fill{fill:none;stroke:var(--accent);stroke-width:7;stroke-linecap:round;transform-origin:center;transform:rotate(-90deg);transition:stroke-dashoffset 0.9s cubic-bezier(.4,0,.2,1);}
+        .dsr-num{font-family:var(--mono);font-size:1.375rem;font-weight:400;fill:var(--text);text-anchor:middle;dominant-baseline:central;}
+        .dsr-sub{font-family:var(--font);font-size:0.38rem;font-weight:600;fill:var(--text-3);text-anchor:middle;dominant-baseline:central;text-transform:uppercase;letter-spacing:0.1em;}
+
+        .day-stats-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;}
+        .day-stat{background:var(--bg-3);border-radius:var(--r-sm);padding:0.75rem;border:1px solid var(--border);}
+        .day-stat-val{font-family:var(--mono);font-size:1.25rem;font-weight:300;margin-bottom:0.15rem;}
+        .day-stat-lbl{font-size:0.55rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);font-weight:600;}
+
+        /* quality bar */
+        .day-q-lbl{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);font-weight:600;margin-bottom:0.5rem;}
+        .day-q-track{height:10px;border-radius:999px;overflow:hidden;background:var(--bg-3);display:flex;margin-bottom:0.75rem;}
+        .day-q-seg{transition:width 0.6s cubic-bezier(.4,0,.2,1);}
+        .day-q-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:1.25rem;}
+        .day-ql{background:var(--bg-3);border-radius:var(--r-sm);padding:0.625rem;text-align:center;border:1px solid var(--border);}
+        .day-ql-pct{font-family:var(--mono);font-size:1.1rem;font-weight:400;margin-bottom:0.15rem;}
+        .day-ql-dot{width:6px;height:6px;border-radius:50%;margin:0 auto 0.2rem;}
+        .day-ql-lbl{font-size:0.5rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);font-weight:600;}
+        .day-ql-dur{font-size:0.5rem;color:var(--text-3);font-family:var(--mono);margin-top:0.1rem;}
+
+        /* mini timeline in day modal */
+        .day-tl-lbl{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);font-weight:600;margin-bottom:0.5rem;}
+        .day-tl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(10px,1fr));gap:2px;max-height:80px;overflow:hidden;}
+        .day-tl-bar{aspect-ratio:1;border-radius:2px;}
+        .day-tl-bar.correct{background:var(--accent);}
+        .day-tl-bar.warning{background:var(--amber);}
+        .day-tl-bar.away{background:var(--bg-3);}
+
+        /* loading state inside day modal */
+        .day-loading{text-align:center;padding:2rem;color:var(--text-3);}
+        .day-no-data{text-align:center;padding:2.5rem;color:var(--text-3);}
+        .day-no-data-ico{font-size:2.5rem;margin-bottom:0.75rem;}
+        .day-no-data-txt{font-size:0.875rem;}
 
         /* =============================================
            ADVANCED
@@ -254,7 +327,7 @@
         /* MODALS */
         .backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:1200;}
         .backdrop.open{display:flex;}
-        .modal{background:var(--bg-2);border:1px solid var(--border-md);border-radius:var(--r-xl);padding:2rem;max-width:540px;width:92%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.65);animation:mIn 0.3s cubic-bezier(.34,1.56,.64,1);}
+        .modal{background:var(--bg-2);border:1px solid var(--border-md);border-radius:var(--r-xl);padding:2rem;max-width:540px;width:92%;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.65);animation:mIn 0.3s cubic-bezier(.34,1.56,.64,1);}
         .modal-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.375rem;}
         .modal-title{font-size:1.1875rem;font-weight:300;letter-spacing:0.02em;}
         .modal-x{background:none;border:none;color:var(--text-3);font-size:1.5rem;cursor:pointer;line-height:1;padding:0.2rem;transition:color 0.2s;}
@@ -310,8 +383,8 @@
 
         /* RESPONSIVE */
         @media(max-width:1024px){.kpi-strip{grid-template-columns:repeat(2,1fr);}}
-        @media(max-width:860px){.row-2{grid-template-columns:1fr;}.hero-card{padding:1.375rem 1.5rem;}.comm-grid{grid-template-columns:1fr;}.comm-item{padding:0.875rem 0;border-right:none;border-bottom:1px solid var(--border);}.comm-item:last-child{border-bottom:none;}}
-        @media(max-width:600px){.page{padding:0.875rem;}.hero-status{font-size:2rem;}.kpi-strip{grid-template-columns:1fr 1fr;}.cal-grid{grid-template-columns:repeat(7,minmax(0,1fr));gap:0.25rem;}.cal-dot{width:26px;height:26px;font-size:0.6rem;}.header-right{gap:0.35rem;}}
+        @media(max-width:860px){.row-2{grid-template-columns:1fr;}.hero-card{padding:1.375rem 1.5rem;}.comm-grid{grid-template-columns:1fr;}.comm-item{padding:0.875rem 0;border-right:none;border-bottom:1px solid var(--border);}.comm-item:last-child{border-bottom:none;}.day-top{flex-direction:column;}}
+        @media(max-width:600px){.page{padding:0.875rem;}.hero-status{font-size:2rem;}.kpi-strip{grid-template-columns:1fr 1fr;}.cal-grid{grid-template-columns:repeat(7,minmax(0,1fr));gap:0.25rem;}.cal-dot{width:26px;height:26px;font-size:0.6rem;}.header-right{gap:0.35rem;}.day-stats-grid{grid-template-columns:1fr 1fr;}}
     </style>
 </head>
 <body>
@@ -336,11 +409,11 @@
     <div class="modal">
         <div class="modal-hd"><div class="modal-title">Understanding Your Dashboard</div><button class="modal-x" id="closeHelp">&times;</button></div>
         <div class="modal-sec"><div class="modal-sec-title">Overall Score</div><p>0–100 wellness score based on how consistently you maintain balanced posture this session.</p></div>
-        <div class="modal-sec"><div class="modal-sec-title">KPI Cards</div><p>Four at-a-glance numbers: minutes in balanced posture today · active session time · your score vs yesterday · current streak of good posture days.</p></div>
-        <div class="modal-sec"><div class="modal-sec-title">Break Timer</div><p>Counts down 30 active sitting minutes, then suggests a stretch routine. Shows the next exercise so you know what's coming.</p></div>
+        <div class="modal-sec"><div class="modal-sec-title">KPI Cards</div><p>Four at-a-glance numbers: minutes in balanced posture today · active session time · your score vs yesterday · current streak of good posture days. Times over 60 minutes are shown in hours; over 24 hours in days.</p></div>
+        <div class="modal-sec"><div class="modal-sec-title">Break Timer</div><p>Counts down 30 active sitting minutes, then suggests a stretch routine. Click "Take a Break" at any time to start the exercise routine.</p></div>
+        <div class="modal-sec"><div class="modal-sec-title">Posture History</div><p>Click any day dot to see that day's full stats: score, quality breakdown, and a mini session timeline.</p></div>
         <div class="modal-sec"><div class="modal-sec-title">Seat Pressure Map</div><p>Visual representation of where your weight sits on the chair. Highlighted zones = more pressure. Balanced posture lights up all four zones evenly.</p></div>
         <div class="modal-sec"><div class="modal-sec-title">Connection Status</div><p>🟢 Connected — server OK, sensor data fresh.<br>🟡 Device offline — server reachable but sensor silent &gt;15s.<br>🔴 Server offline — cannot reach LeanTil server, auto-retrying.</p></div>
-        <div class="modal-sec"><div class="modal-sec-title">Posture History</div><p>Green = excellent (90+) · Purple = good (70–89) · Yellow = medium (50–69) · Gray = no data. Loaded from server at login.</p></div>
     </div>
 </div>
 
@@ -398,6 +471,22 @@
     </div>
 </div>
 
+<!-- DAY DETAIL MODAL -->
+<div id="dayBd" class="backdrop">
+    <div class="modal day-modal">
+        <div class="modal-hd">
+            <div>
+                <div class="modal-title" id="dayModalTitle">—</div>
+                <div class="day-modal-date" id="dayModalDate"></div>
+            </div>
+            <button class="modal-x" id="closeDayModal">&times;</button>
+        </div>
+        <div id="dayModalBody">
+            <div class="day-loading">Loading data…<br><div style="margin:1rem auto;width:24px;height:24px;border:2px solid var(--border-md);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;"></div></div>
+        </div>
+    </div>
+</div>
+
 <!-- LOGIN -->
 <div id="loginScreen" class="login-screen">
     <div style="position:absolute;top:1.25rem;right:1.25rem;"><button class="icon-btn" id="themeLogin">☀️</button></div>
@@ -451,13 +540,13 @@
         <div class="kpi-card kc-accent">
             <span class="kpi-icon">🧘</span>
             <div class="kpi-val" id="kpiBalanced" style="color:var(--accent);">0</div>
-            <div class="kpi-lbl">Min balanced today</div>
+            <div class="kpi-lbl">Balanced today</div>
             <div class="kpi-delta" id="kpiBalancedDelta">— vs yesterday</div>
         </div>
         <div class="kpi-card kc-blue">
             <span class="kpi-icon">⏱️</span>
             <div class="kpi-val" id="kpiSession" style="color:var(--blue);">0</div>
-            <div class="kpi-lbl">Session minutes</div>
+            <div class="kpi-lbl">Session time</div>
             <div class="kpi-delta" id="kpiSessionSub">Active since —</div>
         </div>
         <div class="kpi-card kc-green">
@@ -476,40 +565,34 @@
 
     <!-- BREAK + SEAT MAP -->
     <div class="row-2 mb">
+
+        <!-- BREAK — redesigned, action-focused -->
         <div class="card break-card" id="breakCard">
-            <div class="break-top">
-                <div class="break-info">
-                    <div class="break-next-lbl">Next Exercise</div>
-                    <div class="break-next-name" id="bnName">Hip Opener</div>
-                    <div class="break-next-desc" id="bnDesc">Cross one ankle over the opposite knee. Hold 20–30 sec per side.</div>
-                </div>
-                <svg width="84" height="84" viewBox="0 0 84 84">
-                    <circle class="br-bg" cx="42" cy="42" r="35"/>
-                    <circle class="br-fill" id="brFill" cx="42" cy="42" r="35" stroke-dasharray="219.91" stroke-dashoffset="0"/>
-                    <text class="br-time" id="brTime" x="42" y="38">30:00</text>
-                    <text class="br-sub" x="42" y="51">until break</text>
+            <div class="break-ring-wrap">
+                <svg width="140" height="140" viewBox="0 0 140 140">
+                    <circle class="br-bg" cx="70" cy="70" r="58"/>
+                    <circle class="br-fill" id="brFill" cx="70" cy="70" r="58"
+                        stroke-dasharray="364.42" stroke-dashoffset="0"/>
+                    <text class="br-time" id="brTime" x="70" y="63">30:00</text>
+                    <text class="br-sub"  x="70" y="82">until break</text>
                 </svg>
             </div>
-            <div class="break-bottom">
+            <div class="break-status-row">
                 <div class="break-pill" id="bPill">🪑 Sitting</div>
-                <button class="break-cta" id="bCta">Take Break Now</button>
             </div>
+            <div class="break-next" id="breakNextLbl">Next: <strong id="bnName">Hip Opener</strong></div>
+            <button class="break-cta-big" id="bCta">Take a Break Now</button>
         </div>
 
+        <!-- SEAT MAP -->
         <div class="card">
             <div class="card-lbl">🪑 Seat Pressure Map</div>
             <div class="seat-visual">
                 <div class="seat-zone" id="sz0"><div class="seat-zone-pct" id="szp0">—</div><div class="seat-zone-lbl">Front L</div></div>
-                <div class="seat-spine">
-                    <div class="seat-spine-dot"></div><div class="seat-spine-dot"></div>
-                    <div class="seat-spine-dot"></div><div class="seat-spine-dot"></div>
-                </div>
+                <div class="seat-spine"><div class="seat-spine-dot"></div><div class="seat-spine-dot"></div><div class="seat-spine-dot"></div><div class="seat-spine-dot"></div></div>
                 <div class="seat-zone" id="sz1"><div class="seat-zone-pct" id="szp1">—</div><div class="seat-zone-lbl">Front R</div></div>
                 <div class="seat-zone" id="sz2"><div class="seat-zone-pct" id="szp2">—</div><div class="seat-zone-lbl">Back L</div></div>
-                <div class="seat-spine">
-                    <div class="seat-spine-dot"></div><div class="seat-spine-dot"></div>
-                    <div class="seat-spine-dot"></div><div class="seat-spine-dot"></div>
-                </div>
+                <div class="seat-spine"><div class="seat-spine-dot"></div><div class="seat-spine-dot"></div><div class="seat-spine-dot"></div><div class="seat-spine-dot"></div></div>
                 <div class="seat-zone" id="sz3"><div class="seat-zone-pct" id="szp3">—</div><div class="seat-zone-lbl">Back R</div></div>
             </div>
             <div class="seat-hint" id="seatHint">Waiting for sensor data…</div>
@@ -519,7 +602,7 @@
     <!-- CALENDAR -->
     <div class="card mb">
         <div class="cal-hd">
-            <div class="card-lbl" style="margin-bottom:0;">📅 Posture History</div>
+            <div class="card-lbl" style="margin-bottom:0;">📅 Posture History — click any day for details</div>
             <div class="view-sw">
                 <button class="vbtn active" id="vWeek">Week</button>
                 <button class="vbtn" id="vMonth">Month</button>
@@ -539,7 +622,6 @@
         <div class="adv-divider"><div class="adv-line"></div><div class="adv-label">⭐ Advanced Insights</div><div class="adv-line"></div></div>
 
         <div class="row-2 mb">
-            <!-- 7-day trend -->
             <div class="card">
                 <div class="card-lbl">📊 7-Day Posture Trend</div>
                 <div class="trend-chart" id="trendChart"></div>
@@ -549,8 +631,6 @@
                     <div><div class="trend-stat-val" id="trendStreak">—</div><div class="trend-stat-lbl">Streak</div></div>
                 </div>
             </div>
-
-            <!-- Session quality -->
             <div class="card">
                 <div class="card-lbl">📊 Session Quality</div>
                 <div class="q-track">
@@ -559,15 +639,14 @@
                     <div class="q-seg" id="qsA" style="background:var(--bg-3);flex:1;"></div>
                 </div>
                 <div class="q-legend">
-                    <div class="ql"><div class="ql-pct" id="qpG" style="color:var(--accent);">—</div><div class="ql-dot" style="background:var(--accent);"></div><div class="ql-lbl">Balanced</div><div class="ql-dur" id="qdG">0m 0s</div></div>
-                    <div class="ql"><div class="ql-pct" id="qpW" style="color:var(--amber);">—</div><div class="ql-dot" style="background:var(--amber);"></div><div class="ql-lbl">Leaning</div><div class="ql-dur" id="qdW">0m 0s</div></div>
-                    <div class="ql"><div class="ql-pct" id="qpA" style="color:var(--text-3);">—</div><div class="ql-dot" style="background:var(--bg-3);border:1px solid var(--border-md);"></div><div class="ql-lbl">Away</div><div class="ql-dur" id="qdA">0m 0s</div></div>
+                    <div class="ql"><div class="ql-pct" id="qpG" style="color:var(--accent);">—</div><div class="ql-dot" style="background:var(--accent);"></div><div class="ql-lbl">Balanced</div><div class="ql-dur" id="qdG">—</div></div>
+                    <div class="ql"><div class="ql-pct" id="qpW" style="color:var(--amber);">—</div><div class="ql-dot" style="background:var(--amber);"></div><div class="ql-lbl">Leaning</div><div class="ql-dur" id="qdW">—</div></div>
+                    <div class="ql"><div class="ql-pct" id="qpA" style="color:var(--text-3);">—</div><div class="ql-dot" style="background:var(--bg-3);border:1px solid var(--border-md);"></div><div class="ql-lbl">Away</div><div class="ql-dur" id="qdA">—</div></div>
                 </div>
                 <div class="insight-box"><span id="insIco">💡</span> <span id="insTxt">Waiting for data…</span></div>
             </div>
         </div>
 
-        <!-- Timeline -->
         <div class="card mb">
             <div class="card-lbl">📈 Posture Timeline — this session</div>
             <div class="tl-marks" id="tlMarks"></div>
@@ -580,7 +659,6 @@
             </div>
         </div>
 
-        <!-- Community -->
         <div class="card mb">
             <div class="card-lbl">🌟 Community Highlights</div>
             <div class="comm-grid">
@@ -659,9 +737,10 @@ const EX=[
 ];
 
 /* ================================================================
-   BREAK TIMER
+   BREAK TIMER  — updated CIRC for larger ring (r=58)
 ================================================================ */
-const BREAK_TOT=30*60,BREAK_SNZ=5*60,CIRC_B=2*Math.PI*35;
+const BREAK_TOT=30*60, BREAK_SNZ=5*60;
+const CIRC_B=2*Math.PI*58; // r=58
 let bSecs=BREAK_TOT,bInt=null,bSitting=false,exIdx=0;
 
 function startBreak(){stopBreak();bSecs=BREAK_TOT;drawBreak();bInt=setInterval(()=>{if(!bSitting)return;bSecs=Math.max(0,bSecs-1);drawBreak();if(bSecs===0)openEx();},1000);}
@@ -677,11 +756,11 @@ function drawBreak(){
     card.classList.remove('state-soon','state-now');
     const pill=document.getElementById('bPill');
     if(bSecs===0){card.classList.add('state-now');pill.textContent='🧘 Break!';}
-    else if(bSecs<=300){card.classList.add('state-soon');pill.textContent='⚠️ Soon';}
+    else if(bSecs<=300){card.classList.add('state-soon');pill.textContent='⚠️ Almost time';}
     else{pill.textContent=bSitting?'🪑 Sitting':'🚶 Away';}
+    // update next exercise label
     const nx=EX[exIdx%EX.length];
     document.getElementById('bnName').textContent=nx.title;
-    document.getElementById('bnDesc').textContent=nx.desc;
 }
 
 /* ================================================================
@@ -707,7 +786,20 @@ function parseNum(v){if(v===null||v===undefined)return 0;return parseFloat(Strin
 function parseTS(ts){if(!ts)return null;const d=new Date(ts);return isNaN(d.getTime())?null:d;}
 function s(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
 function sh(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v;}
-function fmtD(ms){const sec=Math.floor(ms/1000);return`${Math.floor(sec/60)}m ${sec%60}s`;}
+
+/* ================================================================
+   TIME FORMATTING  (minutes input)
+   <60 → "Xm"  |  <1440 → "Xh Ym"  |  >=1440 → "Xd Yh"
+================================================================ */
+function fmtMins(mins){
+    mins=Math.round(mins);
+    if(mins<60)return`${mins}m`;
+    if(mins<1440){const h=Math.floor(mins/60),m=mins%60;return m>0?`${h}h ${m}m`:`${h}h`;}
+    const d=Math.floor(mins/1440),h=Math.floor((mins%1440)/60);return h>0?`${d}d ${h}h`:`${d}d`;
+}
+
+/* Duration from ms → "Xm Ys" for detail panels, fmtMins for KPI */
+function fmtDms(ms){const sec=Math.floor(ms/1000);return`${Math.floor(sec/60)}m ${sec%60}s`;}
 
 /* ================================================================
    HISTORY SKELETON
@@ -724,7 +816,7 @@ function buildHist(demo){
 }
 
 /* ================================================================
-   LOAD HISTORICAL DATA  (fixes: first-session + stale calendar)
+   LOAD HISTORICAL DATA
 ================================================================ */
 async function loadHistoricalData(){
     if(isTest)return;
@@ -757,24 +849,171 @@ async function loadHistoricalData(){
                 entry.score=Math.max(0,Math.min(100,Math.round((dayMap[key].correct/dayMap[key].total)*100)-5));
         });
 
-        // Yesterday score for KPI delta
         const yest=new Date(today);yest.setDate(yest.getDate()-1);
         const yKey=yest.toISOString().substring(0,10);
         if(dayMap[yKey]&&dayMap[yKey].total>0)
             yesterdayScore=Math.max(0,Math.min(100,Math.round((dayMap[yKey].correct/dayMap[yKey].total)*100)-5));
 
-        // Restore today's counters
         const todayKey=today.toISOString().substring(0,10);
         if(dayMap[todayKey]&&dayMap[todayKey].total>0){
             correct=dayMap[todayKey].correct;
             total=dayMap[todayKey].total;
-            const ts=new Date(today);ts.setHours(0,0,0,0);
-            sessStart=ts.getTime();
+            const ts2=new Date(today);ts2.setHours(0,0,0,0);
+            sessStart=ts2.getTime();
         }
 
         renderCal();
     }catch(e){console.warn('History load failed:',e.message);}
 }
+
+/* ================================================================
+   DAY DETAIL MODAL  (new — point 1)
+================================================================ */
+async function openDayModal(day){
+    document.getElementById('dayBd').classList.add('open');
+    const dateStr=day.date.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+    s('dayModalTitle', day.isToday ? 'Today' : day.date.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'}));
+    s('dayModalDate', dateStr);
+    const body=document.getElementById('dayModalBody');
+
+    // No data case
+    if(day.score===null && !day.isToday){
+        body.innerHTML=`<div class="day-no-data"><div class="day-no-data-ico">📭</div><div class="day-no-data-txt">No session data for this day.</div></div>`;
+        return;
+    }
+
+    // Show spinner while fetching
+    body.innerHTML=`<div class="day-loading">Loading…<div style="margin:1rem auto;width:24px;height:24px;border:2px solid var(--border-md);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;"></div></div>`;
+
+    let rows=[];
+
+    if(day.isToday){
+        // Use in-memory hist[] for today
+        rows=hist.map(h=>({postureName:h.postureName,ts:h.ts}));
+    } else if(!isTest){
+        // Fetch from server for past days
+        try{
+            const fmt=d=>{const p=n=>String(n).padStart(2,'0');return`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;};
+            const start=new Date(day.date);start.setHours(0,0,0,0);
+            const end=new Date(day.date);end.setHours(23,59,59,999);
+            const url=`${API.BASE}/dati?utente=${encodeURIComponent(API.USER)}&start=${encodeURIComponent(fmt(start))}&end=${encodeURIComponent(fmt(end))}`;
+            const resp=await fetch(url,{headers:{'Authorization':API.TOKEN},signal:AbortSignal.timeout(10000)});
+            if(resp.ok){
+                const data=await resp.json();
+                if(Array.isArray(data)){
+                    rows=data.map(r=>({
+                        postureName:PNAMES[Math.max(0,Math.min(7,Math.round(parseNum(r.valore1))))],
+                        ts:parseTS(r.timestamp)?.getTime()||0
+                    })).filter(r=>r.ts>0);
+                }
+            }
+        }catch(e){console.warn('Day detail fetch failed:',e.message);}
+    } else {
+        // Demo mode: generate synthetic rows for the day
+        for(let i=0;i<180;i++){
+            const p=TP[Math.floor(Math.random()*TP.length)];
+            rows.push({postureName:p.n,ts:day.date.getTime()+i*30000});
+        }
+    }
+
+    if(rows.length===0 && day.score===null){
+        body.innerHTML=`<div class="day-no-data"><div class="day-no-data-ico">📭</div><div class="day-no-data-txt">No session data for this day.</div></div>`;
+        return;
+    }
+
+    // Compute stats from rows
+    let cCnt=0,wCnt=0,aCnt=0;
+    rows.forEach(r=>{
+        const t=PM[r.postureName]?.t||'warning';
+        if(t==='correct')cCnt++;
+        else if(t==='away')aCnt++;
+        else wCnt++;
+    });
+    const tot=rows.length||1;
+    const pG=Math.round((cCnt/tot)*100);
+    const pW=Math.round((wCnt/tot)*100);
+    const pA=Math.round((aCnt/tot)*100);
+
+    // Use stored score or compute it
+    const sc=day.score!==null ? day.score : Math.max(0,Math.min(100,Math.round((cCnt/tot)*100)-5));
+
+    // Score colour
+    const scCol=sc>=90?'var(--green)':sc>=70?'var(--accent)':sc>=50?'var(--amber)':'var(--red)';
+    const CIRC_D=2*Math.PI*38;
+    const offset=(CIRC_D*(1-sc/100)).toFixed(2);
+
+    // Session duration
+    let sessionMins=0;
+    if(rows.length>=2){
+        const sorted=rows.map(r=>r.ts).sort((a,b)=>a-b);
+        sessionMins=Math.round((sorted[sorted.length-1]-sorted[0])/60000);
+    }
+
+    // First & last posture time
+    const firstTime=rows.length>0?new Date(rows.reduce((a,b)=>a.ts<b.ts?a:b).ts).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false}):'—';
+    const lastTime=rows.length>0?new Date(rows.reduce((a,b)=>a.ts>b.ts?a:b).ts).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false}):'—';
+
+    // Build mini timeline bars (max 120 bars for readability)
+    const step=Math.max(1,Math.floor(rows.length/120));
+    const tlBars=rows.filter((_,i)=>i%step===0).map(r=>{
+        const t=PM[r.postureName]?.t||'warning';
+        return`<div class="day-tl-bar ${t}"></div>`;
+    }).join('');
+
+    body.innerHTML=`
+        <div class="day-top">
+            <div class="day-score-wrap">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                    <circle class="dsr-bg" cx="50" cy="50" r="38"/>
+                    <circle class="dsr-fill" cx="50" cy="50" r="38"
+                        stroke="${scCol}" stroke-dasharray="${CIRC_D.toFixed(2)}" stroke-dashoffset="${offset}"
+                        fill="none" stroke-width="7" stroke-linecap="round"
+                        style="transform-origin:center;transform:rotate(-90deg)"/>
+                    <text class="dsr-num" x="50" y="46" style="fill:var(--text);font-family:var(--mono);font-size:1.375rem;text-anchor:middle;dominant-baseline:central;">${sc}</text>
+                    <text class="dsr-sub" x="50" y="62" style="fill:var(--text-3);font-family:var(--font);font-size:0.38rem;text-anchor:middle;dominant-baseline:central;text-transform:uppercase;letter-spacing:0.1em;">Score</text>
+                </svg>
+                <div class="day-score-lbl">Overall</div>
+            </div>
+            <div class="day-stats-grid">
+                <div class="day-stat"><div class="day-stat-val" style="color:var(--blue);">${fmtMins(sessionMins)}</div><div class="day-stat-lbl">Session time</div></div>
+                <div class="day-stat"><div class="day-stat-val" style="color:var(--accent);">${tot}</div><div class="day-stat-lbl">Readings</div></div>
+                <div class="day-stat"><div class="day-stat-val" style="color:var(--text-2);font-size:0.875rem;">${firstTime}</div><div class="day-stat-lbl">First reading</div></div>
+                <div class="day-stat"><div class="day-stat-val" style="color:var(--text-2);font-size:0.875rem;">${lastTime}</div><div class="day-stat-lbl">Last reading</div></div>
+            </div>
+        </div>
+
+        <div class="day-q-lbl">Posture Breakdown</div>
+        <div class="day-q-track">
+            <div class="day-q-seg" style="background:var(--accent);width:${pG}%;transition:width 0.6s cubic-bezier(.4,0,.2,1);"></div>
+            <div class="day-q-seg" style="background:var(--amber);width:${pW}%;transition:width 0.6s cubic-bezier(.4,0,.2,1);"></div>
+            <div class="day-q-seg" style="background:var(--bg-3);flex:1;"></div>
+        </div>
+        <div class="day-q-legend">
+            <div class="day-ql">
+                <div class="day-ql-pct" style="color:var(--accent);">${pG}%</div>
+                <div class="day-ql-dot" style="background:var(--accent);"></div>
+                <div class="day-ql-lbl">Balanced</div>
+                <div class="day-ql-dur">${fmtMins(Math.round(cCnt*2/60))}</div>
+            </div>
+            <div class="day-ql">
+                <div class="day-ql-pct" style="color:var(--amber);">${pW}%</div>
+                <div class="day-ql-dot" style="background:var(--amber);"></div>
+                <div class="day-ql-lbl">Leaning</div>
+                <div class="day-ql-dur">${fmtMins(Math.round(wCnt*2/60))}</div>
+            </div>
+            <div class="day-ql">
+                <div class="day-ql-pct" style="color:var(--text-3);">${pA}%</div>
+                <div class="day-ql-dot" style="background:var(--bg-3);border:1px solid var(--border-md);"></div>
+                <div class="day-ql-lbl">Away</div>
+                <div class="day-ql-dur">${fmtMins(Math.round(aCnt*2/60))}</div>
+            </div>
+        </div>
+
+        ${tlBars?`<div class="day-tl-lbl">Session Timeline</div><div class="day-tl-grid">${tlBars}</div>`:''}
+    `;
+}
+
+function closeDayModal(){document.getElementById('dayBd').classList.remove('open');}
 
 /* ================================================================
    CALENDAR
@@ -795,10 +1034,9 @@ function renderCal(){
         else if(day.score>=70)dot.classList.add('good');
         else if(day.score>=50)dot.classList.add('medium');
         else dot.classList.add('poor');
-        el.onclick=()=>{
-            const ds=day.date.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
-            alert(`${ds}\n${day.score!==null?'Score: '+day.score+'%':'No data'}`);
-        };
+        // Point 1: open day detail modal on click
+        el.onclick=()=>openDayModal(day);
+        el.title='Click to see details';
         el.appendChild(lb);el.appendChild(dot);g.appendChild(el);
     });
 }
@@ -824,7 +1062,8 @@ function tickDur(t){
     else if(t==='warning')pDur.w+=e;
     else pDur.a+=e;
     lastTick=now;
-    ['qdG','qdW','qdA'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=fmtD([pDur.c,pDur.w,pDur.a][i]);});
+    // Update advanced quality durations
+    ['qdG','qdW','qdA'].forEach((id,i)=>{const el=document.getElementById(id);if(el)el.textContent=fmtDms([pDur.c,pDur.w,pDur.a][i]);});
 }
 
 /* ================================================================
@@ -833,12 +1072,10 @@ function tickDur(t){
 function seatHintText(n){
     if(!n)return'Waiting for sensor data…';
     const u=n.toUpperCase();
-    if(AWAY_KEYS.includes(u))return'Not seated — no weight detected on chair.';
-    if(u==='CORRETTA'||u==='CORRECT'){
-        const hint=document.getElementById('seatHint');if(hint){hint.className='seat-hint ok';}
-        return'✅ Weight evenly distributed — great posture!';
-    }
-    const hint=document.getElementById('seatHint');if(hint){hint.className='seat-hint warn';}
+    const hint=document.getElementById('seatHint');
+    if(AWAY_KEYS.includes(u)){if(hint)hint.className='seat-hint';return'Not seated — no weight detected on chair.';}
+    if(u==='CORRETTA'||u==='CORRECT'){if(hint)hint.className='seat-hint ok';return'✅ Weight evenly distributed — great posture!';}
+    if(hint)hint.className='seat-hint warn';
     if(u.includes('AVANTI')||u.includes('FORWARD'))return'⚠️ Leaning forward — sit back, relax your shoulders.';
     if(u.includes('INDIETRO')||u.includes('BACK'))return'⚠️ Leaning back — sit upright with your back straight.';
     if(u.includes('SINISTRA')||u.includes('LEFT'))return'⚠️ Leaning left — shift your weight to the center.';
@@ -848,25 +1085,28 @@ function seatHintText(n){
 }
 
 /* ================================================================
-   KPI STRIP UPDATE
+   KPI STRIP  (point 2: fmtMins applied)
 ================================================================ */
 function updateKPIs(sc){
+    // Balanced minutes today → formatted
     const balMins=Math.round(pDur.c/60000);
-    s('kpiBalanced',balMins);
+    s('kpiBalanced', fmtMins(balMins));
+
     const bdEl=document.getElementById('kpiBalancedDelta');
     if(bdEl&&yesterdayScore!==null){
         const yMins=Math.round(yesterdayScore*4.8);
         const diff=balMins-yMins;
-        bdEl.textContent=`${diff>=0?'+':''}${diff} min vs yesterday`;
+        bdEl.textContent=`${diff>=0?'+':''}${fmtMins(Math.abs(diff))} vs yesterday`;
         bdEl.className=`kpi-delta ${diff>=0?'up':'dn'}`;
     }
 
+    // Session time → formatted
     const sessMins=Math.floor((Date.now()-sessStart)/60000);
-    s('kpiSession',sessMins);
+    s('kpiSession', fmtMins(sessMins));
     const startStr=new Date(sessStart).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
-    s('kpiSessionSub',`Active since ${startStr}`);
+    s('kpiSessionSub',`Since ${startStr}`);
 
-    s('kpiScore',total>0?`${sc}%`:'—');
+    s('kpiScore', total>0?`${sc}%`:'—');
     const sdEl=document.getElementById('kpiScoreDelta');
     if(sdEl&&yesterdayScore!==null&&total>0){
         const diff=sc-yesterdayScore;
@@ -875,8 +1115,8 @@ function updateKPIs(sc){
     }
 
     const streak=bestStreakD();
-    s('kpiStreak',streak>0?streak:'0');
-    s('kpiStreakSub',streak===1?'1 good posture day':streak>1?`${streak} good posture days`:'Keep going!');
+    s('kpiStreak',streak>0?`${streak}d`:'0');
+    s('kpiStreakSub',streak===1?'Good posture day':streak>1?`${streak} days in a row`:'Keep going!');
 }
 
 /* ================================================================
@@ -901,26 +1141,18 @@ function score(){return total>0?Math.max(0,Math.min(100,Math.round((correct/tota
 
 function refreshUI(e,mp){
     const sc=score();
-    // Hero
     const hs=document.getElementById('heroSt');hs.textContent=mp.d;hs.className=`hero-status s-${mp.t}`;
-    // Score ring
     if(total>0)drawScore(sc);
-    // KPIs
     updateKPIs(sc);
-    // Seat map
     const act=activeCells(e.postureName);
     [0,1,2,3].forEach(i=>{
         document.getElementById(`sz${i}`)?.classList.toggle('active',act.includes(i));
         const pEl=document.getElementById(`szp${i}`);if(pEl)pEl.textContent=`${Math.round(e.pcts[i])}%`;
     });
-    const hint=document.getElementById('seatHint');
-    if(hint)hint.className='seat-hint'; // reset before seatHintText sets it
+    const hint=document.getElementById('seatHint');if(hint)hint.className='seat-hint';
     s('seatHint',seatHintText(e.postureName));
-    // Calendar
     updateTodayHist(sc);
-    // Achievements
     checkAch(sc);
-    // Advanced
     if(mode==='advanced'){renderTL();renderQ();renderTLMarks();updateTLFoot();renderComm(sc);renderTrend();}
 }
 
@@ -935,7 +1167,7 @@ function activeCells(n){
 }
 
 /* ================================================================
-   ADVANCED PANELS
+   ADVANCED
 ================================================================ */
 function renderTrend(){
     const chart=document.getElementById('trendChart');if(!chart)return;chart.innerHTML='';
@@ -1041,18 +1273,10 @@ function setConnState(state){
     chip.classList.remove('conn-live','conn-device','conn-server');
     const banner=document.getElementById('deviceBanner');
     const overlay=document.getElementById('serverOverlay');
-    if(state==='live'){
-        chip.classList.add('conn-live');s('connLbl','Connected');
-        banner.classList.remove('show');overlay.classList.remove('show');stopRetryCountdown();
-    }else if(state==='device_offline'){
-        chip.classList.add('conn-device');s('connLbl','Device offline');
-        banner.classList.add('show');overlay.classList.remove('show');stopRetryCountdown();updateDeviceBannerAgo();
-    }else if(state==='server_offline'){
-        chip.classList.add('conn-server');s('connLbl','Server offline');
-        banner.classList.remove('show');overlay.classList.add('show');startRetryCountdown();
-    }else{
-        s('connLbl','Disconnected');banner.classList.remove('show');overlay.classList.remove('show');stopRetryCountdown();
-    }
+    if(state==='live'){chip.classList.add('conn-live');s('connLbl','Connected');banner.classList.remove('show');overlay.classList.remove('show');stopRetryCountdown();}
+    else if(state==='device_offline'){chip.classList.add('conn-device');s('connLbl','Device offline');banner.classList.add('show');overlay.classList.remove('show');stopRetryCountdown();updateDeviceBannerAgo();}
+    else if(state==='server_offline'){chip.classList.add('conn-server');s('connLbl','Server offline');banner.classList.remove('show');overlay.classList.add('show');startRetryCountdown();}
+    else{s('connLbl','Disconnected');banner.classList.remove('show');overlay.classList.remove('show');stopRetryCountdown();}
 }
 
 function updateDeviceBannerAgo(){
@@ -1084,7 +1308,7 @@ function startRetryCountdown(){
 function stopRetryCountdown(){if(retryTimerId){clearInterval(retryTimerId);retryTimerId=null;}}
 
 /* ================================================================
-   API POLLING  (fixes: timestamp check + parseNum for IT decimals)
+   API POLLING
 ================================================================ */
 function startPoll(){stopPoll();fetchData();pollId=setInterval(fetchData,API.POLL);}
 function stopPoll(){if(pollId){clearInterval(pollId);pollId=null;}}
@@ -1097,20 +1321,16 @@ async function fetchData(){
         const d=await r.json();
         if(!d||d.valore1===undefined)throw new Error('No data');
 
-        // --- Bug 1 fix: staleness check ---
         const dataTs=parseTS(d.timestamp);
         const ageMs=dataTs?(Date.now()-dataTs.getTime()):Infinity;
         if(ageMs>API.DATA_MAX_AGE_S*1000){
             errCount=0;
             if(connState!=='device_offline')setConnState('device_offline');
-            const hs=document.getElementById('heroSt');
-            if(hs){hs.textContent='AWAY';hs.className='hero-status s-away';}
-            const hint=document.getElementById('seatHint');
-            if(hint){hint.className='seat-hint';hint.textContent='Device is off or disconnected — no live data.';}
+            const hs=document.getElementById('heroSt');if(hs){hs.textContent='AWAY';hs.className='hero-status s-away';}
+            const hint=document.getElementById('seatHint');if(hint){hint.className='seat-hint';hint.textContent='Device is off or disconnected — no live data.';}
             return;
         }
 
-        // Fresh data
         errCount=0;lastDataTs=Date.now();
         if(connState!=='live')setConnState('live');
 
@@ -1228,10 +1448,7 @@ function startTest(){
         update({postureName:p.n,lc0:p.w[0],lc1:p.w[1],lc2:p.w[2],lc3:p.w[3]});
     },2000);
 }
-function stopTest(){
-    isTest=false;if(testId){clearInterval(testId);testId=null;}
-    document.getElementById('testBadge').classList.add('hidden');
-}
+function stopTest(){isTest=false;if(testId){clearInterval(testId);testId=null;}document.getElementById('testBadge').classList.add('hidden');}
 
 /* ================================================================
    NAVIGATION
@@ -1312,6 +1529,10 @@ document.addEventListener('DOMContentLoaded',()=>{
         document.getElementById('goalBd').classList.remove('open');
     };
 
+    // Day detail modal
+    document.getElementById('closeDayModal').onclick=closeDayModal;
+    document.getElementById('dayBd').onclick=e=>{if(e.target===document.getElementById('dayBd'))closeDayModal();};
+
     document.getElementById('retryNowBtn').onclick=()=>{stopRetryCountdown();startPoll();};
 
     document.addEventListener('mousemove',e=>{
@@ -1327,87 +1548,96 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 /* ================================================================
-   PROMPT PER CONTINUAZIONE CON ALTRA AI
+   HANDOFF PROMPT — for continuation with another AI
    ================================================================
 
 PROJECT: LeanTil Posture Monitor — single-file web dashboard
-FILE: leantil-dashboard.html (vanilla HTML/CSS/JS, no build step)
+FILE: leantil-dashboard.html (vanilla HTML/CSS/JS, no build step, no dependencies)
 
---- SERVER API ---
-Base URL: https://api-leantil.duckdns.org
-Auth header: Authorization: <password>
+─── SERVER API ───────────────────────────────────────────────────
+Base URL : https://api-leantil.duckdns.org
+Auth     : HTTP header  →  Authorization: <password>
 
 Endpoints (all GET):
-  /utenti                                                       → auth check
-  /ultimo?utente=<name>                                         → last reading
-  /dati?utente=<name>&start=<datetime>&end=<datetime>           → range query
-  /recenti?utente=<name>&secondi=<n>                            → last N seconds
+  /utenti                                                        auth check / user list
+  /ultimo?utente=<n>                                          last single reading
+  /dati?utente=<n>&start=<datetime>&end=<datetime>            readings in time range
+  /recenti?utente=<n>&secondi=<n>                             last N seconds
 
-JSON shape (single row):
+datetime format for query params: "YYYY-MM-DD HH:MM:SS" (URL-encoded)
+
+JSON shape of a single row:
   { "id": 5332,
-    "timestamp": "Wed, 22 Apr 2026 15:25:44 GMT",   ← RFC2822
+    "timestamp": "Wed, 22 Apr 2026 15:25:44 GMT",  ← RFC2822, parseable with new Date()
     "utente": "mario",
-    "valore1": 2.0,    ← posture class index (round to int, 0–7)
-    "valore2": 80.0,   ← unknown (not yet used)
-    "valore3": -0.3333, ← CoP X  (negative=left, positive=right)
-    "valore4": -0.3333  ← CoP Y  (negative=back,  positive=front)
+    "valore1": 2.0,     posture class index (round to int, 0–7)
+    "valore2": 80.0,    unknown / not yet used
+    "valore3": -0.3333, CoP X  (negative=left, positive=right, range -1..+1)
+    "valore4": -0.3333  CoP Y  (negative=back, positive=front,  range -1..+1)
   }
-  IMPORTANT: server may return decimals with Italian comma ("2,0" or "-0,3333").
-  Always run parseNum() before parseFloat — it replaces comma with dot.
+  ⚠️  Decimals may use Italian comma format ("2,0" or "-0,3333").
+      Always use parseNum(v) before parseFloat — it replaces comma with dot.
 
-Posture index map (valore1 → class name):
+Posture index → class name (PNAMES array):
   0=CORRETTA  1=SLOUCH  2=LEAN_LEFT  3=LEAN_RIGHT
   4=LEAN_BACK 5=LEAN_FORWARD  6=AWAY  7=UNCERTAIN
 
---- ARCHITECTURE ---
-Single-page app. Two screens: login (id="loginScreen") → dashboard (id="dashboard").
-Two dashboard modes toggled by header pill: Basic (default) / Advanced.
+─── ARCHITECTURE ────────────────────────────────────────────────
+Two screens: loginScreen → dashboard (toggled via .hidden class).
+Two dashboard modes: Basic (default) / Advanced (header toggle pill).
 
-Connection chip (id="connChip") has 3 CSS states:
-  conn-live        → green,  server OK + data timestamp < 20s old
-  conn-device      → amber,  server OK but data age > 15s (device off)
-                             shows yellow banner at top of page
-  conn-server      → red,    3+ consecutive fetch errors
-                             shows full-screen overlay with 15s auto-retry
+Connection chip has 3 CSS states (class on #connChip):
+  conn-live        server OK + data timestamp < 20s old (DATA_MAX_AGE_S)
+  conn-device      server OK but data age > 15s → yellow banner top (DEVICE_STALE_MS)
+  conn-server      3+ consecutive fetch errors → full overlay + 15s auto-retry
 
-Data polling: /ultimo every 2s. Staleness checked via data.timestamp (RFC2822).
-History load: /dati (last 30 days) called once at login, aggregated daily.
+Polling: /ultimo every 2s (POLL). Staleness checked via data.timestamp vs Date.now().
+History: /dati called once at login (last 30 days), aggregated by day into monthHist[].
+Day detail: clicking a calendar dot opens a modal; fetches /dati for that single day
+            (or uses in-memory hist[] if clicking today; synthetic data in demo mode).
 
---- BASIC VIEW ---
-1. Hero card: posture label (large text) + score ring (0–100)
-2. KPI strip (4 cards in a row):
-   - 🧘 Min balanced today  (+ delta vs yesterday)
-   - ⏱️ Session minutes  (active since HH:MM)
-   - 📈 Score vs yesterday  (+ / − delta)
-   - 🔥 Day streak  (consecutive good posture days ≥70%)
-3. Two-column row:
-   - Break timer card (30-min countdown, exercise preview, CTA)
-   - Seat Pressure Map (2×2 grid: Front L / Front R / Back L / Back R,
-     zones highlight when active, hint text explains posture)
-4. Posture History calendar (30-day dots, week/month toggle)
+─── BASIC VIEW ──────────────────────────────────────────────────
+1. Hero card       current posture label (large) + score ring (0–100)
+2. KPI strip       4 cards: balanced time today | session time | score vs yesterday | streak
+                   All times use fmtMins(): <60→"Xm", <1440→"Xh Ym", ≥1440→"Xd Yh"
+3. Break card      Centered large ring (r=58, CIRC_B=2π×58) + big CTA button
+                   "Next: <exercise name>" as secondary label
+4. Seat map        2×2 pressure grid (Front L/R · Back L/R), hint text
+5. Calendar        30-day history dots (week/month toggle).
+                   Clicking any dot → day detail modal (openDayModal)
 
---- ADVANCED VIEW ---
-5. Two-column row:
-   - 7-day bar chart (one bar per day, colored by score tier: green/purple/amber/gray)
-     + summary stats: week avg, best day, streak
-   - Session Quality (horizontal progress bar + 3 breakdown tiles: balanced/leaning/away %
-     + contextual insight text)
-6. Posture Timeline (dense pixel grid, one square per reading, color-coded, click for detail)
-7. Community Highlights (journey to avg, ranking, best moment)
+─── ADVANCED VIEW ───────────────────────────────────────────────
+6. 7-day bar chart      trend + week avg / best day / streak summary
+7. Session Quality      horizontal bar + 3 tiles (balanced/leaning/away % + duration)
+                        + contextual insight text
+8. Session Timeline     dense pixel grid, one square per reading, click for detail
+9. Community Highlights journey to avg, ranking, best moment (mocked)
 
---- BUGS FIXED IN THIS VERSION ---
-1. Device off shows wrong posture → now checked via data.timestamp age (DATA_MAX_AGE_S=20)
-2. Calendar empty for past days → loadHistoricalData() called at login via /dati
-3. First-session achievement fires every reconnect → suppressed if history exists
-4. Italian comma decimals crashed parseFloat → parseNum() handles both formats
+─── DAY DETAIL MODAL ───────────────────────────────────────────
+Opens on calendar click. Shows:
+  - Score ring (smaller, coloured by tier)
+  - 4 stat tiles: session time, readings count, first reading time, last reading time
+  - Quality breakdown bar + 3 tiles (balanced/leaning/away % + time in fmtMins)
+  - Mini timeline (up to 120 pixel squares, colour-coded)
+For today: uses in-memory hist[].
+For past days: fetches /dati for that calendar day.
+For demo mode: generates 180 synthetic readings.
+No data → shows empty state illustration.
 
---- KNOWN OPEN ITEMS ---
-- valore2 (always 80.0 in samples) — ask hardware team what it represents
-- /recenti endpoint unused — could power a live sparkline in Advanced
-- Community data is mocked (no multi-user server endpoint exists yet)
-- Goal modal (openGoalModal) exists and works but no trigger in current UI
-  (was previously linked to an editGoalBtn in the removed Progress card)
+─── BUGS FIXED ──────────────────────────────────────────────────
+1. Device off → wrong posture shown: data.timestamp age check in fetchData()
+2. Italian comma decimals ("2,0"): parseNum() replaces comma before parseFloat
+3. First-session achievement on every reconnect: suppressed when /dati returns history
+4. Calendar empty for past days: loadHistoricalData() runs at login via /dati
+5. Small break CTA: break card fully redesigned as action-focused centred layout
+
+─── OPEN ITEMS ──────────────────────────────────────────────────
+- valore2 (always 80.0 in samples) → ask hardware team what it represents
+- /recenti endpoint unused → could power a live sparkline in Advanced
+- Community data is mocked (no multi-user server endpoint yet)
+- Goal modal (openGoalModal / #goalBd) exists but has no UI trigger in current build
 - No session persistence across browser tabs (state is in-memory only)
+- Day detail shows estimated minutes (readings × 2s poll interval); not exact wall-clock
 
 ================================================================ */
 </script>
