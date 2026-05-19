@@ -660,11 +660,25 @@
         </div>
 
         <div class="card mb">
-            <div class="card-lbl">🌟 Community Highlights</div>
+            <div class="card-lbl" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+                <span>🌟 Community Highlights</span>
+                <button class="btn" id="openGoalBtn" style="padding:0.25rem 0.75rem;font-size:0.6875rem;border-radius:999px;">🎯 Set Goal</button>
+            </div>
             <div class="comm-grid">
-                <div class="comm-item"><div class="comm-lbl">Journey to Average</div><div class="comm-val" id="commProg">Start your session to compare</div></div>
-                <div class="comm-item"><div class="comm-lbl">Your Ranking</div><div class="comm-val g" id="commRank">Data after first reading</div></div>
+                <div class="comm-item"><div class="comm-lbl">Journey to Average</div><div class="comm-val" id="commProg">Start your session to compare</div><div style="font-size:0.55rem;color:var(--text-3);margin-top:0.35rem;font-style:italic;">Community avg is estimated (no multi-user API yet)</div></div>
+                <div class="comm-item"><div class="comm-lbl">Your Ranking</div><div class="comm-val g" id="commRank">Data after first reading</div><div style="font-size:0.55rem;color:var(--text-3);margin-top:0.35rem;font-style:italic;">Simulated — no live leaderboard yet</div></div>
                 <div class="comm-item"><div class="comm-lbl">Best Moment</div><div class="comm-best-t" id="commBestT">—</div><div class="comm-val" id="commBestD" style="font-size:0.8rem;">No streak yet</div></div>
+            </div>
+            <!-- Personal goal row -->
+            <div id="commGoalRow" style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
+                    <div class="comm-lbl" style="margin-bottom:0;">🎯 Personal Goal — <span id="commGoalPct" style="color:var(--accent);">60%</span> balanced</div>
+                    <div style="font-family:var(--mono);font-size:0.75rem;" id="commGoalStatus">—</div>
+                </div>
+                <div style="height:6px;border-radius:999px;overflow:hidden;background:var(--bg-3);">
+                    <div id="commGoalBar" style="height:100%;border-radius:999px;background:var(--accent);width:0%;transition:width 0.6s cubic-bezier(.4,0,.2,1);"></div>
+                </div>
+                <div style="font-size:0.7rem;color:var(--text-3);margin-top:0.4rem;" id="commGoalMsg">Start a session to track your goal progress.</div>
             </div>
         </div>
     </div>
@@ -697,6 +711,8 @@ let dailyGoal=parseInt(localStorage.getItem('dailyGoal')||'60');
 let connState='disconnected',lastDataTs=0;
 let deviceCheckId=null,retryTimerId=null;
 let yesterdayScore=null;
+let deviceOfflineSince=0;           // timestamp when device went offline (0 = not offline)
+const SESSION_TIMEOUT_MS=10*60*1000; // 10 min gap → nuova sessione
 
 /* ================================================================
    POSTURE MAP
@@ -798,8 +814,14 @@ function fmtMins(mins){
     const d=Math.floor(mins/1440),h=Math.floor((mins%1440)/60);return h>0?`${d}d ${h}h`:`${d}d`;
 }
 
-/* Duration from ms → "Xm Ys" for detail panels, fmtMins for KPI */
-function fmtDms(ms){const sec=Math.floor(ms/1000);return`${Math.floor(sec/60)}m ${sec%60}s`;}
+/* Duration from ms — mostra ore quando >= 60 min, altrimenti min+sec */
+function fmtDms(ms){
+    const sec=Math.floor(ms/1000);
+    const mins=Math.floor(sec/60);
+    if(mins<60)return`${mins}m ${sec%60}s`;
+    const h=Math.floor(mins/60),m=mins%60;
+    return m>0?`${h}h ${m}m`:`${h}h`;
+}
 
 /* ================================================================
    HISTORY SKELETON
@@ -858,8 +880,45 @@ async function loadHistoricalData(){
         if(dayMap[todayKey]&&dayMap[todayKey].total>0){
             correct=dayMap[todayKey].correct;
             total=dayMap[todayKey].total;
-            const ts2=new Date(today);ts2.setHours(0,0,0,0);
-            sessStart=ts2.getTime();
+
+            // Calcola il vero inizio della sessione corrente:
+            // cerca l'ultimo gap > 10 min tra le letture di oggi
+            const todayRows=rows.filter(r=>{
+                const ts=parseTS(r.timestamp);
+                return ts&&ts.toISOString().substring(0,10)===todayKey;
+            });
+            if(todayRows.length>0){
+                const sorted=todayRows
+                    .map(r=>({ts:parseTS(r.timestamp).getTime(),name:PNAMES[Math.max(0,Math.min(7,Math.round(parseNum(r.valore1))))]}))
+                    .filter(r=>r.ts>0)
+                    .sort((a,b)=>a.ts-b.ts);
+
+                // Trova inizio sessione corrente (ultimo gap > SESSION_TIMEOUT_MS)
+                let sessionStartIdx=0;
+                for(let i=1;i<sorted.length;i++){
+                    if(sorted[i].ts-sorted[i-1].ts>SESSION_TIMEOUT_MS)sessionStartIdx=i;
+                }
+                sessStart=sorted[sessionStartIdx].ts;
+
+                // Popola hist[] con le sole letture della sessione corrente
+                hist=sorted.slice(sessionStartIdx).map(r=>({
+                    postureName:r.name,ts:r.ts,
+                    lc0:25,lc1:25,lc2:25,lc3:25,pcts:[25,25,25,25]
+                }));
+
+                // Ricalcola correct/total sulla sessione corrente
+                correct=0;total=0;
+                hist.forEach(h=>{
+                    total++;
+                    const mp=PM[h.postureName]||{t:'warning'};
+                    if(mp.t==='correct')correct++;
+                    const t=mp.t;
+                    // ricalcola anche pDur approssimativamente (2 s per lettura)
+                    if(t==='correct')pDur.c+=2000;
+                    else if(t==='away')pDur.a+=2000;
+                    else pDur.w+=2000;
+                });
+            }
         }
 
         renderCal();
@@ -1232,6 +1291,23 @@ function renderComm(sc){
     const avg=68,prog=sc>=avg?100:Math.round((sc/avg)*100),better=Math.min(95,Math.round((sc/100)*40));
     sh('commProg',`You're <strong>${prog}%</strong> of the way to the community average`);
     sh('commRank',`You've surpassed <strong>${better}%</strong> of users`);
+
+    // Personal goal
+    const goalEl=document.getElementById('commGoalRow');if(!goalEl)return;
+    const barPct=Math.min(100,Math.round((sc/dailyGoal)*100));
+    const reached=sc>=dailyGoal;
+    s('commGoalPct',`${dailyGoal}%`);
+    const bar=document.getElementById('commGoalBar');
+    if(bar){bar.style.width=`${barPct}%`;bar.style.background=reached?'var(--green)':'var(--accent)';}
+    s('commGoalStatus',total>0?`${sc}% now`:'—');
+    const gap=dailyGoal-sc;
+    let msg='';
+    if(total===0)msg='Start a session to track your goal progress.';
+    else if(reached)msg=`🎉 Goal reached! You're ${sc-dailyGoal}% above target. Keep it up!`;
+    else if(barPct>=80)msg=`Almost there — just ${gap}% more balanced posture needed.`;
+    else if(barPct>=50)msg=`Halfway! ${gap}% to go — sit up straight and stay focused.`;
+    else msg=`${gap}% below your goal of ${dailyGoal}%. Focus on posture corrections.`;
+    s('commGoalMsg',msg);
 }
 
 /* ================================================================
@@ -1268,15 +1344,33 @@ function trigAch(k){
 ================================================================ */
 function setConnState(state){
     if(connState===state)return;
+    const prev=connState;
     connState=state;
     const chip=document.getElementById('connChip');
     chip.classList.remove('conn-live','conn-device','conn-server');
     const banner=document.getElementById('deviceBanner');
     const overlay=document.getElementById('serverOverlay');
-    if(state==='live'){chip.classList.add('conn-live');s('connLbl','Connected');banner.classList.remove('show');overlay.classList.remove('show');stopRetryCountdown();}
-    else if(state==='device_offline'){chip.classList.add('conn-device');s('connLbl','Device offline');banner.classList.add('show');overlay.classList.remove('show');stopRetryCountdown();updateDeviceBannerAgo();}
-    else if(state==='server_offline'){chip.classList.add('conn-server');s('connLbl','Server offline');banner.classList.remove('show');overlay.classList.add('show');startRetryCountdown();}
-    else{s('connLbl','Disconnected');banner.classList.remove('show');overlay.classList.remove('show');stopRetryCountdown();}
+    if(state==='live'){
+        chip.classList.add('conn-live');s('connLbl','Connected');
+        banner.classList.remove('show');overlay.classList.remove('show');stopRetryCountdown();
+        // Controlla se il dispositivo era offline da più di 10 min → nuova sessione
+        if(prev==='device_offline'&&deviceOfflineSince>0){
+            const offMs=Date.now()-deviceOfflineSince;
+            if(offMs>SESSION_TIMEOUT_MS)resetSession();
+        }
+        deviceOfflineSince=0;
+    }
+    else if(state==='device_offline'){
+        chip.classList.add('conn-device');s('connLbl','Device offline');
+        banner.classList.add('show');overlay.classList.remove('show');stopRetryCountdown();
+        if(deviceOfflineSince===0)deviceOfflineSince=Date.now(); // segna inizio offline
+        updateDeviceBannerAgo();
+    }
+    else if(state==='server_offline'){
+        chip.classList.add('conn-server');s('connLbl','Server offline');
+        banner.classList.remove('show');overlay.classList.add('show');startRetryCountdown();
+    }
+    else{s('connLbl','Disconnected');banner.classList.remove('show');overlay.classList.remove('show');stopRetryCountdown();deviceOfflineSince=0;}
 }
 
 function updateDeviceBannerAgo(){
@@ -1376,8 +1470,15 @@ function toggleMode(){
 }
 
 /* ================================================================
-   CONNECT MODAL
+   GOAL MODAL
 ================================================================ */
+function openGoalModal(){
+    document.getElementById('goalR').value=dailyGoal;
+    s('goalRV',`${dailyGoal}%`);
+    document.getElementById('goalBd').classList.add('open');
+}
+
+
 function openApiModal(){
     document.getElementById('inUser').value=API.USER||'';
     document.getElementById('inPass').value='';
@@ -1477,7 +1578,17 @@ function resetState(){
     pDur={c:0,w:0,a:0};lastTick=Date.now();
     bestStr={start:null,dur:0};curStr={start:null,dur:0};
     achUnlocked=new Set();errCount=0;lastDataTs=0;yesterdayScore=null;
+    deviceOfflineSince=0;
     monthHist=buildHist(false);
+}
+
+// Resetta i contatori della sessione corrente (senza toccare lo storico mensile)
+function resetSession(){
+    hist=[];sessStart=Date.now();correct=0;total=0;
+    pDur={c:0,w:0,a:0};lastTick=Date.now();
+    bestStr={start:null,dur:0};curStr={start:null,dur:0};
+    deviceOfflineSince=0;
+    if(mode==='advanced'){renderTL();renderQ();renderTLMarks();updateTLFoot();}
 }
 
 /* ================================================================
@@ -1527,7 +1638,9 @@ document.addEventListener('DOMContentLoaded',()=>{
         dailyGoal=parseInt(document.getElementById('goalR').value,10);
         localStorage.setItem('dailyGoal',dailyGoal);
         document.getElementById('goalBd').classList.remove('open');
+        if(mode==='advanced'&&total>0)renderComm(score());
     };
+    document.getElementById('openGoalBtn').onclick=openGoalModal;
 
     // Day detail modal
     document.getElementById('closeDayModal').onclick=closeDayModal;
@@ -1630,14 +1743,26 @@ No data → shows empty state illustration.
 3. First-session achievement on every reconnect: suppressed when /dati returns history
 4. Calendar empty for past days: loadHistoricalData() runs at login via /dati
 5. Small break CTA: break card fully redesigned as action-focused centred layout
+6. Session time showed clock time, not elapsed: now resets when device reconnects
+   after >10 min gap (SESSION_TIMEOUT_MS). deviceOfflineSince tracks offline start;
+   resetSession() resets hist[], sessStart, correct, total, pDur.
+7. Session Quality durations stayed in minutes past 60: fmtDms() now promotes to
+   hours (Xh Ym) when mins≥60.
+8. Timeline (hist[]) was empty on reload: loadHistoricalData() now populates hist[]
+   with today's current-session readings from /dati, finds real sessStart via last
+   gap>10min, and recomputes correct/total/pDur from those rows.
+9. Goal modal had no UI trigger: openGoalModal() function added; 🎯 Set Goal button
+   in Community Highlights header opens it. Goal saved to localStorage('dailyGoal').
+   renderComm() now shows a personal goal progress bar + motivational message.
 
 ─── OPEN ITEMS ──────────────────────────────────────────────────
 - valore2 (always 80.0 in samples) → ask hardware team what it represents
 - /recenti endpoint unused → could power a live sparkline in Advanced
-- Community data is mocked (no multi-user server endpoint yet)
-- Goal modal (openGoalModal / #goalBd) exists but has no UI trigger in current build
+- Community data is mocked (no multi-user server endpoint yet); commProg and
+  commRank are computed from a fixed avg=68 baseline — labels say so in UI
 - No session persistence across browser tabs (state is in-memory only)
 - Day detail shows estimated minutes (readings × 2s poll interval); not exact wall-clock
+- pDur recomputed from hist[] on loadHistoricalData uses fixed 2s/reading estimate
 
 ================================================================ */
 </script>
